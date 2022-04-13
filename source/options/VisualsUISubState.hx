@@ -54,6 +54,13 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool',
 			false);
 		addOption(option);
+
+		var option:Option = new Option('Hide Score Text',
+			'If checked, hides score, accuracy and misses text under health bar in song',
+			'hideScoreText',
+			'bool',
+			false);
+		addOption(option);
 		
 		var option:Option = new Option('Time Bar:',
 			"What should the Time Bar display?",

@@ -20,6 +20,7 @@ class ClientPrefs {
 	public static var camZooms:Bool = true;
 	public static var hideHud:Bool = false;
 	public static var hideWatermark:Bool = false;
+	public static var hideScoreText:Bool = false;
 	public static var noteOffset:Int = 0;
 	public static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
 	public static var imagesPersist:Bool = false;
@@ -108,6 +109,7 @@ class ClientPrefs {
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
 		FlxG.save.data.hideWatermark = hideWatermark;
+		FlxG.save.data.hideScoreText = hideScoreText;
 		FlxG.save.data.arrowHSV = arrowHSV;
 		FlxG.save.data.imagesPersist = imagesPersist;
 		FlxG.save.data.ghostTapping = ghostTapping;
@@ -188,6 +190,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.hideWatermark != null) {
 			hideWatermark = FlxG.save.data.hideWatermark;
+		}
+		if(FlxG.save.data.hideWatermark != null) {
+			hideScoreText = FlxG.save.data.hideScoreText;
 		}
 		if(FlxG.save.data.noteOffset != null) {
 			noteOffset = FlxG.save.data.noteOffset;

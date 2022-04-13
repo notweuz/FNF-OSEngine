@@ -1078,7 +1078,11 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
-		scoreTxt.visible = !ClientPrefs.hideHud;
+		if (!ClientPrefs.hideScoreText && !ClientPrefs.hideHud) {
+			scoreTxt.visible = true;
+		} else {
+			scoreTxt.visible = false;
+		}
 		add(scoreTxt);
 
 		songTxt = new FlxText(12, FlxG.height - 24, 0, "", 8);
@@ -2372,6 +2376,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
+		
 		if(ratingName == '?') {
 			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName;
 		} else {
