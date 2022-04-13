@@ -473,7 +473,7 @@ class TitleState extends MusicBeatState
 				{
 					if (mustUpdate)
 					{
-						MusicBeatState.switchState(new OutdatedState());
+						//MusicBeatState.switchState(new OutdatedState());
 					}
 					else
 					{
