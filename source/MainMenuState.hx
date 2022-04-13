@@ -65,6 +65,8 @@ class MainMenuState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camAchievement);
 		FlxCamera.defaultCameras = [camGame];
+		camera.zoom = 1.85;
+		FlxTween.tween(camera, {zoom: 1}, .5, {ease: FlxEase.sineOut, type: ONESHOT});
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -79,6 +81,14 @@ class MainMenuState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
+
+		var hours:Int = Date.now().getHours();
+
+		if(hours > 6) {
+			bg.color = 0x6939ff;
+		} else {
+			bg.color = 0xfffff; 
+		}
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -263,23 +273,28 @@ class MainMenuState extends MusicBeatState
 							{
 								var daChoice:String = optionShit[curSelected];
 
-
 								switch (daChoice)
 								{
 									case 'story_mode':
 										MusicBeatState.switchState(new StoryMenuState());
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 									case 'freeplay':
 										MusicBeatState.switchState(new FreeplayState());
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 									#if MODS_ALLOWED
 									case 'mods':
-										MusicBeatState.switchState(new ModsMenuState());
+										MusicBeatState.switchState(new ModsMenuState()); 
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 									#end
 									case 'awards':
 										MusicBeatState.switchState(new AchievementsMenuState());
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 									case 'credits':
 										MusicBeatState.switchState(new CreditsState());
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 									case 'options':
 										LoadingState.loadAndSwitchState(new options.OptionsState());
+										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
 								}
 							});
 						}
