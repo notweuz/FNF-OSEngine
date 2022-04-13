@@ -33,6 +33,7 @@ class ClientPrefs {
 	public static var hitsoundVolume:Float = 0;
 	public static var underlaneVisibility:Float = 0;
 	public static var opponentUnderlaneVisibility:Float = 0;
+	public static var noteSkinSettings:String = 'Classic';
 	public static var pauseMusic:String = 'Tea Time';
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -131,6 +132,7 @@ class ClientPrefs {
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.underlaneVisibility = underlaneVisibility;
 		FlxG.save.data.pauseMusic = pauseMusic;
+		FlxG.save.data.noteSkinSettings = noteSkinSettings;
 	
 		FlxG.save.flush();
 
@@ -248,6 +250,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.pauseMusic != null) {
 			pauseMusic = FlxG.save.data.pauseMusic;
+		}
+		if(FlxG.save.data.pauseMusic != null) {
+			noteSkinSettings = FlxG.save.data.noteSkinSettings;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
