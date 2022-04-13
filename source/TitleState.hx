@@ -633,8 +633,9 @@ class TitleState extends MusicBeatState
 				case 1:
 					createCoolText(['OS Engine by'], 45);
 				case 2:
-					addMoreText('Cooljer', 45);
 					addMoreText('weuz_', 45);
+					addMoreText('nelifs', 45);
+					addMoreText('Cooljer', 45);
 				case 3:
 					deleteCoolText();
 					createCoolText(['Forked', 'from'], 15);
