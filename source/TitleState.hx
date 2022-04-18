@@ -467,6 +467,7 @@ class TitleState extends MusicBeatState
 				FlxTween.tween(gfDance, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
 				FlxTween.tween(titleText, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
 				FlxTween.tween(camera, {zoom: 3}, 3, {ease: FlxEase.backOut, type: ONESHOT});
+				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 				FlxG.sound.music.fadeOut();
 				titlestatebg.velocity.set(400, 210);
 
@@ -488,6 +489,7 @@ class TitleState extends MusicBeatState
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new GameExitState());
+				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 			}
 			// OLD EXIT:
 

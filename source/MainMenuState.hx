@@ -66,7 +66,7 @@ class MainMenuState extends MusicBeatState
 		FlxG.cameras.add(camAchievement);
 		FlxCamera.defaultCameras = [camGame];
 		camera.zoom = 1.85;
-		FlxTween.tween(camera, {zoom: 1}, .5, {ease: FlxEase.sineOut, type: ONESHOT});
+		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -84,11 +84,9 @@ class MainMenuState extends MusicBeatState
 
 		var hours:Int = Date.now().getHours();
 
-		if(hours > 6) {
+		if(hours > 18) {
 			bg.color = 0x6939ff;
-		} else {
-			bg.color = 0xfffff; 
-		}
+		} else if(hours < 18) null;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -211,6 +209,7 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
+				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 			}
 
 			if (controls.ACCEPT)
@@ -270,6 +269,7 @@ class MainMenuState extends MusicBeatState
 							}});
 							*/
 							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+
 							{
 								var daChoice:String = optionShit[curSelected];
 
@@ -277,24 +277,24 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story_mode':
 										MusicBeatState.switchState(new StoryMenuState());
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'freeplay':
 										MusicBeatState.switchState(new FreeplayState());
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									#if MODS_ALLOWED
 									case 'mods':
 										MusicBeatState.switchState(new ModsMenuState()); 
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									#end
 									case 'awards':
 										MusicBeatState.switchState(new AchievementsMenuState());
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'credits':
 										MusicBeatState.switchState(new CreditsState());
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'options':
 										LoadingState.loadAndSwitchState(new options.OptionsState());
-										FlxTween.tween(camera, {zoom: 2}, 1, {ease: FlxEase.backOut, type: ONESHOT});
+										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 								}
 							});
 						}
