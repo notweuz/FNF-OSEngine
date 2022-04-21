@@ -59,6 +59,9 @@ class OptionsState extends MusicBeatState
 		DiscordClient.changePresence("Options Menu", null);
 		#end
 
+		camera.zoom = 2.2;
+		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
+
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
 		bg.updateHitbox();
@@ -111,6 +114,7 @@ class OptionsState extends MusicBeatState
 				PauseSubState.wasinsongbeforethenwenttooptions = false;
 			} else {
 				MusicBeatState.switchState(new MainMenuState());
+				CoolUtil.cameraZoom(camera, 2, .5, FlxEase.backOut, ONESHOT);
 			}
 		}
 
