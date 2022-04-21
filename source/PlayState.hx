@@ -219,6 +219,8 @@ class PlayState extends MusicBeatState
 	var santa:BGSprite;
 	var heyTimer:Float;
 
+	var songPlaying:BGSprite;
+
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 	var bgGhouls:BGSprite;
