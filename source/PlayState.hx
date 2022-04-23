@@ -160,6 +160,7 @@ class PlayState extends MusicBeatState
 	private var timeBarBG:AttachedSprite;
 	public var timeBar:FlxBar;
 	
+	public var perfects:Int = 0;
 	public var sicks:Int = 0;
 	public var goods:Int = 0;
 	public var bads:Int = 0;
@@ -253,12 +254,10 @@ class PlayState extends MusicBeatState
 	public var opponentCameraOffset:Array<Float> = null;
 	public var girlfriendCameraOffset:Array<Float> = null;
 
-	#if desktop
 	// Discord RPC variables
 	var storyDifficultyText:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
-	#end
 
 	//Achievement shit
 	var keysPressed:Array<Bool> = [];
@@ -1061,6 +1060,7 @@ class PlayState extends MusicBeatState
 		healthBarOverlay.blend = MULTIPLY;
 		healthBarOverlay.x = healthBarBG.x-1.9;
 	    healthBarOverlay.alpha = ClientPrefs.healthBarAlpha;
+		healthBarOverlay.antialiasing = ClientPrefs.globalAntialiasing;
 		add(healthBarOverlay); healthBarOverlay.alpha = ClientPrefs.healthBarAlpha; if(ClientPrefs.downScroll) healthBarOverlay.y = 0.11 * FlxG.height;
 
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
@@ -1261,6 +1261,10 @@ class PlayState extends MusicBeatState
 
 		Paths.clearUnusedMemory();
 		CustomFadeTransition.nextCamera = camOther;
+		if (ClientPrefs.showcaseMode) {
+			camHUD.visible = false;
+			instance.cpuControlled = true;
+		}
 	}
 
 	function set_songSpeed(value:Float):Float
@@ -3250,8 +3254,7 @@ class PlayState extends MusicBeatState
 		if(achievementObj != null) {
 			return;
 		} else {
-			var achieve:String = checkForAchievement(['week1_nomiss', 'week2_nomiss', 'week3_nomiss', 'week4_nomiss',
-				'week5_nomiss', 'week6_nomiss', 'week7_nomiss', 'ur_bad',
+			var achieve:String = checkForAchievement(['ur_bad',
 				'ur_good', 'hype', 'two_keys', 'toastie', 'debugger']);
 
 			if(achieve != null) {
@@ -3447,10 +3450,14 @@ class PlayState extends MusicBeatState
 				totalNotesHit += 1;
 				note.ratingMod = 1;
 				if(!note.ratingDisabled) sicks++;
+			case "perfect":
+				totalNotesHit += 1;
+				note.ratingMod = 1.25;
+				if (!note.ratingDisabled) perfects++;
 		}
 		note.rating = daRating;
 
-		if(daRating == 'sick' && !note.noteSplashDisabled)
+		if(daRating == 'sick' || daRating == 'perfect' && !note.noteSplashDisabled)
 		{
 			spawnNoteSplashOnNote(note);
 		}

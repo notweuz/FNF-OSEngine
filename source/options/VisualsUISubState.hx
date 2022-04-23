@@ -48,6 +48,13 @@ class VisualsUISubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option("Showcase Mode",
+			'If checked, hides entire HUD and enables botplay :D',
+			'showcaseMode',
+			'bool',
+			false);
+		addOption(option);
+
 		var option:Option = new Option('Hide Watermark',
 			'If checked, hides watermark in left-bottom corner while playing song',
 			'hideWatermark',

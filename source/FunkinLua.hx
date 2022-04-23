@@ -170,6 +170,8 @@ class FunkinLua {
 		// Some settings, no jokes
 		set('downscroll', ClientPrefs.downScroll);
 		set('middlescroll', ClientPrefs.middleScroll);
+		set('showcaseMode', ClientPrefs.showcaseMode);
+		set('removePerfects', ClientPrefs.removePerfects);
 		set('framerate', ClientPrefs.framerate);
 		set('ghostTapping', ClientPrefs.ghostTapping);
 		set('hideHud', ClientPrefs.hideHud);
@@ -884,6 +886,12 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "setRatingName", function(value:String) {
 			PlayState.instance.ratingName = value;
+		});
+		Lua_helper.add_callback(lua, "setBotPlayText", function(value:String) {
+			PlayState.instance.botplayTxt.text = value;
+		});
+		Lua_helper.add_callback(lua, "setWatermarkText", function(value:String) {
+			PlayState.instance.songTxt.text = value;
 		});
 		Lua_helper.add_callback(lua, "setRatingFC", function(value:String) {
 			PlayState.instance.ratingFC = value;

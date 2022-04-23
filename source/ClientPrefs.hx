@@ -35,6 +35,9 @@ class ClientPrefs {
 	public static var opponentUnderlaneVisibility:Float = 0;
 	public static var noteSkinSettings:String = 'Classic';
 	public static var pauseMusic:String = 'Tea Time';
+	public static var showcaseMode:Bool = false;
+	public static var cameramoveonnotes:Bool = true;
+	public static var removePerfects:Bool = false;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -58,6 +61,7 @@ class ClientPrefs {
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
 	public static var ratingOffset:Int = 0;
+	public static var perfectWindow:Int = 15;
 	public static var sickWindow:Int = 45;
 	public static var goodWindow:Int = 90;
 	public static var badWindow:Int = 135;
@@ -123,6 +127,9 @@ class ClientPrefs {
 		FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
+		FlxG.save.data.showcaseMode = showcaseMode;
+		FlxG.save.data.removePerfects = removePerfects;
+		FlxG.save.data.perfectWindow = perfectWindow;
 		FlxG.save.data.sickWindow = sickWindow;
 		FlxG.save.data.goodWindow = goodWindow;
 		FlxG.save.data.badWindow = badWindow;
@@ -199,6 +206,12 @@ class ClientPrefs {
 		if(FlxG.save.data.noteOffset != null) {
 			noteOffset = FlxG.save.data.noteOffset;
 		}
+		if(FlxG.save.data.removePerfects != null) {
+			removePerfects = FlxG.save.data.removePerfects;
+		}
+		if(FlxG.save.data.showcaseMode != null) {
+			showcaseMode = FlxG.save.data.showcaseMode;
+		}
 		if(FlxG.save.data.arrowHSV != null) {
 			arrowHSV = FlxG.save.data.arrowHSV;
 		}
@@ -224,6 +237,9 @@ class ClientPrefs {
 		if(FlxG.save.data.ratingOffset != null) {
 			ratingOffset = FlxG.save.data.ratingOffset;
 		}
+		if(FlxG.save.data.perfectWindow != null) {
+			perfectWindow = FlxG.save.data.perfectWindow;
+		}
 		if(FlxG.save.data.sickWindow != null) {
 			sickWindow = FlxG.save.data.sickWindow;
 		}
@@ -241,6 +257,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.hitsoundVolume != null) {
 			hitsoundVolume = FlxG.save.data.hitsoundVolume;
+		}
+		if(FlxG.save.data.cameramoveonnotes != null) {
+			cameramoveonnotes = FlxG.save.data.cameramoveonnotes;
 		}
 		if(FlxG.save.data.underlaneVisibility != null) {
 			underlaneVisibility = FlxG.save.data.underlaneVisibility;

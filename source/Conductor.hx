@@ -35,8 +35,15 @@ class Conductor
 	public static function judgeNote(note:Note, diff:Float=0) //STOLEN FROM KADE ENGINE (bbpanzu) - I had to rewrite it later anyway after i added the custom hit windows lmao (Shadow Mario)
 	{
 		//tryna do MS based judgment due to popular demand
-		var timingWindows:Array<Int> = [ClientPrefs.sickWindow, ClientPrefs.goodWindow, ClientPrefs.badWindow];
-		var windowNames:Array<String> = ['sick', 'good', 'bad'];
+		var timingWindows:Array<Int>;
+		var windowNames:Array<String>;
+		if (!ClientPrefs.removePerfects) {
+			timingWindows = [ClientPrefs.perfectWindow, ClientPrefs.sickWindow, ClientPrefs.goodWindow, ClientPrefs.badWindow];
+			windowNames = ['perfect', 'sick', 'good', 'bad'];
+		} else {
+			timingWindows = [ClientPrefs.sickWindow, ClientPrefs.goodWindow, ClientPrefs.badWindow];
+			windowNames = ['sick', 'good', 'bad'];
+		}
 
 		// var diff = Math.abs(note.strumTime - Conductor.songPosition) / (PlayState.songMultiplier >= 1 ? PlayState.songMultiplier : 1);
 		for(i in 0...timingWindows.length) // based on 4 timing windows, will break with anything else
