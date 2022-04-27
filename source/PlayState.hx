@@ -65,6 +65,8 @@ class PlayState extends MusicBeatState
 {
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
+	public static var cameramovingoffset = 40;
+	public static var cameramovingoffsetbf = 30;	//will use it somedays....
 
 	public static var ratingStuff:Array<Dynamic> = [
 		['You Suck!', 0.2], //From 0% to 19%
@@ -84,6 +86,7 @@ class PlayState extends MusicBeatState
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, ModchartText> = new Map<String, ModchartText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
+	public var lDance:Bool = false;
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
 	#if (haxe >= "4.0.0")
@@ -858,6 +861,13 @@ class PlayState extends MusicBeatState
 				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069); //nice
 				insert(members.indexOf(dadGroup) - 1, evilTrail);
 		}
+		
+		if (ClientPrefs.characterTrail) {
+			var trailunderdad = new FlxTrail(dad, null, 4, 24, 0.3, 0.069); //nice
+			insert(members.indexOf(dadGroup) - 1, trailunderdad);
+			var trailunderbf = new FlxTrail(boyfriend, null, 4, 24, 0.3, 0.069); //nice
+			insert(members.indexOf(boyfriendGroup) - 1, trailunderbf);
+		}
 
 		var file:String = Paths.json(songName + '/dialogue'); //Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file)) {
@@ -1478,7 +1488,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function schoolIntro(?dialogueBox:DialogueBox):Void
+	function schoolIntro(?dialogueBox:DialogueBox):Void // ig i need to delete vanilla shit
 	{
 		inCutscene = true;
 		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
@@ -2428,21 +2438,33 @@ class PlayState extends MusicBeatState
 			openChartEditor();
 		}
 
+		var iconOffset:Int = 26;
+
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
+		/*
 		var mult:Float = FlxMath.lerp(1, iconP1.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP1.scale.set(mult, mult);
 		iconP1.updateHitbox();
 
 		var mult:Float = FlxMath.lerp(1, iconP2.scale.x, CoolUtil.boundTo(1 - (elapsed * 9), 0, 1));
 		iconP2.scale.set(mult, mult);
-		iconP2.updateHitbox();
+		iconP2.updateHitbox();			old shit, never gonna use it again
 
-		var iconOffset:Int = 26;
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
+		*/
+
+		
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
+		iconP1.updateHitbox();
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, CoolUtil.boundTo(1 - (elapsed * 30), 0, 1))));
+		iconP2.updateHitbox();
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+
 
 		if (health > 2)
 			health = 2;
@@ -3921,6 +3943,31 @@ class PlayState extends MusicBeatState
 				char = gf;
 			}
 
+			/*
+			if(ClientPrefs.cameramoveonnotes)
+				if(SONG.notes[Math.floor(curStep / 16)].mustHitSection == false && !note.isSustainNote)
+				{
+					if (!dad.stunned)
+						{
+							switch(Std.int(Math.abs(note.noteData)))
+							{
+								case 2:
+									camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+									camFollow.x += dad.cameraPosition[0];camFollow.y += dad.cameraPosition[1] - cameramovingoffset;
+								case 3:							
+									camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+									camFollow.x += dad.cameraPosition[0] + cameramovingoffset;camFollow.y += dad.cameraPosition[1];
+								case 1:
+									camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+									camFollow.x += dad.cameraPosition[0];camFollow.y += dad.cameraPosition[1] + cameramovingoffset;
+								case 0:
+									camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+									camFollow.x += dad.cameraPosition[0] - cameramovingoffset;camFollow.y += dad.cameraPosition[1];
+					}                   
+				}
+			} 			and I don't want to fix this too, okay?
+			*/
+
 			if(char != null)
 			{
 				char.playAnim(animToPlay, true);
@@ -4009,6 +4056,28 @@ class PlayState extends MusicBeatState
 				{
 					boyfriend.playAnim(animToPlay + daAlt, true);
 					boyfriend.holdTimer = 0;
+					/*
+					if(ClientPrefs.cameramoveonnotes){
+						if(SONG.notes[Math.floor(curStep / 16)].mustHitSection == true && !note.isSustainNote){
+							if (!boyfriend.stunned){
+								switch(Std.int(Math.abs(note.noteData))){
+									case 2:
+										camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+										camFollow.x += boyfriend.cameraPosition[0];camFollow.y += boyfriend.cameraPosition[1] - cameramovingoffsetbf;
+									case 3:							
+										camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+										camFollow.x += boyfriend.cameraPosition[0] + cameramovingoffsetbf;camFollow.y += boyfriend.cameraPosition[1];
+									case 1:
+										camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+										camFollow.x += boyfriend.cameraPosition[0];camFollow.y += boyfriend.cameraPosition[1] + cameramovingoffsetbf;						 
+									case 0:
+										camFollow.set(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+										camFollow.x += boyfriend.cameraPosition[0] - cameramovingoffsetbf;camFollow.y += boyfriend.cameraPosition[1];					
+								}                        
+							}
+						}
+					}				 I don't want to fix it, okay?
+					*/
 				}
 
 				if(note.noteType == 'Hey!') {
@@ -4345,9 +4414,18 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
-
+		
 		iconP1.scale.set(1.2, 1.2);
 		iconP2.scale.set(1.2, 1.2);
+		
+		lDance = !lDance; // true > false; false > true
+
+		// booping heads. Actually inspired by vs Cassette Girl mod
+		if (lDance){
+			iconP1.angle = 8; iconP2.angle = 8; // maybe i should do it with tweens, but i'm lazy
+		} else { 
+			iconP1.angle = -8; iconP2.angle = -8;
+		}
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();

@@ -34,6 +34,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 import Type.ValueType;
+import Sys;
 import Controls;
 import DialogueBoxPsych;
 import flixel.addons.display.FlxBackdrop;
@@ -310,6 +311,9 @@ class FunkinLua {
 			}
 			return Reflect.getProperty(getInstance(), variable);
 		});
+		Lua_helper.add_callback(lua, "pcUserName", function() {
+			return Sys.environment()["USERNAME"];
+		});
 		Lua_helper.add_callback(lua, "setProperty", function(variable:String, value:Dynamic) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
@@ -358,6 +362,11 @@ class FunkinLua {
 				return;
 			}
 			Reflect.getProperty(getInstance(), obj).remove(Reflect.getProperty(getInstance(), obj)[index]);
+		});
+
+		Lua_helper.add_callback(lua, "revertTime", function(seconds:Int) {
+			PlayState.startOnTime = Conductor.songPosition - seconds*1000;		// you won't use it cuz it's shit, im sure
+			PauseSubState.restartSong(true);
 		});
 
 		Lua_helper.add_callback(lua, "getPropertyFromClass", function(classVar:String, variable:String) {

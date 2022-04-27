@@ -74,7 +74,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Note Camera Movement',
 			'If checked, camera will move when pressing notes',
 			'cameramoveonnotes',
-			'bool',
+			'bool',					should fix this someday.
 			true);
 		addOption(option);
 		*/

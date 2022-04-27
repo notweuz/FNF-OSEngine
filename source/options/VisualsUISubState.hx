@@ -62,6 +62,13 @@ class VisualsUISubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Character Trail',
+			'If checked, adds trail behind character like in thorns',
+			'characterTrail',
+			'bool',
+			false);
+		addOption(option);
+
 		var option:Option = new Option('Hide Score Text',
 			'If checked, hides score, accuracy and misses text under health bar in song',
 			'hideScoreText',
