@@ -30,6 +30,8 @@ typedef SwagSong =
 	var arrowSkin:String;
 	var splashSkin:String;
 	var validScore:Bool;
+	var characterTrails:Bool;
+	var cameraMoveOnNotes:Bool;
 }
 
 class Song
@@ -39,10 +41,12 @@ class Song
 	public var events:Array<Dynamic>;
 	public var bpm:Float;
 	public var needsVoices:Bool = true;
+	public var cameraMoveOnNotes:Bool = false;
 	public var arrowSkin:String;
 	public var splashSkin:String;
 	public var speed:Float = 1;
 	public var stage:String;
+	public var characterTrails:Bool = false;
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
