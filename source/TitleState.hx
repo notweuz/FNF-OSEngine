@@ -644,17 +644,16 @@ class TitleState extends MusicBeatState
 					createCoolText(['Forked', 'from'], 15);
 				case 4:
 					addMoreText('Psych Engine', 45);
-				case 5:
-					deleteCoolText();
 				case 6:
-					createCoolText(['Psych Engine', 'by'], 15);
-				case 7:
-					addMoreText('Shadow Mario', 15);
-					addMoreText('RiverOaken', 15);
-					addMoreText('shubs', 15);
+					deleteCoolText();
+					createCoolText(['Psych Engine by'], 45);
+					addMoreText('Shadow Mario',45);
+					addMoreText('RiverOaken',45);
+					addMoreText('bbpanzu',45);
 				case 8:
 					deleteCoolText();
 					createCoolText([curWacky[0]]);
+				case 10:
 					addMoreText(curWacky[1]);
 				case 12:
 					deleteCoolText();
