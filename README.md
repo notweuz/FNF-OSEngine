@@ -90,6 +90,7 @@ Now you can press ESC at title state. And game will ask you do you want to close
 Instead of 2 icons, there'll be three icons (losing, normal, winning). So you need icon file 450x150, or it won't work
 
 ![](https://github.com/weuz-github/FNF-OSEngine/blob/main/assets/preload/images/icons/icon-bf.png?raw=true)
+
 *thanks Cooljer for remaking original fnf icons*
 
 ### Shaders
