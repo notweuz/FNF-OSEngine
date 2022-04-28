@@ -1,5 +1,9 @@
 # Friday Night Funkin' - OS Engine - Modded Psych Engine
 
+## IMPORTANT NOTE:
+
+I need help with making good wikis. So if you can, ping me in [my discord server](https://discord.gg/5vEHTRjNck) if you wanna help me.
+
 ## Installation:
 You must have [the most up-to-date version of Haxe](https://haxe.org/download/), seriously, stop using 4.1.5, it misses some stuff.
 
@@ -40,3 +44,7 @@ OS Engine is a fork of Psych Engine, so you can use almost every feature from Ps
 
 ### Psych Engine mods compability
 Yes, almost every mod for Psych Engine runs on OS Engine (But you need to convert icons to 450x150)
+
+### Note Skins
+OS Engine adds a note skins system! There's only Default and Circle skins by default.
+![https://media.discordapp.net/attachments/969211146412363828/969211181728399420/unknown.png]()
