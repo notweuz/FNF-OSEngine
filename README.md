@@ -32,11 +32,11 @@ _____________________________________
 
 # Features
 
-## Attractive animated dialogue boxes:
+## Psych Engine Features
 
-![](https://user-images.githubusercontent.com/44785097/127706669-71cd5cdb-5c2a-4ecc-871b-98a276ae8070.gif)
+OS Engine is a fork of Psych Engine, so you can use almost every feature from Psych Engine in OS Engine!
 
+## OS Engine Features
 
-## Mod Support
-* Probably one of the main points of this engine, you can code in .lua files outside of the source code, making your own weeks without even messing with the source!
-* Comes with a Mod Organizing/Disabling Menu. 
+### Psych Engine mods compability
+Yes, almost every mod for Psych Engine runs on OS Engine (But you need to convert icons to 450x150)
