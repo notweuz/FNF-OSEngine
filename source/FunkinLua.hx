@@ -24,9 +24,12 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import openfl.Lib;
 import openfl.display.BlendMode;
+import openfl.display.ShaderParameter;
 import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 import openfl.utils.Assets;
 import flixel.math.FlxMath;
+import Shaders;
 import flixel.util.FlxSave;
 import flixel.addons.transition.FlxTransitionableState;
 #if sys
@@ -983,6 +986,15 @@ class FunkinLua {
 			PlayState.instance.modchartSprites.set(tag, leSprite);
 			leSprite.active = true;
 		});
+		Lua_helper.add_callback(lua, "makeLuaShaderSprite", function(tag:String, shader:String, x:Float, y:Float,optimize:Bool=false) {
+			tag = tag.replace('.', '');
+			resetSpriteTag(tag);
+			var leSprite:ModchartSprite = new ModchartSprite(x, y,true,shader,optimize);
+			leSprite.antialiasing = ClientPrefs.globalAntialiasing;
+
+			PlayState.instance.modchartSprites.set(tag, leSprite);
+			leSprite.active = true;
+		});
 		Lua_helper.add_callback(lua, "makeAnimatedLuaSprite", function(tag:String, image:String, x:Float, y:Float, ?spriteType:String = "sparrow") {
 			tag = tag.replace('.', '');
 			resetSpriteTag(tag);
@@ -1175,6 +1187,115 @@ class FunkinLua {
 				PlayState.instance.modchartSprites.remove(tag);
 			}
 		});
+
+		Lua_helper.add_callback(lua, "addChromaticAbberationEffect", function(camera:String,chromeOffset:Float = 0.005) {
+			
+			PlayState.instance.addShaderToCamera(camera, new ChromaticAberrationEffect(chromeOffset));
+			
+		});
+		
+		Lua_helper.add_callback(lua, "addScanlineEffect", function(camera:String,lockAlpha:Bool=false) {
+			
+			PlayState.instance.addShaderToCamera(camera, new ScanlineEffect(lockAlpha));
+			
+		});
+		Lua_helper.add_callback(lua, "addGrainEffect", function(camera:String,grainSize:Float,lumAmount:Float,lockAlpha:Bool=false) {
+			
+			PlayState.instance.addShaderToCamera(camera, new GrainEffect(grainSize,lumAmount,lockAlpha));
+			
+		});
+		Lua_helper.add_callback(lua, "addTiltshiftEffect", function(camera:String,blurAmount:Float,center:Float) {
+			
+			PlayState.instance.addShaderToCamera(camera, new TiltshiftEffect(blurAmount,center));
+			
+		});
+		Lua_helper.add_callback(lua, "addVCREffect", function(camera:String,glitchFactor:Float = 0.0,distortion:Bool=true,perspectiveOn:Bool=true,vignetteMoving:Bool=true) {
+			
+			PlayState.instance.addShaderToCamera(camera, new VCRDistortionEffect(glitchFactor,distortion,perspectiveOn,vignetteMoving));
+			
+		});
+
+		Lua_helper.add_callback(lua, "createShaders", function(shaderName:String, ?optimize:Bool = false)
+			{
+				var shader = new DynamicShaderHandler(shaderName, optimize);
+			
+				return shaderName;
+			});
+			/*
+			Lua_helper.add_callback(lua, "modifyShaderProperty", function(shaderName:String, propertyName:String, value:Dynamic)
+			{
+				//var handler:DynamicShaderHandler = PlayState.instance.luaShaders.get(shaderName);
+				//trace(Reflect.getProperty(handler.shader.data, propertyName));
+				//Reflect.setProperty(Reflect.getProperty(handler.shader.data, propertyName), 'value', value);
+				handler.modifyShaderProperty(propertyName, value);
+			});
+			// shader set
+			*/
+			Lua_helper.add_callback(lua, "setShadersToCamera", function(shaderName:Array<String>, cameraName:String)
+			{
+			
+				var shaderArray = new Array<BitmapFilter>();
+			
+				for (i in shaderName)
+				{
+					shaderArray.push(new ShaderFilter(PlayState.instance.luaShaders[i].shader));
+				}
+			
+				cameraFromString(cameraName).setFilters(shaderArray);
+			});
+			
+			// shader clear
+			
+			Lua_helper.add_callback(lua, "clearShadersFromCamera", function(cameraName)
+				{
+					cameraFromString(cameraName).setFilters([]);
+				});	
+						
+				Lua_helper.add_callback(lua, "addGlitchEffect", function(camera:String,waveSpeed:Float = 0.1,waveFrq:Float = 0.1,waveAmp:Float = 0.1) {
+					
+					PlayState.instance.addShaderToCamera(camera, new GlitchEffect(waveSpeed,waveFrq,waveAmp));
+					
+				});
+				Lua_helper.add_callback(lua, "addPulseEffect", function(camera:String,waveSpeed:Float = 0.1,waveFrq:Float = 0.1,waveAmp:Float = 0.1) {
+					
+					PlayState.instance.addShaderToCamera(camera, new PulseEffect(waveSpeed,waveFrq,waveAmp));
+					
+				});
+				Lua_helper.add_callback(lua, "addDistortionEffect", function(camera:String,waveSpeed:Float = 0.1,waveFrq:Float = 0.1,waveAmp:Float = 0.1) {
+					
+					PlayState.instance.addShaderToCamera(camera, new DistortBGEffect(waveSpeed,waveFrq,waveAmp));
+					
+				});
+				Lua_helper.add_callback(lua, "addInvertEffect", function(camera:String,lockAlpha:Bool=false) {
+					
+					PlayState.instance.addShaderToCamera(camera, new InvertColorsEffect(lockAlpha));
+					
+				});
+				Lua_helper.add_callback(lua, "addGreyscaleEffect", function(camera:String) { //for dem funkies
+					
+					PlayState.instance.addShaderToCamera(camera, new GreyscaleEffect());
+					
+				});
+				Lua_helper.add_callback(lua, "addGrayscaleEffect", function(camera:String) { //for dem funkies
+					
+					PlayState.instance.addShaderToCamera(camera, new GreyscaleEffect());
+					
+				});
+				Lua_helper.add_callback(lua, "add3DEffect", function(camera:String,xrotation:Float=0,yrotation:Float=0,zrotation:Float=0,depth:Float=0) { //for dem funkies
+					
+					PlayState.instance.addShaderToCamera(camera, new ThreeDEffect(xrotation,yrotation,zrotation,depth));
+					
+				});
+				Lua_helper.add_callback(lua, "addBloomEffect", function(camera:String,intensity:Float = 0.35,blurSize:Float=1.0) {
+					
+					PlayState.instance.addShaderToCamera(camera, new BloomEffect(blurSize/512.0,intensity));
+					
+				});
+				Lua_helper.add_callback(lua, "clearEffects", function(camera:String) {
+					PlayState.instance.clearShaderFromCamera(camera);
+				});
+			
+			
 
 		Lua_helper.add_callback(lua, "setObjectCamera", function(obj:String, camera:String = '') {
 			if(PlayState.instance.modchartSprites.exists(obj)) {
@@ -2068,11 +2189,27 @@ class ModchartSprite extends FlxSprite
 {
 	public var wasAdded:Bool = false;
 	//public var isInFront:Bool = false;
+	var hShader:DynamicShaderHandler;
 
-	public function new(?x:Float = 0, ?y:Float = 0)
+	public function new(?x:Float = 0, ?y:Float = 0,shaderSprite:Bool=false,type:String='', optimize:Bool = false)
 	{
 		super(x, y);
-		antialiasing = ClientPrefs.globalAntialiasing;
+		if(shaderSprite){
+
+			// codism
+			flipY = true;
+
+			makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT);
+
+			hShader = new DynamicShaderHandler(type, optimize);
+
+			if (hShader.shader != null)
+			{
+				shader = hShader.shader;
+			}
+
+			antialiasing = FlxG.save.data.antialiasing;
+			}
 	}
 }
 

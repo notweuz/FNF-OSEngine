@@ -15,6 +15,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.system.FlxAssets.FlxShader;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.FlxTrailArea;
@@ -41,8 +42,10 @@ import haxe.Json;
 import lime.utils.Assets;
 import openfl.Lib;
 import openfl.display.BlendMode;
+import openfl.display.Shader;
 import openfl.display.StageQuality;
 import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 import openfl.utils.Assets as OpenFlAssets;
 import editors.ChartingState;
 import editors.CharacterEditorState;
@@ -55,6 +58,8 @@ import Achievements;
 import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
+import Shaders;
+import DynamicShaderHandler;
 #if sys
 import sys.FileSystem;
 #end
@@ -80,12 +85,17 @@ class PlayState extends MusicBeatState
 		['Sick!', 1], //From 90% to 99%
 		['Perfect!!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
+	public static var animatedShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
 	public var modchartSprites:Map<String, ModchartSprite> = new Map<String, ModchartSprite>();
 	public var modchartTimers:Map<String, FlxTimer> = new Map<String, FlxTimer>();
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, ModchartText> = new Map<String, ModchartText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
+	public var shader_chromatic_abberation:ChromaticAberrationEffect;
+	public var camGameShaders:Array<ShaderEffect> = [];
+	public var camHUDShaders:Array<ShaderEffect> = [];
+	public var camOtherShaders:Array<ShaderEffect> = [];
 	public var lDance:Bool = false;
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -114,6 +124,7 @@ class PlayState extends MusicBeatState
 	public var boyfriendGroup:FlxSpriteGroup;
 	public var dadGroup:FlxSpriteGroup;
 	public var gfGroup:FlxSpriteGroup;
+	public var shaderUpdates:Array<Float->Void> = [];
 	public static var curStage:String = '';
 	public static var isPixelStage:Bool = false;
 	public static var SONG:SwagSong = null;
@@ -272,6 +283,7 @@ class PlayState extends MusicBeatState
 	public var luaArray:Array<FunkinLua> = [];
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
+	public var luaShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
 
 	// Debug buttons
 	private var debugKeysChart:Array<FlxKey>;
@@ -313,6 +325,8 @@ class PlayState extends MusicBeatState
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
+
+		shader_chromatic_abberation = new ChromaticAberrationEffect();
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -426,6 +440,10 @@ class PlayState extends MusicBeatState
 				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
 				stageFront.updateHitbox();
 				add(stageFront);
+				new DynamicShaderHandler('Example', false);
+				var shaderArray = new Array<BitmapFilter>();
+				shaderArray.push(new ShaderFilter(animatedShaders['Example'].shader));
+				camGame.setFilters(shaderArray);
 				if(!ClientPrefs.lowQuality) {
 					var stageLight:BGSprite = new BGSprite('stage_light', -125, -100, 0.9, 0.9);
 					stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
@@ -1093,6 +1111,113 @@ class PlayState extends MusicBeatState
 			luaArray.push(new FunkinLua(luaFile));
 		}
 		#end
+	}
+
+	public function addShaderToCamera(cam:String,effect:Dynamic){//STOLE FROM ANDROMEDA
+	  
+	  
+	  
+		switch(cam.toLowerCase()) {
+			case 'camhud' | 'hud':
+					camHUDShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camHUDShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other':
+					camOtherShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camOtherShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camOther.setFilters(newCamEffects);
+			case 'camgame' | 'game':
+					camGameShaders.push(effect);
+					var newCamEffects:Array<BitmapFilter>=[]; // IT SHUTS HAXE UP IDK WHY BUT WHATEVER IDK WHY I CANT JUST ARRAY<SHADERFILTER>
+					for(i in camGameShaders){
+					  newCamEffects.push(new ShaderFilter(i.shader));
+					}
+					camGame.setFilters(newCamEffects);
+			default:
+				if(modchartSprites.exists(cam)) {
+					Reflect.setProperty(modchartSprites.get(cam),"shader",effect.shader);
+				} else if(modchartTexts.exists(cam)) {
+					Reflect.setProperty(modchartTexts.get(cam),"shader",effect.shader);
+				} else {
+					var OBJ = Reflect.getProperty(PlayState.instance,cam);
+					Reflect.setProperty(OBJ,"shader", effect.shader);
+				}
+			
+			
+				
+				
+		}
+	  
+	  
+	  
+	  
+  }
+
+
+	public function removeShaderFromCamera(cam:String, effect:ShaderEffect)
+	{
+		switch (cam.toLowerCase())
+		{
+			case 'camhud' | 'hud':
+				camHUDShaders.remove(effect);
+				var newCamEffects:Array<BitmapFilter> = [];
+				for (i in camHUDShaders)
+				{
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other':
+				camOtherShaders.remove(effect);
+				var newCamEffects:Array<BitmapFilter> = [];
+				for (i in camOtherShaders)
+				{
+					newCamEffects.push(new ShaderFilter(i.shader));
+				}
+				camOther.setFilters(newCamEffects);
+			default:
+				if (modchartSprites.exists(cam))
+				{
+					Reflect.setProperty(modchartSprites.get(cam), "shader", null);
+				}
+				else if (modchartTexts.exists(cam))
+				{
+					Reflect.setProperty(modchartTexts.get(cam), "shader", null);
+				}
+				else
+				{
+					var OBJ = Reflect.getProperty(PlayState.instance, cam);
+					Reflect.setProperty(OBJ, "shader", null);
+				}
+		}
+	}
+
+	public function clearShaderFromCamera(cam:String)
+	{
+		switch (cam.toLowerCase())
+		{
+			case 'camhud' | 'hud':
+				camHUDShaders = [];
+				var newCamEffects:Array<BitmapFilter> = [];
+				camHUD.setFilters(newCamEffects);
+			case 'camother' | 'other':
+				camOtherShaders = [];
+				var newCamEffects:Array<BitmapFilter> = [];
+				camOther.setFilters(newCamEffects);
+			case 'camgame' | 'game':
+				camGameShaders = [];
+				var newCamEffects:Array<BitmapFilter> = [];
+				camGame.setFilters(newCamEffects);
+			default:
+				camGameShaders = [];
+				var newCamEffects:Array<BitmapFilter> = [];
+				camGame.setFilters(newCamEffects);
+		}
 	}
 	
 	function startCharacterPos(char:Character, ?gfCheck:Bool = false) {
@@ -2304,7 +2429,21 @@ class PlayState extends MusicBeatState
 		setOnLuas('cameraX', camFollowPos.x);
 		setOnLuas('cameraY', camFollowPos.y);
 		setOnLuas('botPlay', cpuControlled);
+		for (shader in animatedShaders)
+			{
+				shader.update(elapsed);
+			}
+			#if LUA_ALLOWED
+			
+		for (key => value in luaShaders)
+		{
+			value.update(elapsed);
+		}
+		#end
 		callOnLuas('onUpdatePost', [elapsed]);
+		for (i in shaderUpdates){
+			i(elapsed);
+		}
 	}
 
 	function openChartEditor()
