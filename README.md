@@ -4,6 +4,8 @@
 
 I need help with making good wikis. So if you can, ping me in [my discord server](https://discord.gg/5vEHTRjNck) if you wanna help me.
 
+!!Add mods by folders (mods/my-mod/) instead of just (mods/)!!! Or it'll break engine
+
 ## Installation:
 You must have [the most up-to-date version of Haxe](https://haxe.org/download/), seriously, stop using 4.1.5, it misses some stuff.
 
