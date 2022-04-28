@@ -1,3 +1,4 @@
+
 package;
 
 #if desktop
@@ -13,7 +14,6 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
@@ -55,9 +55,6 @@ class StoryMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
-		camera.zoom = 2.2;
-		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
-
 		PlayState.isStoryMode = true;
 		WeekData.reloadWeekFiles(true);
 		if(curWeek >= WeekData.weeksList.length) curWeek = 0;
@@ -94,7 +91,7 @@ class StoryMenuState extends MusicBeatState
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Story Mode Menu", null);
+		DiscordClient.changePresence("In the Menus", null);
 		#end
 
 		var num:Int = 0;
@@ -263,7 +260,6 @@ class StoryMenuState extends MusicBeatState
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
 			MusicBeatState.switchState(new MainMenuState());
-			CoolUtil.cameraZoom(camera, 2, .5, FlxEase.backOut, ONESHOT);
 		}
 
 		super.update(elapsed);
