@@ -4,6 +4,8 @@
 
 I need help with making good wikis. So if you can, ping me in [my discord server](https://discord.gg/5vEHTRjNck) if you wanna help me.
 
+!!Add mods by folders (mods/my-mod/) instead of just (mods/)!!! Or it'll break engine
+
 ## Installation:
 You must have [the most up-to-date version of Haxe](https://haxe.org/download/), seriously, stop using 4.1.5, it misses some stuff.
 
@@ -16,7 +18,11 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/AndreiRud
 ## OS Engine Credits:
 * [weuz_](https://github.com/weuz-github) - Coding
 * [nelifs](https://github.com/nelifs) - Coding and Design
-* Cooljer - Arts
+* [Cooljer](https://github.com/cooljer) - Arts
+
+### Spectial Thanks
+
+* [vs Dave and Bambi: Golden Apple](https://gamebanana.com/mods/343129) - Discord Button
 
 ## Psych Engine Credits:
 * Shadow Mario - Coding
