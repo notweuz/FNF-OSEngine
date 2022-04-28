@@ -47,4 +47,4 @@ Yes, almost every mod for Psych Engine runs on OS Engine (But you need to conver
 
 ### Note Skins
 OS Engine adds a note skins system! There's only Default and Circle skins by default.
-![https://media.discordapp.net/attachments/969211146412363828/969211181728399420/unknown.png]()
+![](https://media.discordapp.net/attachments/969211146412363828/969211181728399420/unknown.png)
