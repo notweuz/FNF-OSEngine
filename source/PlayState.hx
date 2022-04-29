@@ -1579,7 +1579,11 @@ class PlayState extends MusicBeatState
 					note.copyAlpha = false;
 					note.alpha = note.multAlpha;
 					if(ClientPrefs.middleScroll && !note.mustPress) {
-						note.alpha *= 0.5;
+						if (!ClientPrefs.hideMidScrollOpArrows) {
+							note.alpha *= 0.5;
+						} else {
+							note.alpha *= 0;
+						}
 					}
 				});
 				callOnLuas('onCountdownTick', [swagCounter]);
@@ -1923,6 +1927,7 @@ class PlayState extends MusicBeatState
 			// FlxG.log.add(i);
 			var targetAlpha:Float = 1;
 			if (player < 1 && ClientPrefs.middleScroll) targetAlpha = 0.35;
+			if (ClientPrefs.hideMidScrollOpArrows && ClientPrefs.middleScroll && player < 1) targetAlpha = 0;
 
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, strumLine.y, i, player);
 			babyArrow.downScroll = ClientPrefs.downScroll;

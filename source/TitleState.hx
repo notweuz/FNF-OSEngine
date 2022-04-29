@@ -15,6 +15,7 @@ import flixel.addons.transition.TransitionData;
 import haxe.Json;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import ColorblindFilters;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
@@ -220,6 +221,7 @@ class TitleState extends MusicBeatState
 
 	function startIntro()
 	{
+		ColorblindFilters.applyFiltersOnGame(); // applies colorbind filters, ok?
 		if (!initialized)
 		{
 			/*var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
