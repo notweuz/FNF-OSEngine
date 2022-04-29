@@ -105,13 +105,13 @@ class ScanlineEffect extends Effect
 	
 }
 
-
+//hi i sigma male fixing these shaders for macos 
 class Scanline extends FlxShader
 {
 	public function new(){super('
 		////pragma header
 		const float scale = 1.0;
-	uniform bool lockAlpha = false;
+	        uniform bool lockAlpha;
 		void main()
 		{
 			if (mod(floor(openfl_TextureCoordv.y * openfl_TextureSize.y / scale), 2.0) == 0.0 ){
