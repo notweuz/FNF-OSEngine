@@ -25,7 +25,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var osEngineVesrion:String = '0.1.3'; //This is also used for Discord RPC
+	public static var osEngineVesrion:String = '0.1.4'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -38,7 +38,7 @@ class MainMenuState extends MusicBeatState
 		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
-		'discord',
+		//'discord', you can go to discord now by pressing ctrl in credits
 		#if !switch 'donate', #end
 		'options'
 	];
@@ -218,8 +218,6 @@ class MainMenuState extends MusicBeatState
 				if (optionShit[curSelected] == 'donate')
 				{
 					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
-				} else if (optionShit[curSelected] == 'discord') {
-					CoolUtil.browserLoad('https://discord.gg/5vEHTRjNck');
 				}
 				else
 				{

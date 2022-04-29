@@ -396,10 +396,6 @@ class Paths
 		return modFolders('data/' + key + '.json');
 	}
 
-	inline static public function modsSongs(song:String, key:String) {
-		return modFolders('songs/' + song + '/' + key + '.' + SOUND_EXT);
-	}
-
 	inline static public function modsVideo(key:String) {
 		return modFolders('videos/' + key + '.' + VIDEO_EXT);
 	}

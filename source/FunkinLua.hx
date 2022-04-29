@@ -317,6 +317,9 @@ class FunkinLua {
 		Lua_helper.add_callback(lua, "pcUserName", function() {
 			return Sys.environment()["USERNAME"];
 		});
+		Lua_helper.add_callback(lua, 'openURL', function(url:String) {
+			CoolUtil.browserLoad(url);
+		});
 		Lua_helper.add_callback(lua, "setProperty", function(variable:String, value:Dynamic) {
 			var killMe:Array<String> = variable.split('.');
 			if(killMe.length > 1) {
