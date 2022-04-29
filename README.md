@@ -21,8 +21,8 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/AndreiRud
 * [Cooljer](https://github.com/cooljer) - Arts
 
 ### Spectial Thanks
-
 * [vs Dave and Bambi: Golden Apple](https://gamebanana.com/mods/343129) - Discord Button
+* [jonnycat](https://github.com/McJonnycat) - fixing scanline shader for macos
 
 ## Psych Engine Credits:
 * Shadow Mario - Coding
