@@ -26,12 +26,14 @@ typedef SwagSong =
 	var player3:String; //deprecated, now replaced by gfVersion
 	var gfVersion:String;
 	var stage:String;
+	var healthdrainKill:Bool;
 
 	var arrowSkin:String;
 	var splashSkin:String;
 	var validScore:Bool;
 	var characterTrails:Bool;
 	var cameraMoveOnNotes:Bool;
+	var healthdrain:Float;
 }
 
 class Song
@@ -45,7 +47,9 @@ class Song
 	public var arrowSkin:String;
 	public var splashSkin:String;
 	public var speed:Float = 1;
+	public var healthdrain:Float = 0;
 	public var stage:String;
+	public var healthdrainKill:Bool = false;
 	public var characterTrails:Bool = false;
 
 	public var player1:String = 'bf';

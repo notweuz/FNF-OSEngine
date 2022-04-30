@@ -71,7 +71,7 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 	public static var cameramovingoffset = 40;
-	public static var cameramovingoffsetbf = 40;	//will use it somedays....
+	public static var cameramovingoffsetbf = 40; // idk why i made literally same variable
 
 	public static var ratingStuff:Array<Dynamic> = [
 		['You Suck!', 0.2], //From 0% to 19%
@@ -88,6 +88,7 @@ class PlayState extends MusicBeatState
 	public static var animatedShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
 	public var modchartSprites:Map<String, ModchartSprite> = new Map<String, ModchartSprite>();
+	//public var modchartBackdropSprites:Map<String, ModchartBackdropSprite> = new Map<String, ModchartBackdropSprite>(); gonna use it somedays
 	public var modchartTimers:Map<String, FlxTimer> = new Map<String, FlxTimer>();
 	public var modchartSounds:Map<String, FlxSound> = new Map<String, FlxSound>();
 	public var modchartTexts:Map<String, ModchartText> = new Map<String, ModchartText>();
@@ -3560,7 +3561,7 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 
-		// weuz_, don't forget to add shit for misses here, ok?
+		// weuz_, don't forget to add shit for misses here, ok? // i literally forgot what i supposed to add here ;-;
 
 		health -= daNote.missHealth * healthLoss;
 		if(instakillOnMiss)
@@ -3687,6 +3688,18 @@ class PlayState extends MusicBeatState
 								}                   
 							}
 					} 
+			}
+
+			if(SONG.healthdrain > 0) {
+				var ppppperc = SONG.healthdrain/100;
+				if (SONG.healthdrainKill == true) {
+					health = health - ppppperc;
+				} else if (!SONG.healthdrainKill && (health - ppppperc < 0)) {
+					//trace("shut up");
+					health = 0.01;
+				} else if (!SONG.healthdrainKill && (health - ppppperc > 0)) {
+					health = health - ppppperc;
+				}
 			}
 
 			if(char != null)
@@ -3834,7 +3847,7 @@ class PlayState extends MusicBeatState
 			note.wasGoodHit = true;
 			vocals.volume = 1;
 
-			var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
+			var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD // i wonder who wrote that
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);

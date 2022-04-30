@@ -139,6 +139,8 @@ class ChartingState extends MusicBeatState
 
 	var tempBpm:Float = 0;
 
+	var lastNoteData:Float;
+	var lastNoteStrum:Float;
 	var vocals:FlxSound = null;
 
 	var leftIcon:HealthIcon;
@@ -207,6 +209,8 @@ class ChartingState extends MusicBeatState
 				bpm: 150.0,
 				needsVoices: true,
 				cameraMoveOnNotes: false,
+				healthdrain: 0,
+				healthdrainKill: false,
 				arrowSkin: '',
 				splashSkin: 'noteSplashes',//idk it would crash if i didn't
 				player1: 'bf',
@@ -337,17 +341,18 @@ class ChartingState extends MusicBeatState
 		\nHold Shift to move 4x faster
 		\nHold Control and click on an arrow to select it
 		\nZ/X - Zoom in/out
-		\n
+		\nHold Right Mouse - Placing notes by dragging mouse
 		\nEsc - Test your chart inside Chart Editor
 		\nEnter - Play your chart
+		\nHold C & Mouse Wheel - Decrease/Increate Note Sustain Length
 		\nQ/E - Decrease/Increase Note Sustain Length
 		\nSpace - Stop/Resume song";
 
 		var tipTextArray:Array<String> = text.split('\n');
 		for (i in 0...tipTextArray.length) {
 			var tipText:FlxText = new FlxText(UI_box.x, UI_box.y + UI_box.height + 8, 0, tipTextArray[i], 16);
-			tipText.y += i * 14;
-			tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
+			tipText.y += i * 12;
+			tipText.setFormat(Paths.font("vcr.ttf"), 14, FlxColor.WHITE, LEFT/*, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK*/);
 			//tipText.borderSize = 2;
 			tipText.scrollFactor.set();
 			add(tipText);
@@ -590,6 +595,18 @@ class ChartingState extends MusicBeatState
 		stageDropDown.selectedLabel = _song.stage;
 		blockPressWhileScrolling.push(stageDropDown);
 
+		var healthdrainOBJ:FlxUINumericStepper = new FlxUINumericStepper(player1DropDown.x + 140, player3DropDown.y, 1, 0, 0, 99, 0);
+		healthdrainOBJ.value = _song.healthdrain;
+		healthdrainOBJ.name = 'health_drain';
+		blockPressWhileTypingOnStepper.push(healthdrainOBJ);
+		
+		var healthdrainKill_check = new FlxUICheckBox(player1DropDown.x + 140, player2DropDown.y, null, null, "Healthdrain can kill player", 100);
+		healthdrainKill_check.checked = _song.healthdrainKill;
+		healthdrainKill_check.callback = function()
+		{
+			_song.healthdrainKill = healthdrainKill_check.checked;
+		};
+
 		var skin = PlayState.SONG.arrowSkin;
 		if(skin == null) skin = '';
 		noteSkinInputText = new FlxUIInputText(player2DropDown.x, player2DropDown.y + 50, 150, skin, 8);
@@ -629,12 +646,15 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(player3DropDown.x, player3DropDown.y - 15, 0, 'Girlfriend:'));
 		tab_group_song.add(new FlxText(player1DropDown.x, player1DropDown.y - 15, 0, 'Boyfriend:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
+		tab_group_song.add(new FlxText(healthdrainOBJ.x, healthdrainOBJ.y - 15, 0, 'Health Drain on Opponent Notehit'));
 		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture:'));
 		tab_group_song.add(new FlxText(noteSplashesInputText.x, noteSplashesInputText.y - 15, 0, 'Note Splashes Texture:'));
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(player3DropDown);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(stageDropDown);
+		tab_group_song.add(healthdrainOBJ);
+		tab_group_song.add(healthdrainKill_check);
 
 		UI_box.addGroup(tab_group_song);
 
@@ -1393,6 +1413,10 @@ class ChartingState extends MusicBeatState
 				} else {
 					sender.value = 0;
 				}
+			} 
+			else if (wname == 'health_drain')
+			{
+				_song.healthdrain = nums.value;
 			}
 			else if (wname == 'section_bpm')
 			{
@@ -1507,8 +1531,49 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
 
-		
-		if (FlxG.mouse.justPressed)
+		if (FlxG.mouse.pressedRight) {
+			var curNoteStrum = getStrumTime(dummyArrow.y, false) + sectionStartTime();
+			var curNoteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
+			if ((curNoteStrum == lastNoteStrum) && (curNoteData == lastNoteData)) {
+				//trace("there's another arrow :c"); no one wants to see this in console, so this is a comment now
+			} else {
+				if (FlxG.mouse.overlaps(curRenderedNotes))
+				{
+					curRenderedNotes.forEachAlive(function(note:Note)
+					{
+						if (FlxG.mouse.overlaps(note))
+						{
+							if (FlxG.keys.pressed.CONTROL)
+							{
+								selectNote(note);
+							}
+							else if (FlxG.keys.pressed.ALT)
+							{
+								selectNote(note);
+								curSelectedNote[3] = noteTypeIntMap.get(currentType);
+								updateGrid();
+							}
+							else
+							{
+								//trace('tryin to delete note...');
+								deleteNote(note);
+							}
+						}
+					});
+				}
+				else
+				{
+					if (FlxG.mouse.x > gridBG.x
+						&& FlxG.mouse.x < gridBG.x + gridBG.width
+						&& FlxG.mouse.y > gridBG.y
+						&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * _song.notes[curSection].lengthInSteps) * zoomList[curZoom])
+					{
+						FlxG.log.add('added note');
+						addNote();
+					}
+				}
+			}
+		} else if (FlxG.mouse.justPressed && !FlxG.keys.pressed.V)
 		{
 			if (FlxG.mouse.overlaps(curRenderedNotes))
 			{
@@ -1629,6 +1694,12 @@ class ChartingState extends MusicBeatState
 				{
 					changeNoteSustain(-Conductor.stepCrochet);
 				}
+				if (FlxG.keys.pressed.C && FlxG.mouse.wheel < 0) {
+					changeNoteSustain(Conductor.stepCrochet);
+				}
+				if (FlxG.keys.pressed.C && FlxG.mouse.wheel > 0) {
+					changeNoteSustain(-Conductor.stepCrochet);
+				}
 			}
 			
 			
@@ -1699,7 +1770,7 @@ class ChartingState extends MusicBeatState
 					resetSection();
 			}
 
-			if (FlxG.mouse.wheel != 0)
+			if (FlxG.mouse.wheel != 0 && !FlxG.keys.pressed.C)
 			{
 				FlxG.sound.music.pause();
 				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet*0.8);
@@ -2544,6 +2615,10 @@ class ChartingState extends MusicBeatState
 			{
 				if (i[0] == note.strumTime && i[1] == noteDataToCheck)
 				{
+					var noteStrum = getStrumTime(dummyArrow.y, false) + sectionStartTime();
+					var noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
+					lastNoteData = noteData;
+					lastNoteStrum = noteStrum;
 					if(i == curSelectedNote) curSelectedNote = null;
 					//FlxG.log.add('FOUND EVIL NOTE');
 					_song.notes[curSection].sectionNotes.remove(i);
@@ -2638,6 +2713,9 @@ class ChartingState extends MusicBeatState
 
 		//trace(noteData + ', ' + noteStrum + ', ' + curSection);
 		strumTimeInputText.text = '' + curSelectedNote[0];
+
+		lastNoteData = noteData;
+		lastNoteStrum = noteStrum;
 
 		updateGrid();
 		updateNoteUI();
@@ -2775,6 +2853,8 @@ class ChartingState extends MusicBeatState
 			splashSkin: _song.splashSkin,
 			characterTrails: _song.characterTrails,
 			cameraMoveOnNotes: _song.cameraMoveOnNotes,
+			healthdrain: _song.healthdrain,
+			healthdrainKill: _song.healthdrainKill,
 
 			player1: _song.player1,
 			player2: _song.player2,
