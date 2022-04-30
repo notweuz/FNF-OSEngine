@@ -20,7 +20,7 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/AndreiRud
 * [nelifs](https://github.com/nelifs) - Coding and Design
 * [Cooljer](https://github.com/cooljer) - Arts
 
-### Spectial Thanks
+### Special Thanks
 * [jonnycat](https://github.com/McJonnycat) - Fixing bugs in Engine <3.
 
 ## Psych Engine Credits:

@@ -105,6 +105,18 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		option.decimals = 1;
 
+		var option:Option = new Option('Hold Notes Visibility',
+			'These lines after hold notes will be shown with selecter visibility',
+			'holdNoteVisibility',
+			'percent',
+			1);
+		addOption(option);
+		option.scrollSpeed = 1;
+		option.minValue = 0.0;
+		option.changeValue = 0.1;
+		option.maxValue = 1;
+		option.decimals = 1;
+
 		var option:Option = new Option('Opponent Lane Underlay Visibility',
 			'Sets visibility of opponent\'s lane underlay.',
 			'opponentUnderlaneVisibility',

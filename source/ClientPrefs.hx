@@ -34,6 +34,7 @@ class ClientPrefs {
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
 	public static var underlaneVisibility:Float = 0;
+	public static var holdNoteVisibility:Float = 1;
 	public static var opponentUnderlaneVisibility:Float = 0;
 	public static var noteSkinSettings:String = 'Classic';
 	public static var pauseMusic:String = 'Tea Time';
@@ -127,6 +128,7 @@ class ClientPrefs {
 		FlxG.save.data.scoreZoom = scoreZoom;
 		FlxG.save.data.characterTrail = characterTrail;
 		FlxG.save.data.noReset = noReset;
+		FlxG.save.data.holdNoteVisibility = holdNoteVisibility;
 		FlxG.save.data.healthBarAlpha = healthBarAlpha;
 		FlxG.save.data.comboOffset = comboOffset;
 		FlxG.save.data.achievementsMap = Achievements.achievementsMap;
