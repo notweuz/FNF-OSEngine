@@ -207,6 +207,7 @@ class ChartingState extends MusicBeatState
 				events: [],
 				characterTrails: false,
 				bpm: 150.0,
+				songInstVolume: 1.0,
 				needsVoices: true,
 				cameraMoveOnNotes: false,
 				healthdrain: 0,
@@ -288,7 +289,7 @@ class ChartingState extends MusicBeatState
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
 
-		bpmTxt = new FlxText(1000, 50, 0, "", 16);
+		bpmTxt = new FlxText(1100, 50, 0, "", 16);
 		bpmTxt.scrollFactor.set();
 		add(bpmTxt);
 
@@ -330,7 +331,7 @@ class ChartingState extends MusicBeatState
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
 
-		UI_box.resize(300, 400);
+		UI_box.resize(400, 400);
 		UI_box.x = 640 + GRID_SIZE / 2;
 		UI_box.y = 25;
 		UI_box.scrollFactor.set();
@@ -457,26 +458,26 @@ class ChartingState extends MusicBeatState
 				saveEvents();
 			});
 
-		var check_Trails = new FlxUICheckBox(110, loadAutosaveBtn.y, null, null, "Character Trails", 100);
+		var check_Trails = new FlxUICheckBox(80, loadAutosaveBtn.y, null, null, "Character Trails", 100);
 		check_Trails.checked = _song.characterTrails;
 		check_Trails.callback = function()
 		{
 			_song.characterTrails = check_Trails.checked;
 		};
-		var check_cameraMove = new FlxUICheckBox(110, loadEventJson.y, null, null, "Move Camera on Note Hits", 100);
+		var check_cameraMove = new FlxUICheckBox(80, loadEventJson.y, null, null, "Move Camera on Note Hits", 100);
 		check_cameraMove.checked = _song.cameraMoveOnNotes;
 		check_cameraMove.callback = function()
 		{
 			_song.cameraMoveOnNotes = check_cameraMove.checked;
 		};
-		var clear_events:FlxButton = new FlxButton(320, 310, 'Clear events', function()
+		var clear_events:FlxButton = new FlxButton(450, 310, 'Clear events', function()
 			{
 				openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, clearEvents, null,ignoreWarnings));
 			});
 		clear_events.color = FlxColor.RED;
 		clear_events.label.color = FlxColor.WHITE;
 
-		var clear_notes:FlxButton = new FlxButton(320, clear_events.y + 30, 'Clear notes', function()
+		var clear_notes:FlxButton = new FlxButton(450, clear_events.y + 30, 'Clear notes', function()
 			{
 				openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, function(){for (sec in 0..._song.notes.length) {
 					_song.notes[sec].sectionNotes = [];
@@ -611,6 +612,11 @@ class ChartingState extends MusicBeatState
 		if(skin == null) skin = '';
 		noteSkinInputText = new FlxUIInputText(player2DropDown.x, player2DropDown.y + 50, 150, skin, 8);
 		blockPressWhileTypingOn.push(noteSkinInputText);
+
+		var songinstVolumeOBJ:FlxUINumericStepper = new FlxUINumericStepper(noteSkinInputText.x + 180, noteSkinInputText.y, 0.1, 1.0, 0.1, 1, 1);
+		if (_song.songInstVolume > 0 ) songinstVolumeOBJ.value = _song.songInstVolume; else songinstVolumeOBJ.value = 1;
+		songinstVolumeOBJ.name = 'instplay_Volume';
+		blockPressWhileTypingOnStepper.push(songinstVolumeOBJ);
 	
 		noteSplashesInputText = new FlxUIInputText(noteSkinInputText.x, noteSkinInputText.y + 35, 150, _song.splashSkin, 8);
 		blockPressWhileTypingOn.push(noteSplashesInputText);
@@ -640,6 +646,8 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(reloadNotesButton);
 		tab_group_song.add(noteSkinInputText);
 		tab_group_song.add(noteSplashesInputText);
+		tab_group_song.add(songinstVolumeOBJ);
+		tab_group_song.add(new FlxText(songinstVolumeOBJ.x, songinstVolumeOBJ.y - 15, 0, 'Ingame Instrumental Volume:'));
 		tab_group_song.add(new FlxText(stepperBPM.x, stepperBPM.y - 15, 0, 'Song BPM:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
 		tab_group_song.add(new FlxText(player2DropDown.x, player2DropDown.y - 15, 0, 'Opponent:'));
@@ -1417,6 +1425,10 @@ class ChartingState extends MusicBeatState
 			else if (wname == 'health_drain')
 			{
 				_song.healthdrain = nums.value;
+			}
+			else if (wname == 'instplay_Volume')
+			{
+				_song.songInstVolume = nums.value;
 			}
 			else if (wname == 'section_bpm')
 			{
@@ -2849,6 +2861,7 @@ class ChartingState extends MusicBeatState
 			bpm: _song.bpm,
 			needsVoices: _song.needsVoices,
 			speed: _song.speed,
+			songInstVolume: _song.songInstVolume,
 			arrowSkin: _song.arrowSkin,
 			splashSkin: _song.splashSkin,
 			characterTrails: _song.characterTrails,

@@ -34,6 +34,7 @@ typedef SwagSong =
 	var characterTrails:Bool;
 	var cameraMoveOnNotes:Bool;
 	var healthdrain:Float;
+	var songInstVolume:Float;
 }
 
 class Song
@@ -56,6 +57,7 @@ class Song
 	public var player2:String = 'dad';
 	public var player3:String = 'gf'; //deprecated
 	public var gfVersion:String = 'gf';
+	public var songInstVolume:Float = 1;
 
 	private static function onLoadJson(songJson:SwagSong) // Convert old charts to newest format
 	{
