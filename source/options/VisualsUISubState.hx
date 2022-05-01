@@ -139,6 +139,14 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.onChange = onChangeFPSCounter;
 		#end
 
+		var option:Option = new Option('Themed Main Menu Background',
+			'If checked, the background color of the main menu depends on the time of day.',
+			'themedmainmenubg',
+			'bool',
+			false);
+		option.defaultValue = false;
+		addOption(option);
+
 		var option:Option = new Option('Note Skin',
 			"What note skin do you prefer for playing?",
 			'noteSkinSettings',
