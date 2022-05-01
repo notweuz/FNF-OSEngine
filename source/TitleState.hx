@@ -40,6 +40,7 @@ import flixel.addons.display.FlxBackdrop;
 
 using StringTools;
 
+
 typedef TitleData =
 {
 	titlex:Float,
@@ -57,6 +58,7 @@ class TitleState extends MusicBeatState
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
 	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
+	public static var skipped:Bool = false;
 
 	public static var initialized:Bool = false;
 
@@ -65,6 +67,7 @@ class TitleState extends MusicBeatState
 	var credTextShit:Alphabet;
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
+	
 
 	var curWacky:Array<String> = [];
 
@@ -455,11 +458,55 @@ class TitleState extends MusicBeatState
 
 		if (initialized && !transitioning && skippedIntro)
 		{
+			if(skipped == false) {
+				if(ClientPrefs.autotitleskip == true) {
+					if (titleText != null)
+						titleText.animation.play('press');
+					
+					FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+
+					transitioning = true;
+					// FlxG.sound.music.stop();
+					FlxTween.tween(logoBl, {y: -1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+					FlxTween.tween(gfDance, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+					FlxTween.tween(titleText, {y: 1500}, 3, {ease: FlxEase.backInOut, type: ONESHOT});
+					// CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
+					var blackBg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+					add(blackBg);
+
+					var skippedText:FlxText = new FlxText(450, 300, "SKIPPED...", 80);
+					skippedText.setFormat("VCR OSD Mono", 80, FlxColor.WHITE, CENTER);
+					add(skippedText);
+
+					new FlxTimer().start(3, function(tmr:FlxTimer) {
+						skippedText.destroy();
+						blackBg.destroy();
+					});
+
+					FlxG.sound.music.fadeOut();
+					titlestatebg.velocity.set(400, 210);
+					skipped = true; // true
+
+					new FlxTimer().start(1, function(tmr:FlxTimer)
+					{
+						if (mustUpdate)
+						{
+							//MusicBeatState.switchState(new OutdatedState());
+						}
+						else
+						{
+							MusicBeatState.switchState(new MainMenuState());
+						}
+						closedState = true;
+					});
+					// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
+				}
+			}
 			if (pressedEnter)
 			{
 				if (titleText != null)
 					titleText.animation.play('press');
-
+		
 				FlxG.camera.flash(FlxColor.WHITE, 1);
 				FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 
@@ -472,6 +519,7 @@ class TitleState extends MusicBeatState
 				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 				FlxG.sound.music.fadeOut();
 				titlestatebg.velocity.set(400, 210);
+				skipped = true;
 
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
@@ -748,6 +796,8 @@ class TitleState extends MusicBeatState
 				remove(ngSpr);
 				remove(credGroup);
 				FlxG.camera.flash(FlxColor.WHITE, 4);
+				// флешка иди нахуй.
+
 				FlxTween.tween(logoBl, {y: -100}, 2, {ease: FlxEase.backOut, type: ONESHOT});
 				new FlxTimer().start(2, function(tmr:FlxTimer)
 				{

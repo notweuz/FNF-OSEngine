@@ -14,6 +14,7 @@ class ClientPrefs {
 	public static var autosaveInterval:Int = 5;
 	public static var autosavecharts:Bool = true;
 	public static var themedmainmenubg:Bool = false;
+	public static var autotitleskip:Bool = false;
 	public static var globalAntialiasing:Bool = true;
 	public static var noteSplashes:Bool = true;
 	public static var lowQuality:Bool = false;
@@ -139,6 +140,7 @@ class ClientPrefs {
 		FlxG.save.data.autosaveInterval = autosaveInterval;
 		FlxG.save.data.autosavecharts = autosavecharts;
 		FlxG.save.data.themedmainmenubg = themedmainmenubg;
+		FlxG.save.data.autotitleskip = autotitleskip;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.showcaseMode = showcaseMode;
@@ -216,6 +218,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.themedmainmenubg != null) {
 			themedmainmenubg = FlxG.save.data.themedmainmenubg;
+		}
+		if(FlxG.save.data.autotitleskip != null) {
+			autotitleskip = FlxG.save.data.autotitleskip;
 		}
 		/*if(FlxG.save.data.cursing != null) {
 			cursing = FlxG.save.data.cursing;

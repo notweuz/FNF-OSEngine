@@ -86,7 +86,7 @@ class MainMenuState extends MusicBeatState
 		if(ClientPrefs.themedmainmenubg == true) {
 			var hours:Int = Date.now().getHours();
 			if(hours > 18) {
-				bg.color = 0x6939ff;
+				bg.color = 0x4d39ff; // 0x6939ff
 			} else if(hours < 18) null;
 		}
 
@@ -218,7 +218,7 @@ class MainMenuState extends MusicBeatState
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
-					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
+					CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // КТО УДАЛИТ - ТОТ ГЕЙ
 				}
 				else
 				{

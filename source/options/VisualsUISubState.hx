@@ -147,6 +147,14 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.defaultValue = false;
 		addOption(option);
 
+		var option:Option = new Option('Auto Title Skip',
+			'If checked, automatically skips the title state.',
+			'autotitleskip',
+			'bool',
+			false);
+		option.defaultValue = false;
+		addOption(option);
+
 		var option:Option = new Option('Note Skin',
 			"What note skin do you prefer for playing?",
 			'noteSkinSettings',
