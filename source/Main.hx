@@ -33,6 +33,8 @@ class Main extends Sprite
 	{
 		super();
 
+    SUtil.gameCrashCheck();
+
 		if (stage != null)
 		{
 			init();
@@ -76,6 +78,8 @@ class Main extends Sprite
 		FlxGraphic.defaultPersist = true;
 		// the reason for this is we're going to be handling our own cache smartly
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
+		
+		SUtil.doTheCheck();
 
 		#if !mobile
 		fpsVar = new FPS(10, 3, 0xFFFFFF);
