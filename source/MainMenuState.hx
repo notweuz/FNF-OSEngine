@@ -218,7 +218,7 @@ class MainMenuState extends MusicBeatState
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
-					CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // КТО УДАЛИТ - ТОТ ГЕЙ
+					CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // WHOEVER DELETES THIS IS GAY
 				}
 				else
 				{
