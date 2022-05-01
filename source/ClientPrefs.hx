@@ -12,7 +12,7 @@ class ClientPrefs {
 	public static var showFPS:Bool = true;
 	public static var flashing:Bool = true;
 	public static var autosaveInterval:Int = 5;
-	public static var autosave:Bool = true;
+	public static var autosavecharts:Bool = true;
 	public static var globalAntialiasing:Bool = true;
 	public static var noteSplashes:Bool = true;
 	public static var lowQuality:Bool = false;
@@ -136,7 +136,7 @@ class ClientPrefs {
 		FlxG.save.data.achievementsMap = Achievements.achievementsMap;
 		FlxG.save.data.henchmenDeath = Achievements.henchmenDeath;
 		FlxG.save.data.autosaveInterval = autosaveInterval;
-		FlxG.save.data.autosave = autosave;
+		FlxG.save.data.autosavecharts = autosavecharts;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.showcaseMode = showcaseMode;
@@ -209,8 +209,8 @@ class ClientPrefs {
 		if(FlxG.save.data.autosaveInterval != null) {
 			autosaveInterval = FlxG.save.data.autosaveInterval;
 		}
-		if(FlxG.save.data.autosave != null) {
-			autosave = FlxG.save.data.autosave;
+		if(FlxG.save.data.autosavecharts != null) {
+			autosavecharts = FlxG.save.data.autosavecharts;
 		}
 		/*if(FlxG.save.data.cursing != null) {
 			cursing = FlxG.save.data.cursing;

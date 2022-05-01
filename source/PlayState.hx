@@ -3551,6 +3551,16 @@ class PlayState extends MusicBeatState
 	}
 
 	function noteMiss(daNote:Note):Void { //You didn't hit the key and let it go offscreen, also used by Hurt Notes
+		if (daNote.isSustainNote) {
+			notes.remove(daNote, true);
+			if(!practiceMode) songScore -= 5;
+			daNote.alpha = 0.4; 		// kade engine vibes?
+			daNote.kill();
+			totalPlayed++;
+			goods++;
+			RecalculateRating();
+			return;
+		}
 		//Dupe note remove
 		notes.forEachAlive(function(note:Note) {
 			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {

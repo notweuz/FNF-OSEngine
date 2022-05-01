@@ -34,9 +34,9 @@ class ChartEditorSettingsSubState extends BaseOptionsMenu
 		title = 'Chart Editor Settings';
 		rpcTitle = 'Chart Editor Settings Menu'; //for Discord Rich Presence
 
-		var option:Option = new Option('AutoSave',
-			'Enable/Disable chart editor autosave',
-			'autosave',
+		var option:Option = new Option('Autosave',
+			'If checked, enables autosaving charts in chart editor.',
+			'autosavecharts',
 			'bool',
 			true);
 		addOption(option);
@@ -45,10 +45,10 @@ class ChartEditorSettingsSubState extends BaseOptionsMenu
 			'Interval for chart editor autosaves in minutes',
 			'autosaveInterval',
 			'int',
-			10);
+			5);
 		option.scrollSpeed = 5;
 		option.minValue = 1;
-		option.maxValue = 10;
+		option.maxValue = 15;
 		option.changeValue = 1;
 		option.displayFormat = '%v Minutes';
 		addOption(option);

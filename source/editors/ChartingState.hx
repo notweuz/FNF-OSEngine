@@ -201,7 +201,7 @@ class ChartingState extends MusicBeatState
 	public static var vortex:Bool = false;
 	override function create()
 	{
-		if(ClientPrefs.autosave == true) {
+		if(ClientPrefs.autosavecharts == true) {
 			Lib.setInterval(autosaveSong, ClientPrefs.autosaveInterval * 60 * 1000); // <arubz> * 60 * 1000
 		}
 
