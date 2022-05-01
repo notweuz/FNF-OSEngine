@@ -796,7 +796,6 @@ class TitleState extends MusicBeatState
 				remove(ngSpr);
 				remove(credGroup);
 				FlxG.camera.flash(FlxColor.WHITE, 4);
-				// флешка иди нахуй.
 
 				FlxTween.tween(logoBl, {y: -100}, 2, {ease: FlxEase.backOut, type: ONESHOT});
 				new FlxTimer().start(2, function(tmr:FlxTimer)
