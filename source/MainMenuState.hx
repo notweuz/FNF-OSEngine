@@ -86,7 +86,7 @@ class MainMenuState extends MusicBeatState
 
 		var hours:Int = Date.now().getHours();
 		if(hours > 18) {
-			bg.loadGraphic(Paths.image('menuBGBlue'));
+			bg.color = 0x6939ff;
 		} else if(hours < 18) null;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
