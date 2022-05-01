@@ -83,7 +83,7 @@ class MainMenuState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
-		if(ClientPrefx.themedmainmenubg == true) {
+		if(ClientPrefs.themedmainmenubg == true) {
 			var hours:Int = Date.now().getHours();
 			if(hours > 18) {
 				bg.color = 0x6939ff;
