@@ -142,6 +142,7 @@ class ClientPrefs {
 		FlxG.save.data.showcaseMode = showcaseMode;
 		FlxG.save.data.removePerfects = removePerfects;
 		FlxG.save.data.perfectWindow = perfectWindow;
+		FlxG.save.data.sickWindow = sickWindow;
 		FlxG.save.data.goodWindow = goodWindow;
 		FlxG.save.data.badWindow = badWindow;
 		FlxG.save.data.safeFrames = safeFrames;
