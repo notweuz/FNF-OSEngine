@@ -32,9 +32,11 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.ui.FlxSpriteButton;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;
+import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
@@ -149,6 +151,8 @@ class ChartingState extends MusicBeatState
 	var value1InputText:FlxUIInputText;
 	var value2InputText:FlxUIInputText;
 	var currentSongName:String;
+
+	var autosaveIndicator:FlxSprite;
 	
 	var zoomTxt:FlxText;
 	var curZoom:Int = 1;
@@ -197,6 +201,10 @@ class ChartingState extends MusicBeatState
 	public static var vortex:Bool = false;
 	override function create()
 	{
+		if(ClientPrefs.autosave == true) {
+			Lib.setInterval(autosaveSong, ClientPrefs.autosaveInterval * 60 * 1000); // <arubz> * 60 * 1000
+		}
+
 		if (PlayState.SONG != null)
 			_song = PlayState.SONG;
 		else
@@ -225,6 +233,8 @@ class ChartingState extends MusicBeatState
 			addSection();
 			PlayState.SONG = _song;
 		}
+
+		
 
 		// Paths.clearMemory();
 
@@ -359,6 +369,13 @@ class ChartingState extends MusicBeatState
 			add(tipText);
 		}
 		add(UI_box);
+
+		autosaveIndicator = new FlxSprite(-30, FlxG.height - 90).loadGraphic(Paths.image('autosaveIndicator'));
+		autosaveIndicator.setGraphicSize(200, 70);
+		autosaveIndicator.alpha = 0;
+		autosaveIndicator.scrollFactor.set();
+		autosaveIndicator.antialiasing = ClientPrefs.globalAntialiasing;
+		add(autosaveIndicator);
 
 		addSongUI();
 		addSectionUI();
@@ -1681,6 +1698,7 @@ class ChartingState extends MusicBeatState
 		{
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
+				
 				autosaveSong();
 				LoadingState.loadAndSwitchState(new editors.EditorPlayState(sectionStartTime()));
 			}
@@ -2816,6 +2834,14 @@ class ChartingState extends MusicBeatState
 		FlxG.save.data.autosave = Json.stringify({
 			"song": _song
 		});
+		trace('Chart saved!');
+		FlxTween.tween(autosaveIndicator, {alpha: 1}, 1, {ease: FlxEase.backInOut, type: ONESHOT});
+		
+		new FlxTimer().start(3, function(tmr:FlxTimer) {
+			FlxTween.tween(autosaveIndicator, {alpha: 0}, 1, {ease: FlxEase.backInOut, type: ONESHOT});
+		});
+		
+
 		FlxG.save.flush();
 	}
 

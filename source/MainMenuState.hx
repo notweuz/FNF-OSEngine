@@ -83,10 +83,10 @@ class MainMenuState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		add(bg);
 
-		var hours:Int = Date.now().getHours();
 
+		var hours:Int = Date.now().getHours();
 		if(hours > 18) {
-			bg.color = 0x6939ff;
+			bg.loadGraphic(Paths.image('menuBGBlue'));
 		} else if(hours < 18) null;
 
 		camFollow = new FlxObject(0, 0, 1, 1);
