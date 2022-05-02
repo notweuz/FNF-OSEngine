@@ -2,6 +2,8 @@
 
 ## IMPORTANT NOTE:
 
+This is an Android Port, so if you want to help me just send me a pull request
+
 I need help with making good wikis. So if you can, ping me in [my discord server](https://discord.gg/5vEHTRjNck) if you wanna help me.
 
 !!Add mods by folders (mods/my-mod/) instead of just (mods/)!!! Or it'll break engine
