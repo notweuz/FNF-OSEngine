@@ -2377,7 +2377,6 @@ class PlayState extends MusicBeatState
 					//Jesus fuck this took me so much mother fucking time AAAAAAAAAA
 					if(strumScroll && daNote.isSustainNote)
 					{
-						daNote.alpha = ClientPrefs.holdNoteVisibility;
 						if (daNote.animation.curAnim.name.endsWith('end')) {
 							daNote.y += 10.5 * (fakeCrochet / 400) * 1.5 * songSpeed + (46 * (songSpeed - 1));
 							daNote.y -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
@@ -2395,6 +2394,12 @@ class PlayState extends MusicBeatState
 				if (!daNote.mustPress && daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 				{
 					opponentNoteHit(daNote);
+				}
+
+				if (daNote.isSustainNote) {
+					if (daNote.mustPress) { 
+						daNote.alpha = ClientPrefs.holdNoteVisibility; 
+					}
 				}
 
 				if(daNote.mustPress && cpuControlled) {

@@ -50,7 +50,7 @@ class CoolUtil
 		return Math.max(min, Math.min(max, value));
 	}
 
-	public static function cameraZoom(target, zoomLevel, speed, style, type)
+	public static function cameraZoom(target, zoomLevel:Float, speed, style, type)
 	{
 		FlxTween.tween(target, {zoom: zoomLevel}, speed, {ease: style, type: type});
 	}
