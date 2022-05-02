@@ -43,7 +43,6 @@ class MainMenuState extends MusicBeatState
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
 		//'discord', you can go to discord now by pressing ctrl in credits
-		#if !switch 'donate', #end
 		'options'
 	];
 
