@@ -95,6 +95,10 @@ class GameExitState extends MusicBeatState
 
 		changeSelection();
 
+    #if android
+  	addVirtualPad(LEFT_RIGHT, A);
+    #end
+
 		super.create();
 	}
 
