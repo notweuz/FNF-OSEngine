@@ -228,7 +228,9 @@ class ChartingState extends MusicBeatState
 				gfVersion: 'gf',
 				speed: 1,
 				stage: 'stage',
-				validScore: false
+				validScore: false,
+				disableAntiMash: false,
+				disableDebugButtons: false
 			};
 			addSection();
 			PlayState.SONG = _song;
@@ -481,6 +483,18 @@ class ChartingState extends MusicBeatState
 		{
 			_song.characterTrails = check_Trails.checked;
 		};
+		var check_antiMash = new FlxUICheckBox(reloadSong.x + 90, reloadSong.y, null, null, "Disable Antimash", 100);
+		check_antiMash.checked = _song.disableAntiMash;
+		check_antiMash.callback = function()
+		{
+			_song.disableAntiMash = check_antiMash.checked;
+		};
+		var check_disableDebug = new FlxUICheckBox(reloadSongJson.x + 90, reloadSongJson.y, null, null, "Disable Debugmenu Buttons", 100);
+		check_disableDebug.checked = _song.disableDebugButtons;
+		check_disableDebug.callback = function()
+		{
+			_song.disableDebugButtons = check_disableDebug.checked;
+		};
 		var check_cameraMove = new FlxUICheckBox(80, loadEventJson.y, null, null, "Move Camera on Note Hits", 100);
 		check_cameraMove.checked = _song.cameraMoveOnNotes;
 		check_cameraMove.callback = function()
@@ -606,13 +620,6 @@ class ChartingState extends MusicBeatState
 
 		if(stages.length < 1) stages.push('stage');
 
-		stageDropDown = new FlxUIDropDownMenuCustom(player1DropDown.x + 140, player1DropDown.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray(stages, true), function(character:String)
-		{
-			_song.stage = stages[Std.parseInt(character)];
-		});
-		stageDropDown.selectedLabel = _song.stage;
-		blockPressWhileScrolling.push(stageDropDown);
-
 		var healthdrainOBJ:FlxUINumericStepper = new FlxUINumericStepper(player1DropDown.x + 140, player3DropDown.y, 1, 0, 0, 99, 0);
 		healthdrainOBJ.value = _song.healthdrain;
 		healthdrainOBJ.name = 'health_drain';
@@ -630,13 +637,20 @@ class ChartingState extends MusicBeatState
 		noteSkinInputText = new FlxUIInputText(player2DropDown.x, player2DropDown.y + 50, 150, skin, 8);
 		blockPressWhileTypingOn.push(noteSkinInputText);
 
-		var songinstVolumeOBJ:FlxUINumericStepper = new FlxUINumericStepper(noteSkinInputText.x + 180, noteSkinInputText.y, 0.1, 1.0, 0.1, 1, 1);
+		var songinstVolumeOBJ:FlxUINumericStepper = new FlxUINumericStepper(player1DropDown.x + 140, player1DropDown.y, 0.1, 1.0, 0.1, 1, 1);
 		if (_song.songInstVolume > 0 ) songinstVolumeOBJ.value = _song.songInstVolume; else songinstVolumeOBJ.value = 1;
 		songinstVolumeOBJ.name = 'instplay_Volume';
 		blockPressWhileTypingOnStepper.push(songinstVolumeOBJ);
 	
 		noteSplashesInputText = new FlxUIInputText(noteSkinInputText.x, noteSkinInputText.y + 35, 150, _song.splashSkin, 8);
 		blockPressWhileTypingOn.push(noteSplashesInputText);
+
+		stageDropDown = new FlxUIDropDownMenuCustom(noteSplashesInputText.x + 170, noteSplashesInputText.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray(stages, true), function(character:String)
+		{
+			_song.stage = stages[Std.parseInt(character)];
+		});
+		stageDropDown.selectedLabel = _song.stage;
+		blockPressWhileScrolling.push(stageDropDown);
 
 		var reloadNotesButton:FlxButton = new FlxButton(noteSplashesInputText.x + 5, noteSplashesInputText.y + 20, 'Change Notes', function() {
 			_song.arrowSkin = noteSkinInputText.text;
@@ -656,6 +670,8 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(reloadSongJson);
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(check_Trails);
+		tab_group_song.add(check_antiMash);
+		tab_group_song.add(check_disableDebug);
 		tab_group_song.add(check_cameraMove);
 		tab_group_song.add(loadEventJson);
 		tab_group_song.add(stepperBPM);
@@ -2894,6 +2910,8 @@ class ChartingState extends MusicBeatState
 			cameraMoveOnNotes: _song.cameraMoveOnNotes,
 			healthdrain: _song.healthdrain,
 			healthdrainKill: _song.healthdrainKill,
+			disableAntiMash: _song.disableAntiMash,
+			disableDebugButtons: _song.disableDebugButtons,
 
 			player1: _song.player1,
 			player2: _song.player2,

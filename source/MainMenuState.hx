@@ -16,6 +16,10 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+#if MODS_ALLOWED
+import sys.FileSystem;
+import sys.io.File;
+#end
 import lime.app.Application;
 import Achievements;
 import editors.MasterEditorMenu;
@@ -25,7 +29,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var osEngineVesrion:String = '1.1.0'; //This is also used for Discord RPC
+	public static var osEngineVesrion:String = '1.2.0'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -39,9 +43,13 @@ class MainMenuState extends MusicBeatState
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
 		//'discord', you can go to discord now by pressing ctrl in credits
-		#if !switch 'donate', #end
 		'options'
 	];
+
+	#if MODS_ALLOWED
+	var customOption:String;
+	var	customOptionLink:String;
+	#end
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
@@ -75,35 +83,46 @@ class MainMenuState extends MusicBeatState
 		persistentUpdate = persistentDraw = true;
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.scrollFactor.set(0, yScroll);
-		bg.setGraphicSize(Std.int(bg.width * 1.175));
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.antialiasing = ClientPrefs.globalAntialiasing;
-		add(bg);
+        var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+        bg.scrollFactor.set(0, yScroll);
+        bg.setGraphicSize(Std.int(bg.width * 1.175));
+        bg.updateHitbox();
+        bg.screenCenter();
+        bg.antialiasing = ClientPrefs.globalAntialiasing;
+        add(bg);
 
-		if(ClientPrefs.themedmainmenubg == true) {
-			var hours:Int = Date.now().getHours();
-			if(hours > 18) {
-				bg.color = 0x4d39ff; // 0x6939ff
-			} else if(hours < 18) null;
-		}
+        if(ClientPrefs.themedmainmenubg == true) {
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollowPos = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
-		add(camFollowPos);
+            var themedBg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+            themedBg.scrollFactor.set(0, yScroll);
+            themedBg.setGraphicSize(Std.int(bg.width));
+            themedBg.updateHitbox();
+            themedBg.screenCenter();
+            themedBg.antialiasing = ClientPrefs.globalAntialiasing;
+            add(themedBg);
 
-		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		magenta.scrollFactor.set(0, yScroll);
-		magenta.setGraphicSize(Std.int(magenta.width * 1.175));
-		magenta.updateHitbox();
-		magenta.screenCenter();
-		magenta.visible = false;
-		magenta.antialiasing = ClientPrefs.globalAntialiasing;
-		magenta.color = 0xFFfd719b;
-		add(magenta);
+            var hours:Int = Date.now().getHours();
+            if(hours > 18) {
+                themedBg.color = 0x545f8a; // 0x6939ff
+            } else if(hours > 8) {
+                themedBg.loadGraphic(Paths.image('menuBG'));
+            }
+        }
+
+        camFollow = new FlxObject(0, 0, 1, 1);
+        camFollowPos = new FlxObject(0, 0, 1, 1);
+        add(camFollow);
+        add(camFollowPos);
+
+        magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+        magenta.scrollFactor.set(0, yScroll);
+        magenta.setGraphicSize(Std.int(magenta.width * 1.175));
+        magenta.updateHitbox();
+        magenta.screenCenter();
+        magenta.visible = false;
+        magenta.antialiasing = ClientPrefs.globalAntialiasing;
+        magenta.color = 0xFFfd719b;
+        add(magenta);
 		
 		// magenta.scrollFactor.set();
 
@@ -116,6 +135,9 @@ class MainMenuState extends MusicBeatState
 		}*/
 
 		var curoffset:Float = 100;
+		#if MODS_ALLOWED
+		pushModMenuItemsToList(Paths.currentModDirectory);
+		#end
 
 		for (i in 0...optionShit.length)
 		{
@@ -174,6 +196,32 @@ class MainMenuState extends MusicBeatState
 		super.create();
 	}
 
+	#if MODS_ALLOWED
+	private var modsAdded:Array<String> = [];
+	function pushModMenuItemsToList(folder:String)
+	{
+		if(modsAdded.contains(folder)) return;
+
+		var menuitemsFile:String = null;
+		if(folder != null && folder.trim().length > 0) menuitemsFile = Paths.mods(folder + '/data/menuitems.txt');
+		else menuitemsFile = Paths.mods('data/menuitems.txt');
+
+		if (FileSystem.exists(menuitemsFile))
+		{
+			var firstarray:Array<String> = File.getContent(menuitemsFile).split('\n');
+			if (firstarray[0].length > 0) {
+				var arr:Array<String> = firstarray[0].split('||');
+				//if(arr.length == 1) arr.push(folder);
+				optionShit.push(arr[0]);
+				customOption = arr[0];
+				customOptionLink = arr[1];
+			}
+		}
+		modsAdded.push(folder);
+	}
+	#end
+
+
 	#if ACHIEVEMENTS_ALLOWED
 	// Unlocks "Freaky on a Friday Night" achievement
 	function giveAchievement() {
@@ -223,6 +271,8 @@ class MainMenuState extends MusicBeatState
 				if (optionShit[curSelected] == 'donate')
 				{
 					CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // WHOEVER DELETES THIS IS GAY
+				} else if (optionShit[curSelected] == customOption) {
+					CoolUtil.browserLoad(customOptionLink);
 				}
 				else
 				{
