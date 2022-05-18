@@ -81,11 +81,6 @@ class Main extends Sprite
 		
 		SUtil.doTheCheck();
 
-                #if android 
-                FlxG.android.justReleased.BACK
-                openSubState(new PauseSubState());
-                #end
-
 		#if !mobile
 		fpsVar = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
