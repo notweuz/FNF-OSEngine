@@ -340,7 +340,7 @@ class FreeplayState extends MusicBeatState
 		if(ctrl)
 		{
 		  #if android
-			removeVirtualPad();
+                        addVirtualPad(FULL, A_B);
 			#end
 			persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
@@ -409,7 +409,7 @@ class FreeplayState extends MusicBeatState
 		else if(controls.RESET #if android || _virtualpad.buttonY.justPressed #end)
 		{
 			#if android
-			removeVirtualPad();
+			addVirtualPad(FULL, A_B);
 			#end
 			persistentUpdate = false;
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
