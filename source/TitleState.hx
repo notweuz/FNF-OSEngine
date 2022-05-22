@@ -290,8 +290,11 @@ class TitleState extends MusicBeatState
 
 		var easterEgg:String = FlxG.save.data.psychDevsEasterEgg;
 <<<<<<< HEAD
+<<<<<<< HEAD
 		switch (easterEgg.toUpperCase())
 =======
+=======
+>>>>>>> f4cf818 (HTML5 should work now)
 		if(easterEgg == null) easterEgg = ''; //html5 fix
 
 		switch(easterEgg.toUpperCase())
