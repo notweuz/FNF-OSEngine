@@ -49,8 +49,8 @@ import Discord;
 using StringTools;
 
 class FunkinLua {
-	public static var Function_Stop:Dynamic = "Function_Stop";
-	public static var Function_Continue:Dynamic = "Function_Continue";
+	public static var Function_Stop:Dynamic = 1;
+	public static var Function_Continue:Dynamic = 0;
 
 	#if LUA_ALLOWED
 	public var lua:State = null;
@@ -92,8 +92,8 @@ class FunkinLua {
 		#end
 
 		// Lua shit
-		set('Function_Stop', "Function_Stop");
-		set('Function_Continue', "Function_Continue");
+		set('Function_Stop', Function_Stop);
+		set('Function_Continue', Function_Continue);
 		set('luaDebugMode', false);
 		set('luaDeprecatedWarnings', true);
 		set('inChartEditor', false);
@@ -169,7 +169,7 @@ class FunkinLua {
 		// Character shit
 		set('boyfriendName', PlayState.SONG.player1);
 		set('dadName', PlayState.SONG.player2);
-		set('gfName', PlayState.SONG.player3);
+		set('gfName', PlayState.SONG.gfVersion);
 
 		// Some settings, no jokes
 		set('downscroll', ClientPrefs.downScroll);
@@ -316,6 +316,14 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "pcUserName", function() {
 			return Sys.environment()["USERNAME"];
+		});
+		Lua_helper.add_callback(lua, "setRating", function(or:Int, nr:String) {
+			var ratingarray = PlayState.ratingStuff;
+			var targetrating = ratingarray[9];
+			if (or < 10 && or > -1) {
+				targetrating = ratingarray[or];
+			} 
+			targetrating[0] = nr;
 		});
 		Lua_helper.add_callback(lua, 'openURL', function(url:String) {
 			CoolUtil.browserLoad(url);
@@ -2092,6 +2100,7 @@ class FunkinLua {
 			}
 
 			var conv:Dynamic = Convert.fromLua(lua, result);
+			Lua.pop(lua, 1);
 			return conv;
 		}
 		#end

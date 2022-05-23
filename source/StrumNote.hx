@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
+import PlayState;
 
 using StringTools;
 
@@ -30,6 +31,15 @@ class StrumNote extends FlxSprite
 		colorSwap = new ColorSwap();
 		shader = colorSwap.shader;
 		noteData = leData;
+
+		if (PlayState.SONG.swapStrumLines == true) {
+			if (player == 1) {
+				player = 0;
+			} else if (player == 0) {
+				player = 1;
+			}
+		}
+
 		this.player = player;
 		this.noteData = leData;
 		super(x, y);

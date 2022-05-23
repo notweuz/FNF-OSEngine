@@ -32,11 +32,13 @@ typedef SwagSong =
 	var splashSkin:String;
 	var validScore:Bool;
 	var characterTrails:Bool;
+	var bfTrails:Bool;
 	var cameraMoveOnNotes:Bool;
 	var healthdrain:Float;
 	var songInstVolume:Float;
 	var disableAntiMash:Bool;
 	var disableDebugButtons:Bool;
+	var swapStrumLines:Bool;
 }
 
 class Song
@@ -54,8 +56,10 @@ class Song
 	public var stage:String;
 	public var healthdrainKill:Bool = false;
 	public var characterTrails:Bool = false;
+	public var bfTrails:Bool = false;
 	public var disableAntiMash:Bool = false;
 	public var disableDebugButtons:Bool = false;
+	public var swapStrumLines:Bool = false;
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';

@@ -29,7 +29,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var osEngineVesrion:String = '1.2.0'; //This is also used for Discord RPC
+	public static var osEngineVesrion:String = '1.3.0'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -129,7 +129,7 @@ class MainMenuState extends MusicBeatState
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var scale:Float = 0.5;
+		var scale:Float = 0.7;
 		/*if(optionShit.length > 6) {
 			scale = 6 / optionShit.length;
 		}*/
@@ -383,14 +383,14 @@ class MainMenuState extends MusicBeatState
 		{
 			spr.animation.play('idle');
 			//spr.updateHitbox();
-			spr.scale.x = 0.5;
-			spr.scale.y = 0.5;
+			spr.scale.x = 0.7;
+			spr.scale.y = 0.7;
 
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
-				spr.scale.x = 0.8;
-				spr.scale.y = 0.8;
+				spr.scale.x = 1.0;
+				spr.scale.y = 1.0;
 				var add:Float = 0;
 				if(menuItems.length > 4) {
 					add = menuItems.length * 8;

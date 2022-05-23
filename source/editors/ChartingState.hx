@@ -214,6 +214,7 @@ class ChartingState extends MusicBeatState
 				notes: [],
 				events: [],
 				characterTrails: false,
+				bfTrails: false,
 				bpm: 150.0,
 				songInstVolume: 1.0,
 				needsVoices: true,
@@ -230,7 +231,8 @@ class ChartingState extends MusicBeatState
 				stage: 'stage',
 				validScore: false,
 				disableAntiMash: false,
-				disableDebugButtons: false
+				disableDebugButtons: false,
+				swapStrumLines: false
 			};
 			addSection();
 			PlayState.SONG = _song;
@@ -476,13 +478,6 @@ class ChartingState extends MusicBeatState
 			{
 				saveEvents();
 			});
-
-		var check_Trails = new FlxUICheckBox(80, loadAutosaveBtn.y, null, null, "Character Trails", 100);
-		check_Trails.checked = _song.characterTrails;
-		check_Trails.callback = function()
-		{
-			_song.characterTrails = check_Trails.checked;
-		};
 		var check_antiMash = new FlxUICheckBox(reloadSong.x + 90, reloadSong.y, null, null, "Disable Antimash", 100);
 		check_antiMash.checked = _song.disableAntiMash;
 		check_antiMash.callback = function()
@@ -494,6 +489,24 @@ class ChartingState extends MusicBeatState
 		check_disableDebug.callback = function()
 		{
 			_song.disableDebugButtons = check_disableDebug.checked;
+		};
+		var check_swapNote = new FlxUICheckBox(loadAutosaveBtn.x + 90, loadAutosaveBtn.y, null, null, "Swap Strumline Position", 100);
+		check_swapNote.checked = _song.swapStrumLines;
+		check_swapNote.callback = function()
+		{
+			_song.swapStrumLines = check_swapNote.checked;
+		};
+		var check_Trails = new FlxUICheckBox(check_swapNote.x, check_swapNote.y+30, null, null, "Opponent Trail", 100);
+		check_Trails.checked = _song.characterTrails;
+		check_Trails.callback = function()
+		{
+			_song.characterTrails = check_Trails.checked;
+		};
+		var check_bfTrails = new FlxUICheckBox(check_Trails.x, check_Trails.y+30, null, null, "Boyfriend Trail", 100);
+		check_bfTrails.checked = _song.bfTrails;
+		check_bfTrails.callback = function()
+		{
+			_song.bfTrails = check_bfTrails.checked;
 		};
 		var check_cameraMove = new FlxUICheckBox(80, loadEventJson.y, null, null, "Move Camera on Note Hits", 100);
 		check_cameraMove.checked = _song.cameraMoveOnNotes;
@@ -670,7 +683,9 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(reloadSongJson);
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(check_Trails);
+		tab_group_song.add(check_bfTrails);
 		tab_group_song.add(check_antiMash);
+		tab_group_song.add(check_swapNote);
 		tab_group_song.add(check_disableDebug);
 		tab_group_song.add(check_cameraMove);
 		tab_group_song.add(loadEventJson);
@@ -680,14 +695,14 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(noteSkinInputText);
 		tab_group_song.add(noteSplashesInputText);
 		tab_group_song.add(songinstVolumeOBJ);
-		tab_group_song.add(new FlxText(songinstVolumeOBJ.x, songinstVolumeOBJ.y - 15, 0, 'Ingame Instrumental Volume:'));
+		tab_group_song.add(new FlxText(songinstVolumeOBJ.x, songinstVolumeOBJ.y - 25, 0, 'Ingame Instrumental \nVolume:'));
 		tab_group_song.add(new FlxText(stepperBPM.x, stepperBPM.y - 15, 0, 'Song BPM:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
 		tab_group_song.add(new FlxText(player2DropDown.x, player2DropDown.y - 15, 0, 'Opponent:'));
 		tab_group_song.add(new FlxText(player3DropDown.x, player3DropDown.y - 15, 0, 'Girlfriend:'));
 		tab_group_song.add(new FlxText(player1DropDown.x, player1DropDown.y - 15, 0, 'Boyfriend:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
-		tab_group_song.add(new FlxText(healthdrainOBJ.x, healthdrainOBJ.y - 15, 0, 'Health Drain on Opponent Notehit'));
+		tab_group_song.add(new FlxText(healthdrainOBJ.x, healthdrainOBJ.y - 25, 0, 'Health Drain on \nOpponent Notehit'));
 		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture:'));
 		tab_group_song.add(new FlxText(noteSplashesInputText.x, noteSplashesInputText.y - 15, 0, 'Note Splashes Texture:'));
 		tab_group_song.add(player2DropDown);
@@ -2907,11 +2922,13 @@ class ChartingState extends MusicBeatState
 			arrowSkin: _song.arrowSkin,
 			splashSkin: _song.splashSkin,
 			characterTrails: _song.characterTrails,
+			bfTrails: _song.bfTrails,
 			cameraMoveOnNotes: _song.cameraMoveOnNotes,
 			healthdrain: _song.healthdrain,
 			healthdrainKill: _song.healthdrainKill,
 			disableAntiMash: _song.disableAntiMash,
 			disableDebugButtons: _song.disableDebugButtons,
+			swapStrumLines: _song.swapStrumLines,
 
 			player1: _song.player1,
 			player2: _song.player2,
