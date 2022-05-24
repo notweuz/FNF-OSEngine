@@ -1310,6 +1310,23 @@ class ChartingState extends MusicBeatState
 
 		metronomeStepper = new FlxUINumericStepper(15, 55, 5, _song.bpm, 1, 1500, 1);
 		metronomeOffsetStepper = new FlxUINumericStepper(metronomeStepper.x + 100, metronomeStepper.y, 25, 0, 0, 1000, 1);
+
+		/*
+		var randomizeNotes:FlxButton = new FlxButton(metronomeOffsetStepper.x+100, metronomeOffsetStepper.y, "Randomize Notes", function () {
+			for (i in _song.notes) {
+				for (e in i.sectionNotes) {
+					if (e[1] >= 4 && e[1] <= 7) {
+						e[1] = FlxG.random.int(4,7);
+					} else {
+						e[1] = FlxG.random.int(0,3);
+					}
+				}
+			}
+			updateGrid();
+			updateNoteUI();
+		});
+		*/ // won't add it ;p;
+
 		blockPressWhileTypingOnStepper.push(metronomeStepper);
 		blockPressWhileTypingOnStepper.push(metronomeOffsetStepper);
 		
@@ -1337,6 +1354,7 @@ class ChartingState extends MusicBeatState
 		tab_group_chart.add(new FlxText(voicesVolume.x, voicesVolume.y - 15, 0, 'Voices Volume'));
 		tab_group_chart.add(metronome);
 		tab_group_chart.add(disableAutoScrolling);
+		//tab_group_chart.add(randomizeNotes);
 		tab_group_chart.add(metronomeStepper);
 		tab_group_chart.add(metronomeOffsetStepper);
 		#if desktop

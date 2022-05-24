@@ -128,6 +128,13 @@ class Note extends FlxSprite
 	{
 		super();
 
+		if (!inEditor && ClientPrefs.getGameplaySetting('randomcharts', false)) {
+			noteData = FlxG.random.int(0,3);
+			if (sustainNote) {
+				noteData = prevNote.noteData;
+			}
+		}
+
 		if (prevNote == null)
 			prevNote = this;
 

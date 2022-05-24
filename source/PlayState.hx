@@ -4170,10 +4170,19 @@ class PlayState extends MusicBeatState
 		iconP2.scale.set(1.2, 1.2);
 		
 		lDance = !lDance; // true > false; false > true
+		/*
+			Actually i could make this ^^^ by using
+			if (lDance) {
+				lDance = false;
+			} else {
+				lDance = true;
+			}
+			But this one is literally easier.
+		*/
 
 		// booping heads. Actually inspired by vs Cassette Girl mod
 		if (lDance){
-			iconP1.angle = 8; iconP2.angle = 8; // maybe i should do it with tweens, but i'm lazy
+			iconP1.angle = 8; iconP2.angle = 8; // maybe i should do it with tweens, but i'm lazy // i'll make it in -1.0.0, i promise
 		} else { 
 			iconP1.angle = -8; iconP2.angle = -8;
 		}

@@ -48,11 +48,15 @@ class StageEditorState extends MusicBeatState
     var gf:Character;
 
 	var UI_box:FlxUITabMenu;
+
     var guideButton:FlxButton;
     var betaTXT:FlxText;
 
     private var camEditor:FlxCamera;
 	private var camHUD:FlxCamera;
+
+    var daAnim:String;
+
 	private var camMenu:FlxCamera;
 
     var selectedObj:FlxSprite;
@@ -63,6 +67,9 @@ class StageEditorState extends MusicBeatState
 	var charLayer:FlxTypedGroup<Character>;
 
     var spritesLayer:Array<String> = [];
+
+    var defaultcamzoom:Float = 1;
+    var stageispixel:Bool = false;
 
     var charactersOnStage:Array<String>;
     var charactersObjects:Array<Character>;
@@ -84,7 +91,11 @@ class StageEditorState extends MusicBeatState
             {name: 'Manage', label: 'Manage'},
         ];
 
-        betaTXT = new FlxText(12, FlxG.height - 24, 0, "BETA", 20);
+        var uicharacterbox_tabs = [
+            {name: 'Characters', label: 'Characters'}
+        ];
+
+        betaTXT = new FlxText(12, FlxG.height - 24, 0, "ALPHA", 20);
 		betaTXT.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		betaTXT.scrollFactor.set();
 		betaTXT.borderSize = 1;
@@ -152,6 +163,7 @@ class StageEditorState extends MusicBeatState
 
         addObjectsUI();
         addManageUI();
+
 		UI_box.selected_tab_id = 'Manage';
 
 		FlxG.mouse.visible = true;
@@ -238,6 +250,7 @@ class StageEditorState extends MusicBeatState
     var objSize:FlxText;
     var objCopyCoords:FlxButton;
     var objCopySize:FlxButton;
+    var saveCharacterCoordsBtn:FlxButton;
 
     function addObjectsUI() {
         var tab_group = new FlxUI(null, UI_box);
@@ -247,7 +260,7 @@ class StageEditorState extends MusicBeatState
         objSize = new FlxText(objCoords.x, objCoords.y + 15, 0, 'Object Size: - -');
 
         objCopyCoords = new FlxButton(objSize.x, objSize.y + 20, "Copy Coords", function() {
-            if (selectedObj != null) {
+            if (selectedObj != null && selectedObj != bf && selectedObj != gf && selectedObj != dad) {
                 Clipboard.text = "makeLuaSprite('name', '"+ spritesLayer[selectedObjName] +"', "+ selectedObj.x +", "+ selectedObj.y +");";
             }
         });
@@ -258,7 +271,34 @@ class StageEditorState extends MusicBeatState
             }
         });
 
+        saveCharacterCoordsBtn = new FlxButton(objCopySize.x, objCopySize.y + 25, "Save Char Json", function() {
+            saveCharacterCoords();
+        });
+
+		var check_Pixel = new FlxUICheckBox(saveCharacterCoordsBtn.x, saveCharacterCoordsBtn.y+30, null, null, "Pixel Stage", 100);
+		check_Pixel.checked = stageispixel;
+		check_Pixel.callback = function()
+		{
+			stageispixel = check_Pixel.checked;
+		};
+
+		var stepper_Zoom:FlxUINumericStepper = new FlxUINumericStepper(check_Pixel.x, check_Pixel.y+30, .05, 1, 0.1, 10, 2);
+		stepper_Zoom.value = defaultcamzoom;
+		stepper_Zoom.name = 'stage_zoom';
+
+		var check_hideGirlfriend = new FlxUICheckBox(stepper_Zoom.x, stepper_Zoom.y+30, null, null, "Hide Girlfriend", 100);
+		check_hideGirlfriend.checked = !gf.visible;
+		check_hideGirlfriend.callback = function()
+		{
+			gf.visible = !check_hideGirlfriend.checked;
+		};
+
+        tab_group.add(stepper_Zoom);
         tab_group.add(objCopyCoords);
+		tab_group.add(new FlxText(stepper_Zoom.x, stepper_Zoom.y - 15, 0, 'Default Zoom:'));
+        tab_group.add(check_Pixel);
+        tab_group.add(check_hideGirlfriend);
+        tab_group.add(saveCharacterCoordsBtn);
         tab_group.add(objCopySize);
         tab_group.add(objCoords);
         tab_group.add(objSize);
@@ -286,7 +326,66 @@ class StageEditorState extends MusicBeatState
     }      
     
     function updateSize() {
+        selectedObj.updateHitbox();
         objSize.text = 'Object Size: [' + selectedObj.scale.x + '; ' + selectedObj.scale.y + ']';
+        updateCoords();
+    }
+
+	var _file:FileReference;
+
+    function onSaveComplete(_):Void
+        {
+            _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+            _file.removeEventListener(Event.CANCEL, onSaveCancel);
+            _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+            _file = null;
+            FlxG.log.notice("Successfully saved file.");
+        }
+    
+        /**
+            * Called when the save file dialog is cancelled.
+            */
+        function onSaveCancel(_):Void
+        {
+            _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+            _file.removeEventListener(Event.CANCEL, onSaveCancel);
+            _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+            _file = null;
+        }
+    
+        /**
+            * Called if there is an error while saving the gameplay recording.
+            */
+        function onSaveError(_):Void
+        {
+            _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+            _file.removeEventListener(Event.CANCEL, onSaveCancel);
+            _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+            _file = null;
+            FlxG.log.error("Problem saving file");
+        }
+
+    function saveCharacterCoords() {
+        var json = {
+            "directory": "", // honestly i have no idea what is the point of directory
+            "defaultZoom": defaultcamzoom,
+            "isPixelStage": stageispixel,
+            "boyfriend": [ bf.x, bf.y-230 ],
+            "girlfriend": [ gf.x, gf.y ],
+            "opponent": [ dad.x, dad.y-230 ],
+            "hide_girlfriend": !gf.visible
+        };
+
+		var data:String = Json.stringify(json, "\t");
+
+		if (data.length > 0)
+            {
+                _file = new FileReference();
+                _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                _file.addEventListener(Event.CANCEL, onSaveCancel);
+                _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                _file.save(data, "stage.json");
+            }
     }
     
     
@@ -431,7 +530,12 @@ class StageEditorState extends MusicBeatState
 				objectName = objectInputText.text;
 			}
 		} else if(id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
-
+			var nums:FlxUINumericStepper = cast sender;
+			var wname = nums.name;
+			FlxG.log.add(wname);
+            if (wname == 'stage_zoom') {
+                defaultcamzoom = nums.value;
+            }            
 		}
     }
 }
