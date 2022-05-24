@@ -22,6 +22,7 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/AndreiRud
 
 ### Special Thanks
 * [jonnycat](https://github.com/McJonnycat) - Fixing bugs in Engine <3.
+* [Kade Engine](https://gamebanana.com/mods/44291) - Circle Note Skin
 
 ## Psych Engine Credits:
 * Shadow Mario - Coding
