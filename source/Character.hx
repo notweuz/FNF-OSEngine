@@ -376,7 +376,6 @@ class Character extends FlxSprite
 				animationNotes.push(songNotes);
 			}
 		}
-		TankmenBG.animationNotes = animationNotes;
 		animationNotes.sort(sortAnims);
 	}
 

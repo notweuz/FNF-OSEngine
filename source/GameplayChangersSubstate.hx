@@ -91,7 +91,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		var option:GameplayOption = new GameplayOption('Botplay', 'botplay', 'bool', false);
 		optionsArray.push(option);
 		
-		var option:GameplayOption = new GameplayOption('Random Generated Charts', 'randomcharts', 'bool', false);
+		var option:GameplayOption = new GameplayOption('Randomly Generated Charts', 'randomcharts', 'bool', false);
 		optionsArray.push(option);
 	}
 
