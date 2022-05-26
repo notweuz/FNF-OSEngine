@@ -104,6 +104,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.maxValue = 1;
 		option.changeValue = 0.1;
 		option.decimals = 1;
+		option.onChange = onChangeHitsoundVolume;
 
 		var option:Option = new Option('Hold Notes Visibility',
 			'These lines after hold notes will be shown with selecter visibility',
@@ -209,5 +210,10 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		super();
+	}
+
+	function onChangeHitsoundVolume()
+	{
+		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
 	}
 }
