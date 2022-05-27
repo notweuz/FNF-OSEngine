@@ -30,6 +30,7 @@ class ClientPrefs {
 	public static var imagesPersist:Bool = false;
 	public static var ghostTapping:Bool = true;
 	public static var timeBarType:String = 'Time Left';
+	public static var scoreposition:String = 'Classic';
 	public static var colorblindMode:String = 'None';
 	public static var hideMidScrollOpArrows:Bool = false;
 	public static var scoreZoom:Bool = true;
@@ -141,6 +142,7 @@ class ClientPrefs {
 		FlxG.save.data.autosavecharts = autosavecharts;
 		FlxG.save.data.themedmainmenubg = themedmainmenubg;
 		FlxG.save.data.autotitleskip = autotitleskip;
+		FlxG.save.data.scoreposition = scoreposition;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.showcaseMode = showcaseMode;
@@ -212,6 +214,9 @@ class ClientPrefs {
 				FlxG.drawFramerate = framerate;
 				FlxG.updateFramerate = framerate;
 			}
+		}
+		if(FlxG.save.data.scoreposition != null) {
+			scoreposition = FlxG.save.data.scoreposition;
 		}
 		if(FlxG.save.data.autosaveInterval != null) {
 			autosaveInterval = FlxG.save.data.autosaveInterval;

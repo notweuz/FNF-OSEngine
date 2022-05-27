@@ -847,6 +847,11 @@ class PlayState extends MusicBeatState
 		} else {
 			scoreTxt.visible = false;
 		}
+		if (ClientPrefs.scoreposition == "New") {
+			scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			scoreTxt.x = healthBarBG.x - 450;
+			scoreTxt.y = healthBarBG.y - 23;
+		}
 		add(scoreTxt);
 
 		songTxt = new FlxText(12, FlxG.height - 24, 0, "", 8);
@@ -2461,7 +2466,11 @@ class PlayState extends MusicBeatState
 		if(ratingName == '?') {
 			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ?' + ' | Rating: ' + ratingName; 
 		} else {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ' + Math.round(averageMs) + 'ms' + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' | ' + ratingFC;//peeps wanted no integer rating
+			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ' + Math.round(averageMs) + 'ms' + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+		}
+
+		if (ClientPrefs.scoreposition == "New") {
+			scoreTxt.text = scoreTxt.text.replace(' | ', '\n');
 		}
 
 		if(botplayTxt.visible) {
@@ -3488,8 +3497,8 @@ class PlayState extends MusicBeatState
 				if(scoreTxtTween != null) {
 					scoreTxtTween.cancel();
 				}
-				scoreTxt.scale.x = 1.075;
-				scoreTxt.scale.y = 1.075;
+				scoreTxt.scale.x = 1.03;
+				scoreTxt.scale.y = 1.03;
 				scoreTxtTween = FlxTween.tween(scoreTxt.scale, {x: 1, y: 1}, 0.2, {
 					onComplete: function(twn:FlxTween) {
 						scoreTxtTween = null;
