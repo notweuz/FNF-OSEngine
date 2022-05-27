@@ -2462,16 +2462,25 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		
-		if(ratingName == '?') {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ?' + ' | Rating: ' + ratingName; 
+		if (ClientPrefs.scoreposition == "New") {
+			if(ratingName == '?') {
+				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ?' + '\nRating: ' + ratingName; 
+			} else {
+				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ' + Math.round(averageMs) + 'ms' + '\nRating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+			}
 		} else {
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ' + Math.round(averageMs) + 'ms' + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+			if(ratingName == '?') {
+				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ?' + ' | Rating: ' + ratingName; 
+			} else {
+				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Average: ' + Math.round(averageMs) + 'ms' + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+			}
 		}
 
+		/*
 		if (ClientPrefs.scoreposition == "New") {
-			scoreTxt.text = scoreTxt.text.replace(' | ', '\n');
+			scoreTxt.text = scoreTxt.text.replace(' | ', '\n');	// REPLACE IS STUPID. IT EATS LITERALLY 9999999999999999999999999999999999999999999999999 RAM
 		}
+		*/
 
 		if(botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
