@@ -714,6 +714,11 @@ class PlayState extends MusicBeatState
 			timeTxt.y += 3;
 		}
 
+		if (ClientPrefs.timeBarType != 'Disabled' && ClientPrefs.timeBarType == "OS Time Left") {
+			timeBar.visible = false;
+			timeBarBG.visible = false;
+		}
+
 		var splash:NoteSplash = new NoteSplash(100, 100, 0);
 		grpNoteSplashes.add(splash);
 		splash.alpha = 0.0;
