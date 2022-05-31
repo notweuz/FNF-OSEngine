@@ -13,7 +13,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import lime.utils.Assets;
 import flixel.FlxSprite;
-#if MODS_ALLOWED
+#if sys
 import sys.io.File;
 import sys.FileSystem;
 #end
@@ -380,9 +380,8 @@ class Paths
 		#else
 		{
 			var folder:String = '';
-			#if html5
 			if(path == 'songs') folder = 'songs:';
-			#end
+
 			currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(folder + getPath('$path/$key.$SOUND_EXT', SOUND, library)));
 		}
 		#end
@@ -391,6 +390,14 @@ class Paths
 	}
 	
 	#if MODS_ALLOWED
+	inline static public function modsShaderFragment(key:String, ?library:String)
+	{
+		return modFolders('shaders/'+key+'.frag');
+	}
+	inline static public function modsShaderVertex(key:String, ?library:String)
+	{
+		return modFolders('shaders/'+key+'.vert');
+	}
 	inline static public function mods(key:String = '') {
 		return 'mods/' + key;
 	}
@@ -423,14 +430,6 @@ class Paths
 		return modFolders('images/' + key + '.txt');
 	}
 
-	inline static public function modsShaderFragment(key:String, ?library:String)
-	{
-		return modFolders('shaders/'+key+'.frag');
-	}
-	inline static public function modsShaderVertex(key:String, ?library:String)
-	{
-		return modFolders('shaders/'+key+'.vert');
-	}
 	inline static public function modsAchievements(key:String) {
 		return modFolders('achievements/' + key + '.json');
 	}
