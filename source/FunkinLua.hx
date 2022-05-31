@@ -310,7 +310,7 @@ class FunkinLua {
 
 		Lua_helper.add_callback(lua, "loadGraphic", function(variable:String, image:String) {
 			var killMe:Array<String> = variable.split('.');
-			var spr:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var spr:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -322,7 +322,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "loadFrames", function(variable:String, image:String, spriteType:String = "sparrow") {
 			var killMe:Array<String> = variable.split('.');
-			var spr:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var spr:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -440,16 +440,12 @@ class FunkinLua {
 
 		//shitass stuff for epic coders like me B)  *image of obama giving himself a medal*
 		Lua_helper.add_callback(lua, "getObjectOrder", function(obj:String) {
-			if(PlayState.instance.modchartSprites.exists(obj))
-			{
-				return getInstance().members.indexOf(PlayState.instance.modchartSprites.get(obj));
-			}
-			else if(PlayState.instance.modchartTexts.exists(obj))
-			{
-				return getInstance().members.indexOf(PlayState.instance.modchartTexts.get(obj));
+			var killMe:Array<String> = obj.split('.');
+			var leObj:FlxBasic = getObjectDirectly(killMe[0]);
+			if(killMe.length > 1) {
+				leObj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
 
-			var leObj:FlxBasic = Reflect.getProperty(getInstance(), obj);
 			if(leObj != null)
 			{
 				return getInstance().members.indexOf(leObj);
@@ -458,24 +454,12 @@ class FunkinLua {
 			return -1;
 		});
 		Lua_helper.add_callback(lua, "setObjectOrder", function(obj:String, position:Int) {
-			if(PlayState.instance.modchartSprites.exists(obj)) {
-				var spr:ModchartSprite = PlayState.instance.modchartSprites.get(obj);
-				if(spr.wasAdded) {
-					getInstance().remove(spr, true);
-				}
-				getInstance().insert(position, spr);
-				return;
-			}
-			if(PlayState.instance.modchartTexts.exists(obj)) {
-				var spr:ModchartText = PlayState.instance.modchartTexts.get(obj);
-				if(spr.wasAdded) {
-					getInstance().remove(spr, true);
-				}
-				getInstance().insert(position, spr);
-				return;
+			var killMe:Array<String> = obj.split('.');
+			var leObj:FlxBasic = getObjectDirectly(killMe[0]);
+			if(killMe.length > 1) {
+				leObj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
 
-			var leObj:FlxBasic = Reflect.getProperty(getInstance(), obj);
 			if(leObj != null) {
 				getInstance().remove(leObj, true);
 				getInstance().insert(position, leObj);
@@ -963,7 +947,7 @@ class FunkinLua {
 
 		Lua_helper.add_callback(lua, "getMidpointX", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -973,7 +957,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "getMidpointY", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -983,7 +967,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "getGraphicMidpointX", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -993,7 +977,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "getGraphicMidpointY", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1003,7 +987,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "getScreenPositionX", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1013,7 +997,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "getScreenPositionY", function(variable:String) {
 			var killMe:Array<String> = variable.split('.');
-			var obj:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var obj:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				obj = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1182,7 +1166,7 @@ class FunkinLua {
 				}
 			}
 		});
-		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Int, y:Int = 0, ?updateHitbox:Bool = true) {
+		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Int, y:Int = 0, updateHitbox:Bool = true) {
 			if(PlayState.instance.modchartSprites.exists(obj)) {
 				var shit:ModchartSprite = PlayState.instance.modchartSprites.get(obj);
 				shit.setGraphicSize(x, y);
@@ -1191,7 +1175,7 @@ class FunkinLua {
 			}
 
 			var killMe:Array<String> = obj.split('.');
-			var poop:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var poop:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				poop = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1203,7 +1187,7 @@ class FunkinLua {
 			}
 			luaTrace('Couldnt find object: ' + obj);
 		});
-		Lua_helper.add_callback(lua, "scaleObject", function(obj:String, x:Float, y:Float, ?updateHitbox:Bool = true) {
+		Lua_helper.add_callback(lua, "scaleObject", function(obj:String, x:Float, y:Float, updateHitbox:Bool = true) {
 			if(PlayState.instance.modchartSprites.exists(obj)) {
 				var shit:ModchartSprite = PlayState.instance.modchartSprites.get(obj);
 				shit.scale.set(x, y);
@@ -1212,7 +1196,7 @@ class FunkinLua {
 			}
 
 			var killMe:Array<String> = obj.split('.');
-			var poop:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var poop:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				poop = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1386,7 +1370,7 @@ class FunkinLua {
 			}
 
 			var killMe:Array<String> = obj.split('.');
-			var object:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var object:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				object = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1405,7 +1389,7 @@ class FunkinLua {
 			}
 
 			var killMe:Array<String> = obj.split('.');
-			var spr:FlxSprite = getVarInArray(getInstance(), killMe[0]);
+			var spr:FlxSprite = getObjectDirectly(killMe[0]);
 			if(killMe.length > 1) {
 				spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
@@ -1425,7 +1409,7 @@ class FunkinLua {
 				spr = PlayState.instance.modchartTexts.get(obj);
 			} else {
 				var killMe:Array<String> = obj.split('.');
-				spr = getVarInArray(getInstance(), killMe[0]);
+				spr = getObjectDirectly(killMe[0]);
 				if(killMe.length > 1) {
 					spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 				}
@@ -1471,17 +1455,10 @@ class FunkinLua {
 			return false;
 		});
 		Lua_helper.add_callback(lua, "getPixelColor", function(obj:String, x:Int, y:Int) {
-			var spr:FlxSprite = null;
-			if(PlayState.instance.modchartSprites.exists(obj)) {
-				spr = PlayState.instance.modchartSprites.get(obj);
-			} else if(PlayState.instance.modchartTexts.exists(obj)) {
-				spr = PlayState.instance.modchartTexts.get(obj);
-			} else {
-				var killMe:Array<String> = obj.split('.');
-				spr = getVarInArray(getInstance(), killMe[0]);
-				if(killMe.length > 1) {
-					spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
-				}
+			var killMe:Array<String> = obj.split('.');
+			var spr:FlxSprite = getObjectDirectly(killMe[0]);
+			if(killMe.length > 1) {
+				spr = getVarInArray(getPropertyLoopThingWhatever(killMe), killMe[killMe.length-1]);
 			}
 
 			if(spr != null)
@@ -2095,17 +2072,10 @@ class FunkinLua {
 	
 	function tweenShit(tag:String, vars:String) {
 		cancelTween(tag);
-		var variables:Array<String> = vars.replace(' ', '').split('.');
-		var sexyProp:Dynamic = Reflect.getProperty(getInstance(), variables[0]);
-		if(PlayState.instance.modchartSprites.exists(variables[0])) {
-			sexyProp = PlayState.instance.modchartSprites.get(variables[0]);
-		}
-		if(PlayState.instance.modchartTexts.exists(variables[0])) {
-			sexyProp = PlayState.instance.modchartTexts.get(variables[0]);
-		}
-
-		for (i in 1...variables.length) {
-			sexyProp = Reflect.getProperty(sexyProp, variables[i]);
+		var variables:Array<String> = vars.split('.');
+		var sexyProp:Dynamic = getObjectDirectly(variables[0]);
+		if(variables.length > 1) {
+			sexyProp = getVarInArray(getPropertyLoopThingWhatever(variables), variables[variables.length-1]);
 		}
 		return sexyProp;
 	}
