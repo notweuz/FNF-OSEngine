@@ -2560,7 +2560,9 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = scoreTxt.text.replace(' | ', '\n');	// REPLACE IS STUPID. IT EATS LITERALLY 9999999999999999999999999999999999999999999999999 RAM
 		}
 		*/
-
+		setOnLuas('curDecStep', curDecStep);
+		setOnLuas('curDecBeat', curDecBeat);
+		
 		if(botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
