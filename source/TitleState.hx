@@ -43,6 +43,10 @@ using StringTools;
 
 typedef TitleData =
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> aaad82b (improvements)
 	titlex:Float,
 	titley:Float,
 	startx:Float,
@@ -92,6 +96,7 @@ class TitleState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
+		Paths.pushGlobalMods();
 		// Just to load a mod on start up if ya got one. For mods that change the menu music and bg
 		WeekData.loadTheFirstEnabledMod();
 
@@ -236,6 +241,7 @@ class TitleState extends MusicBeatState
 				diamond.persist = true;
 				diamond.destroyOnNoUse = false;
 
+<<<<<<< HEAD
 				FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
 					new FlxRect(-300, -300, FlxG.width * 1.8, FlxG.height * 1.8));
 				FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
@@ -243,6 +249,15 @@ class TitleState extends MusicBeatState
 					
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut; */
+=======
+			FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 1, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
+				new FlxRect(-300, -300, FlxG.width * 1.8, FlxG.height * 1.8));
+			FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1),
+				{asset: diamond, width: 32, height: 32}, new FlxRect(-300, -300, FlxG.width * 1.8, FlxG.height * 1.8));
+
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;*/
+>>>>>>> aaad82b (improvements)
 
 			// HAD TO MODIFY SOME BACKEND SHIT
 			// IF THIS PR IS HERE IF ITS ACCEPTED UR GOOD TO GO
@@ -266,8 +281,12 @@ class TitleState extends MusicBeatState
 
 		var bg:FlxSprite = new FlxSprite();
 
+<<<<<<< HEAD
 		if (titleJSON.backgroundSprite != null && titleJSON.backgroundSprite.length > 0 && titleJSON.backgroundSprite != "none")
 		{
+=======
+		if (titleJSON.backgroundSprite != null && titleJSON.backgroundSprite.length > 0 && titleJSON.backgroundSprite != "none"){
+>>>>>>> aaad82b (improvements)
 			bg.loadGraphic(Paths.image(titleJSON.backgroundSprite));
 		}
 		else
@@ -325,6 +344,7 @@ class TitleState extends MusicBeatState
 		}
 		gfDance.antialiasing = ClientPrefs.globalAntialiasing;
 
+<<<<<<< HEAD
 		// background yo
 		// don't forget to change it, weuz_ pls
 
@@ -336,6 +356,8 @@ class TitleState extends MusicBeatState
 		add(titlestatebg);
 		titlestatebg.shader = swagShader.shader;
 
+=======
+>>>>>>> aaad82b (improvements)
 		add(gfDance);
 		gfDance.shader = swagShader.shader;
 		add(logoBl);
@@ -357,6 +379,10 @@ class TitleState extends MusicBeatState
 		// trace(path, FileSystem.exists(path));
 		titleText.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path), File.getContent(StringTools.replace(path, ".png", ".xml")));
 		#else
+<<<<<<< HEAD
+=======
+
+>>>>>>> aaad82b (improvements)
 		titleText.frames = Paths.getSparrowAtlas('titleEnter');
 		#end
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 10);
@@ -671,7 +697,11 @@ class TitleState extends MusicBeatState
 	{
 		super.beatHit();
 
+<<<<<<< HEAD
 		if (logoBl != null)
+=======
+		if(logoBl != null)
+>>>>>>> aaad82b (improvements)
 			logoBl.animation.play('bump', true);
 
 		if (gfDance != null)
@@ -739,6 +769,7 @@ class TitleState extends MusicBeatState
 				FlxTween.tween(logoBl, {y: -100}, 2, {ease: FlxEase.backOut, type: ONESHOT});
 				new FlxTimer().start(2, function(tmr:FlxTimer)
 				{
+<<<<<<< HEAD
 					FlxTween.tween(logoBl, {y: logoBl.y + 15}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 				});
 				/*
@@ -769,6 +800,28 @@ class TitleState extends MusicBeatState
 							FlxG.sound.music.fadeIn(4, 0, 0.7);
 							return;
 					}
+=======
+					case 'RIVER':
+						sound = FlxG.sound.play(Paths.sound('JingleRiver'));
+					case 'SHUBS':
+						sound = FlxG.sound.play(Paths.sound('JingleShubs'));
+					case 'SHADOW':
+						FlxG.sound.play(Paths.sound('JingleShadow'));
+					case 'BBPANZU':
+						sound = FlxG.sound.play(Paths.sound('JingleBB'));
+
+					default: //Go back to normal ugly ass boring GF
+						remove(ngSpr);
+						remove(credGroup);
+						FlxG.camera.flash(FlxColor.WHITE, 2);
+						skippedIntro = true;
+						playJingle = false;
+
+						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
+						FlxG.sound.music.fadeIn(4, 0, 0.7);
+						return;
+				}
+>>>>>>> aaad82b (improvements)
 
 					transitioning = true;
 					if(easteregg == 'SHADOW')
