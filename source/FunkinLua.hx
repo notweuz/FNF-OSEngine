@@ -49,13 +49,10 @@ import Discord;
 using StringTools;
 
 class FunkinLua {
-<<<<<<< HEAD
 	public static var Function_Stop:Dynamic = #if android "Function_Stop" #else 1 #end;
 	public static var Function_Continue:Dynamic = #if android "Function_Continue" #else 0 #end;
-=======
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
->>>>>>> 3a1f1c7e9d3d48dc1dcc9ebe3a96d0617462f24b
 
 	#if LUA_ALLOWED
 	public var lua:State = null;
@@ -215,14 +212,11 @@ class FunkinLua {
 			{
 				cervix = Paths.modFolders(cervix);
 				doPush = true;
-<<<<<<< HEAD
 			} else {
 				cervix = SUtil.getPath() + Paths.getPreloadPath(cervix);
-=======
 			}
 			else {
 				cervix = Paths.getPreloadPath(cervix);
->>>>>>> 3a1f1c7e9d3d48dc1dcc9ebe3a96d0617462f24b
 				if(FileSystem.exists(cervix)) {
 					doPush = true;
 				}
@@ -1512,20 +1506,16 @@ class FunkinLua {
 			return FlxG.random.bool(chance);
 		});
 		Lua_helper.add_callback(lua, "startDialogue", function(dialogueFile:String, music:String = null) {
-<<<<<<< HEAD
 			var path:String = Paths.modsJson(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
 			if(!FileSystem.exists(path)) {
 				path = SUtil.getPath() + Paths.json(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
 			}
-=======
 			var path:String;
 			#if MODS_ALLOWED
 			path = Paths.modsJson(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
 			if(!FileSystem.exists(path))
 			#end
 				path = Paths.json(Paths.formatToSongPath(PlayState.SONG.song) + '/' + dialogueFile);
-
->>>>>>> 3a1f1c7e9d3d48dc1dcc9ebe3a96d0617462f24b
 			luaTrace('Trying to load dialogue: ' + path);
 
 			#if MODS_ALLOWED
