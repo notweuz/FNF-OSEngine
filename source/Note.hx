@@ -62,6 +62,7 @@ class Note extends FlxSprite
 	public var offsetY:Float = 0;
 	public var offsetAngle:Float = 0;
 	public var multAlpha:Float = 1;
+	public var multSpeed(default, set):Float = 1;
 
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
@@ -77,10 +78,27 @@ class Note extends FlxSprite
 	public var texture(default, set):String = null;
 
 	public var noAnimation:Bool = false;
+	public var noMissAnimation:Bool = false;
 	public var hitCausesMiss:Bool = false;
 	public var distance:Float = 2000; //plan on doing scroll directions soon -bb
 
 	public var hitsoundDisabled:Bool = false;
+	
+	private function set_multSpeed(value:Float):Float {
+		resizeByRatio(value / multSpeed);
+		multSpeed = value;
+		trace('fuck cock');
+		return value;
+	}
+
+	public function resizeByRatio(ratio:Float) //haha funny twitter shit
+	{
+		if(isSustainNote && !animation.curAnim.name.endsWith('end'))
+		{
+			scale.y *= ratio;
+			updateHitbox();
+		}
+	}
 
 	private function set_texture(value:String):String {
 		if(texture != value) {
@@ -113,6 +131,7 @@ class Note extends FlxSprite
 					hitCausesMiss = true;
 				case 'No Animation':
 					noAnimation = true;
+					noMissAnimation = true;
 				case 'GF Sing':
 					gfNote = true;
 			}
@@ -127,6 +146,13 @@ class Note extends FlxSprite
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
 	{
 		super();
+
+		if (!inEditor && ClientPrefs.getGameplaySetting('randomcharts', false)) {
+			noteData = FlxG.random.int(0,3);
+			if (sustainNote) {
+				noteData = prevNote.noteData;
+			}
+		}
 
 		if (prevNote == null)
 			prevNote = this;
@@ -248,12 +274,14 @@ class Note extends FlxSprite
 			skin = PlayState.SONG.arrowSkin;
 			if(skin == null || skin.length < 1) {
 				skin = 'NOTE_assets';
-				if(ClientPrefs.noteSkinSettings == 'Clasic') {
-					skin = 'NOTE_assets';
-				} else if (ClientPrefs.noteSkinSettings == 'Circle') {
-					skin = 'NOTE_assets_circle';
-				} else {
-					skin = 'NOTE_assets';// for preventing crashes
+				if (prefix != 'HURT') {
+					if(ClientPrefs.noteSkinSettings == 'Clasic') {
+						skin = 'NOTE_assets';
+					} else if (ClientPrefs.noteSkinSettings == 'Circle') {
+						skin = 'NOTE_assets_circle';
+					} else {
+						skin = 'NOTE_assets';// for preventing crashes
+					}
 				}
 			}
 		}

@@ -79,6 +79,22 @@ class VisualsUISubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Icon Bop',
+			'Classic is Vanilla FnF icons bops, OS is OS Engine icons bops',
+			'iconbops',
+			'string',
+			'OS',
+			['OS', 'Classic']);
+		addOption(option);
+
+		var option:Option = new Option('Score Text Position',
+			'Classic is Psych Engine position, New is OS Engine position',
+			'scoreposition',
+			'string',
+			'Classic',
+			['Classic', 'New']);
+		addOption(option);
+
 		var option:Option = new Option('Colorblind Filter',
 			'You can set colorblind filter (makes the game more playable for colorblind people)',
 			'colorblindMode',
@@ -93,7 +109,7 @@ class VisualsUISubState extends BaseOptionsMenu
 			'timeBarType',
 			'string',
 			'Time Left',
-			['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']);
+			['Time Left', 'Time Elapsed', 'Song Name', 'OS Time Left', 'Disabled']);
 		addOption(option);
 
 		var option:Option = new Option('Flashing Lights',

@@ -58,6 +58,7 @@ class FreeplayState extends MusicBeatState
 
 		camera.zoom = 2.2;
 		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
+		//Paths.clearUnusedMemory();
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
