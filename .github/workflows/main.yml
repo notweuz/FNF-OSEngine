@@ -48,12 +48,16 @@ jobs:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
+=======
+          haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
+>>>>>>> 7ee74bd (Update hxCodec Libraries)
 =======
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 >>>>>>> 7ee74bd (Update hxCodec Libraries)
@@ -100,12 +104,16 @@ jobs:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
+=======
+          haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
+>>>>>>> 7ee74bd (Update hxCodec Libraries)
 =======
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 >>>>>>> 7ee74bd (Update hxCodec Libraries)
@@ -153,12 +161,16 @@ jobs:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
+=======
+          haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
+>>>>>>> 7ee74bd (Update hxCodec Libraries)
 =======
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 >>>>>>> 7ee74bd (Update hxCodec Libraries)
