@@ -46,7 +46,7 @@ jobs:
         
       - uses: nttld/setup-ndk@v1
         with:
-          ndk-version: r21e
+          ndk-version: r23c
 
       # Runs a set of commands using the runners shell
       - name: Install Haxelib
@@ -70,7 +70,7 @@ jobs:
           haxelib git extension-androidtools https://github.com/jigsaw-4277821/extension-androidtools.git   
           haxelib git extension-videoview https://github.com/jigsaw-4277821/extension-videoview.git --quiet
           haxelib list
-          
+        shell: cmd  
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
