@@ -71,7 +71,6 @@ jobs:
           haxelib git extension-videoview https://github.com/jigsaw-4277821/extension-videoview.git --quiet
           haxelib list
 
-        shell: cmd  
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
