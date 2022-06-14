@@ -43,10 +43,6 @@ using StringTools;
 
 typedef TitleData =
 {
-<<<<<<< HEAD
-=======
-
->>>>>>> aaad82b (improvements)
 	titlex:Float,
 	titley:Float,
 	startx:Float,
