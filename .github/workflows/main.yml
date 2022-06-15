@@ -44,6 +44,10 @@ jobs:
           haxelib install tjson
           haxelib install hxjsonast
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+          haxelib install hxCodec
+>>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
@@ -88,6 +92,10 @@ jobs:
           haxelib install tjson
           haxelib install hxjsonast
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+          haxelib install hxCodec
+>>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
@@ -133,6 +141,10 @@ jobs:
           haxelib install tjson
           haxelib install hxjsonast
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+          haxelib install hxCodec
+>>>>>>> 63ed6eb (wow)
 =======
           haxelib install hxCodec
 >>>>>>> 63ed6eb (wow)
