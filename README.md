@@ -19,6 +19,8 @@ To install LuaJIT do this: `haxelib git linc_luajit https://github.com/nebulazor
 
 If you get an error about StatePointer when using Lua, run `haxelib remove linc_luajit` into Command Prompt/PowerShell, then re-install linc_luajit.
 
+If you want video support on your mod, simply do `haxelib install hxCodec` on a Command prompt/PowerShell
+
 ## OS Engine Credits:
 * [weuz_](https://github.com/weuz-github) - Coding
 * [nelifs](https://github.com/nelifs) - Coding and Design
