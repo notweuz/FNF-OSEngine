@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': OS Engine" file="OS Engine" packageName="com.weuz.osengine" package="com.weuz.osengine" main="Main" version="0.2.7" company="weuz" />
+	<app title="Friday Night Funkin': OS Engine" file="OS Engine" packageName="com.weuz.osengine" package="com.weuz.osengine" main="Main" version="0.2.8" company="weuz" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
