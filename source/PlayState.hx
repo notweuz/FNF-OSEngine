@@ -68,7 +68,7 @@ import sys.FileSystem;
 #end
 
 #if VIDEOS_ALLOWED
-import vlc.MP4Handler;
+import vlc.VideoHandler;
 #end
 
 using StringTools;
@@ -1703,37 +1703,44 @@ class PlayState extends MusicBeatState
 		char.y += char.positionArray[1];
 	}
 
-	public function startVideo(name:String)
+	public function startVideo(name:String, ?atend:Bool)
+	{
+		#if VIDEOS_ALLOWED
+		inCutscene = true;
+
+		var video:VideoHandler = new VideoHandler();
+		FlxG.sound.music.stop();
+		video.finishCallback = function()
 		{
-			#if VIDEOS_ALLOWED
-			inCutscene = true;
-	
-			var filepath:String = Paths.video(name);
-			#if sys
-			if(!FileSystem.exists(filepath))
-			#else
-			if(!OpenFlAssets.exists(filepath))
-			#end
+			if (atend == true)
+			{
+				if (storyPlaylist.length <= 0) {
+					FlxG.sound.playMusic(Paths.music('freakyMenu'));
+
+					cancelMusicFadeTween();
+					if(FlxTransitionableState.skipNextTransIn) {
+						CustomFadeTransition.nextCamera = null;
+					}
+					MusicBeatState.switchState(new StoryMenuState());
+				}
+				else
+				{
+					SONG = Song.loadFromJson(storyPlaylist[0].toLowerCase());
+					LoadingState.loadAndSwitchState(new PlayState());
+				}
+			}
+			else
 			{
 				FlxG.log.warn('Couldnt find video file: ' + name);
 				startAndEnd();
-				return;
 			}
-	
-			FlxG.sound.music.stop();
-			var video:MP4Handler = new MP4Handler();
-			video.playVideo(filepath);
-			
-			video.finishCallback = function()
-			{
-				startAndEnd();
-			}
-			#else
-			FlxG.log.warn('Platform not supported!');
-			startAndEnd();
-			#end
 		}
-	
+		video.playVideo(Paths.video(name));
+		#else
+		FlxG.log.warn('Platform not supported!');
+		startAndEnd();
+		#end
+	}
 
 	function startAndEnd()
 	{
