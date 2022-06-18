@@ -345,6 +345,7 @@ class StageEditorState extends MusicBeatState
 
     var dadSelect:FlxUIDropDownMenuCustom;
     var bfSelect:FlxUIDropDownMenuCustom;
+    var gfSelect:FlxUIDropDownMenuCustom;
 
     function addCharactersUI() {
         var tab_group = new FlxUI(null, UI_box);
@@ -386,12 +387,32 @@ class StageEditorState extends MusicBeatState
                 bfidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
             });
 
+        gfSelect = new FlxUIDropDownMenuCustom(dadSelect.x - 130, dadSelect.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(sprite:String)
+            {
+                //dad.x = 0;
+                //dad.y = 0;
+
+                charLayer.remove(gf);
+                gf = new Character(gf.x, gf.y, characterList[Std.parseInt(sprite)], false);
+                gfSelect.selectedLabel = "";
+                charLayer.add(gf);
+                gf.updateHitbox();
+                charactersObjects = [bf, gf, dad];
+
+                var json:CharacterFile = characterjson(characterList[Std.parseInt(sprite)]);
+
+                gfjson = json;
+                gfidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
+            });
+
         reloadCharDrops();
             
         tab_group.add(dadSelect);
         tab_group.add(new FlxText(dadSelect.x, dadSelect.y - 15, 0, 'Opponent:'));
         tab_group.add(bfSelect);
         tab_group.add(new FlxText(bfSelect.x, bfSelect.y - 15, 0, 'Player:'));
+        tab_group.add(gfSelect);
+        tab_group.add(new FlxText(gfSelect.x, gfSelect.y - 15, 0, 'Girlfriend:'));
         UI_box.addGroup(tab_group);
 	}
 
@@ -425,8 +446,10 @@ class StageEditorState extends MusicBeatState
 
 		dadSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
         bfSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
+        gfSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
 		dadSelect.selectedLabel = daAnim;
 		bfSelect.selectedLabel = daAnim;
+		gfSelect.selectedLabel = daAnim;
     }
 
     function characterjson(characteruse:String) {
@@ -523,7 +546,7 @@ class StageEditorState extends MusicBeatState
             "defaultZoom": defaultcamzoom,
             "isPixelStage": stageispixel,
             "boyfriend": [ bf.x - bfjson.position[0] + bfidle[0], bf.y - bfjson.position[1] + bfidle[1] ],
-            "girlfriend": [ gf.x - gfjson.position[0] + gfidle[0], gf.y- gfjson.position[1] - gfidle[1] ],
+            "girlfriend": [ gf.x - gfjson.position[0] + gfidle[0], gf.y- gfjson.position[1] + gfidle[1] ],
             "opponent": [ dad.x - dadjson.position[0] + dadidle[0], dad.y - dadjson.position[1] + dadidle[1] ],
             "hide_girlfriend": !gf.visible
         };
