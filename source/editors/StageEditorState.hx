@@ -344,6 +344,7 @@ class StageEditorState extends MusicBeatState
 	}
 
     var dadSelect:FlxUIDropDownMenuCustom;
+    var bfSelect:FlxUIDropDownMenuCustom;
 
     function addCharactersUI() {
         var tab_group = new FlxUI(null, UI_box);
@@ -365,12 +366,32 @@ class StageEditorState extends MusicBeatState
 
                 dadjson = json;
                 dadidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
-                trace(dadidle);
+            });
+
+        bfSelect = new FlxUIDropDownMenuCustom(dadSelect.x+130, dadSelect.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(sprite:String)
+            {
+                //dad.x = 0;
+                //dad.y = 0;
+
+                charLayer.remove(bf);
+                bf = new Boyfriend(bf.x, bf.y, characterList[Std.parseInt(sprite)]);
+                bfSelect.selectedLabel = "";
+                charLayer.add(bf);
+                bf.updateHitbox();
+                charactersObjects = [bf, gf, dad];
+
+                var json:CharacterFile = characterjson(characterList[Std.parseInt(sprite)]);
+
+                bfjson = json;
+                bfidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
             });
 
         reloadCharDrops();
             
         tab_group.add(dadSelect);
+        tab_group.add(new FlxText(dadSelect.x, dadSelect.y - 15, 0, 'Opponent:'));
+        tab_group.add(bfSelect);
+        tab_group.add(new FlxText(bfSelect.x, bfSelect.y - 15, 0, 'Player:'));
         UI_box.addGroup(tab_group);
 	}
 
@@ -403,7 +424,9 @@ class StageEditorState extends MusicBeatState
 		#end
 
 		dadSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
+        bfSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
 		dadSelect.selectedLabel = daAnim;
+		bfSelect.selectedLabel = daAnim;
     }
 
     function characterjson(characteruse:String) {
@@ -647,8 +670,6 @@ class StageEditorState extends MusicBeatState
 
         for (i in tempjson.animations) {
             if (i.anim == "idle") {
-                trace(i.anim);
-                trace(i.offsets);
                 top10awesome = i.offsets;
             }
         }
