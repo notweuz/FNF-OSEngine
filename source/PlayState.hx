@@ -2624,6 +2624,7 @@ class PlayState extends MusicBeatState
 						sustainNote.scrollFactor.set();
 						swagNote.tail.push(sustainNote);
 						sustainNote.parent = swagNote;
+						sustainNote.alpha = ClientPrefs.holdNoteVisibility;
 						unspawnNotes.push(sustainNote);
 
 						if (sustainNote.mustPress)
@@ -3366,7 +3367,13 @@ class PlayState extends MusicBeatState
 					daNote.angle = strumDirection - 90 + strumAngle;
 
 				if(daNote.copyAlpha)
-					daNote.alpha = strumAlpha;
+					if (daNote.parent != null) {
+						if (!daNote.parent.shouldbehidden) {
+							daNote.alpha = strumAlpha;
+						}
+					} else {
+						daNote.alpha = strumAlpha;
+					}
 
 				if(daNote.copyX)
 					daNote.x = strumX + Math.cos(angleDir) * daNote.distance;
@@ -3395,12 +3402,6 @@ class PlayState extends MusicBeatState
 				if (!daNote.mustPress && daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 				{
 					opponentNoteHit(daNote);
-				}
-
-				if (daNote.isSustainNote) {
-					if (daNote.mustPress) { 
-						daNote.alpha = ClientPrefs.holdNoteVisibility; 
-					}
 				}
 
 				if(daNote.mustPress && cpuControlled) {
@@ -4440,10 +4441,10 @@ class PlayState extends MusicBeatState
 							sortedNotesList.push(daNote);
 							//notesDatas.push(daNote.noteData);
 						}
-						if (!SONG.disableAntiMash) {
-							canMiss = true;
-						} else {			// best code ever
+						if (SONG.disableAntiMash) {
 							canMiss = false;
+						} else {			// best code ever
+							canMiss = true;
 						}
 					}
 				});
@@ -4484,6 +4485,14 @@ class PlayState extends MusicBeatState
 				// Shubs, this is for the "Just the Two of Us" achievement lol
 				//									- Shadow Mario
 				keysPressed[key] = true;
+
+				
+				if (ClientPrefs.ghostTapping) {
+					var animToPlay:String = singAnimations[Std.int(Math.abs(key))];
+					boyfriend.playAnim(animToPlay, true);
+					boyfriend.holdTimer = 0;
+				}
+				
 
 				//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
 				Conductor.songPosition = lastTime;
@@ -4618,8 +4627,12 @@ class PlayState extends MusicBeatState
 			vocals.volume = 0;	// you shouldn't sing if you're doing misses
 			notes.remove(daNote, true);
 			if(!practiceMode) songScore -= 5;
-			daNote.alpha = 0.4; 		// kade engine vibes?
+			for ( i in daNote.parent.tail ) {
+				i.parent.shouldbehidden = true;
+				i.alpha = 0.4; 		// kade engine vibes?
+			}
 			daNote.kill();
+			daNote.destroy();
 			totalPlayed++;
 			goods++;
 			RecalculateRating();

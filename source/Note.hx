@@ -39,6 +39,8 @@ class Note extends FlxSprite
 	public var tail:Array<Note> = []; // for sustains
 	public var parent:Note;
 
+	public var shouldbehidden:Bool = false;
+
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var noteType(default, set):String = null;
