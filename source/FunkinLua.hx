@@ -47,14 +47,11 @@ import Discord;
 using StringTools;
 
 class FunkinLua {
-<<<<<<< HEAD
 	public static var Function_Stop:Dynamic = #if android "Function_Stop" #else 1 #end;
 	public static var Function_Continue:Dynamic = #if android "Function_Continue" #else 0 #end;
-=======
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 	public static var Function_StopLua:Dynamic = 2;
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
 
 	public var errorHandler:String->Void;
 	#if LUA_ALLOWED
@@ -580,10 +577,8 @@ class FunkinLua {
 			{
 				cervix = Paths.modFolders(cervix);
 				doPush = true;
-<<<<<<< HEAD
 			} else {
 				cervix = SUtil.getPath() + Paths.getPreloadPath(cervix);
-=======
 			}
 			else if(FileSystem.exists(cervix))
 			{
@@ -591,7 +586,6 @@ class FunkinLua {
 			}
 			else {
 				cervix = Paths.getPreloadPath(cervix);
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
 				if(FileSystem.exists(cervix)) {
 					doPush = true;
 				}
@@ -2884,10 +2878,7 @@ class DebugLuaText extends FlxText
 		}
 		else if(disableTime < 1) alpha = disableTime;
 	}
-<<<<<<< HEAD
 	
 }
-=======
 
 }
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
