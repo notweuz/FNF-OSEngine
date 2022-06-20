@@ -132,17 +132,14 @@ class WeekData {
 		var originalLength:Int = directories.length;
 		#end
 
-<<<<<<< HEAD
 		var sexList:Array<String> = CoolUtil.coolTextFile(SUtil.getPath() + Paths.getPreloadPath('weeks/weekList.txt'));
 		for (i in 0...sexList.length)
 		{
 			for (j in 0...directories.length)
 			{
-=======
 		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getPreloadPath('weeks/weekList.txt'));
 		for (i in 0...sexList.length) {
 			for (j in 0...directories.length) {
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
 				var fileToCheck:String = directories[j] + 'weeks/' + sexList[i] + '.json';
 				if(!weeksLoaded.exists(sexList[i])) {
 					var week:WeekFile = getWeekFile(fileToCheck);
