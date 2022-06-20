@@ -36,6 +36,7 @@ import lime.system.Clipboard;
 import flixel.animation.FlxAnimation;
 
 #if MODS_ALLOWED
+import sys.io.File;
 import sys.FileSystem;
 #end
 
@@ -49,11 +50,22 @@ class StageEditorState extends MusicBeatState
 
 	var UI_box:FlxUITabMenu;
 
+    var characterList:Dynamic;
+
     var guideButton:FlxButton;
     var betaTXT:FlxText;
 
     private var camEditor:FlxCamera;
 	private var camHUD:FlxCamera;
+
+    var bfjson:Dynamic;
+    var gfjson:Dynamic;
+    var dadjson:Dynamic;
+    var top10awesome:Dynamic;
+
+    var bfidle:Array<Int> = [0, 0];
+    var gfidle:Array<Int> = [0, 0];
+    var dadidle:Array<Int> = [0, 0];
 
     var daAnim:String;
 
@@ -87,12 +99,9 @@ class StageEditorState extends MusicBeatState
 		camMenu.bgColor.alpha = 0;
 
         var uibox_tabs = [
+            {name: 'Characters', label: 'Characters'},
             {name: 'Objects Info', label: 'Objects Info'},
             {name: 'Manage', label: 'Manage'},
-        ];
-
-        var uicharacterbox_tabs = [
-            {name: 'Characters', label: 'Characters'}
         ];
 
         betaTXT = new FlxText(12, FlxG.height - 24, 0, "ALPHA", 20);
@@ -146,9 +155,9 @@ class StageEditorState extends MusicBeatState
 		FlxG.camera.follow(camFollow);
         FlxG.camera.zoom = 0.5; // big big big big big
 
-        bf = new Character(1500, 230, "bf", true);
+        bf = new Boyfriend(1500, 0, "bf");
         gf = new Character(600, 0, "gf", false);
-        dad = new Character(0, 230, "bf", false);
+        dad = new Character(0, 0, "dad", false);
 
         charLayer.add(gf);
         charLayer.add(dad);
@@ -165,6 +174,22 @@ class StageEditorState extends MusicBeatState
 
         selectedObj = bf;
 
+        for (i in charactersOnStage) {
+            var cjson:CharacterFile = characterjson(i);
+            
+            if (i == 'dad') {
+                dadjson = cjson;
+                dadidle = getIdleOffset('dad');
+            } else if (i == 'gf') {
+                gfjson = cjson;
+                gfidle = getIdleOffset('gf');
+            } else {
+                bfjson = cjson;
+                bfidle = getIdleOffset('bf');
+            }
+        }
+
+        addCharactersUI();
         addObjectsUI();
         addManageUI();
 
@@ -318,7 +343,143 @@ class StageEditorState extends MusicBeatState
         UI_box.addGroup(tab_group);
 	}
 
+    var dadSelect:FlxUIDropDownMenuCustom;
+    var bfSelect:FlxUIDropDownMenuCustom;
+    var gfSelect:FlxUIDropDownMenuCustom;
+
+    function addCharactersUI() {
+        var tab_group = new FlxUI(null, UI_box);
+		tab_group.name = "Characters";
+        
+        dadSelect = new FlxUIDropDownMenuCustom(10, 30, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(sprite:String)
+            {
+                //dad.x = 0;
+                //dad.y = 0;
+
+                charLayer.remove(dad);
+                dad = new Character(dad.x, dad.y, characterList[Std.parseInt(sprite)], false);
+                dadSelect.selectedLabel = "";
+                charLayer.add(dad);
+                dad.updateHitbox();
+                charactersObjects = [bf, gf, dad];
+
+                var json:CharacterFile = characterjson(characterList[Std.parseInt(sprite)]);
+
+                dadjson = json;
+                dadidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
+            });
+
+        bfSelect = new FlxUIDropDownMenuCustom(dadSelect.x+130, dadSelect.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(sprite:String)
+            {
+                //dad.x = 0;
+                //dad.y = 0;
+
+                charLayer.remove(bf);
+                bf = new Boyfriend(bf.x, bf.y, characterList[Std.parseInt(sprite)]);
+                bfSelect.selectedLabel = "";
+                charLayer.add(bf);
+                bf.updateHitbox();
+                charactersObjects = [bf, gf, dad];
+
+                var json:CharacterFile = characterjson(characterList[Std.parseInt(sprite)]);
+
+                bfjson = json;
+                bfidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
+            });
+
+        gfSelect = new FlxUIDropDownMenuCustom(dadSelect.x - 130, dadSelect.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(sprite:String)
+            {
+                //dad.x = 0;
+                //dad.y = 0;
+
+                charLayer.remove(gf);
+                gf = new Character(gf.x, gf.y, characterList[Std.parseInt(sprite)], false);
+                gfSelect.selectedLabel = "";
+                charLayer.add(gf);
+                gf.updateHitbox();
+                charactersObjects = [bf, gf, dad];
+
+                var json:CharacterFile = characterjson(characterList[Std.parseInt(sprite)]);
+
+                gfjson = json;
+                gfidle = getIdleOffset(characterList[Std.parseInt(sprite)]);
+            });
+
+        reloadCharDrops();
+            
+        tab_group.add(dadSelect);
+        tab_group.add(new FlxText(dadSelect.x, dadSelect.y - 15, 0, 'Opponent:'));
+        tab_group.add(bfSelect);
+        tab_group.add(new FlxText(bfSelect.x, bfSelect.y - 15, 0, 'Player:'));
+        tab_group.add(gfSelect);
+        tab_group.add(new FlxText(gfSelect.x, gfSelect.y - 15, 0, 'Girlfriend:'));
+        UI_box.addGroup(tab_group);
+	}
+
     
+    function reloadCharDrops() {
+        var charsLoaded:Map<String, Bool> = new Map();
+
+		#if MODS_ALLOWED
+		characterList = [];
+		var directories:Array<String> = [Paths.mods('characters/'), Paths.mods(Paths.currentModDirectory + '/characters/'), Paths.getPreloadPath('characters/')];
+		for(mod in Paths.getGlobalMods())
+			directories.push(Paths.mods(mod + '/characters/'));
+		for (i in 0...directories.length) {
+			var directory:String = directories[i];
+			if(FileSystem.exists(directory)) {
+				for (file in FileSystem.readDirectory(directory)) {
+					var path = haxe.io.Path.join([directory, file]);
+					if (!sys.FileSystem.isDirectory(path) && file.endsWith('.json')) {
+						var charToCheck:String = file.substr(0, file.length - 5);
+						if(!charsLoaded.exists(charToCheck)) {
+							characterList.push(charToCheck);
+							charsLoaded.set(charToCheck, true);
+						}
+					}
+				}
+			}
+		}
+		#else
+		characterList = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		#end
+
+		dadSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
+        bfSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
+        gfSelect.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
+		dadSelect.selectedLabel = daAnim;
+		bfSelect.selectedLabel = daAnim;
+		gfSelect.selectedLabel = daAnim;
+    }
+
+    function characterjson(characteruse:String) {
+        var characterPath:String = 'characters/' + characteruse + '.json';
+
+        #if MODS_ALLOWED
+        var path:String = Paths.modFolders(characterPath);
+        if (!FileSystem.exists(path)) {
+            path = Paths.getPreloadPath(characterPath);
+        }
+
+        if (!FileSystem.exists(path))
+        #else
+        var path:String = Paths.getPreloadPath(characterPath);
+        if (!Assets.exists(path))
+        #end
+        {
+            path = Paths.getPreloadPath('characters/bf.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+        }
+
+        #if MODS_ALLOWED
+        var rawJson = File.getContent(path);
+        #else
+        var rawJson = Assets.getText(path);
+        #end
+
+        var json:CharacterFile = cast Json.parse(rawJson);
+        return json;
+    }
+
     function reloadCharacterDropDown() {
 		charDropDown.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(charactersOnStage, true));
 	}
@@ -384,9 +545,9 @@ class StageEditorState extends MusicBeatState
             "directory": "", // honestly i have no idea what is the point of directory
             "defaultZoom": defaultcamzoom,
             "isPixelStage": stageispixel,
-            "boyfriend": [ bf.x, bf.y-230 ],
-            "girlfriend": [ gf.x, gf.y ],
-            "opponent": [ dad.x, dad.y-230 ],
+            "boyfriend": [ bf.x - bfjson.position[0] + bfidle[0], bf.y - bfjson.position[1] + bfidle[1] ],
+            "girlfriend": [ gf.x - gfjson.position[0] + gfidle[0], gf.y- gfjson.position[1] + gfidle[1] ],
+            "opponent": [ dad.x - dadjson.position[0] + dadidle[0], dad.y - dadjson.position[1] + dadidle[1] ],
             "hide_girlfriend": !gf.visible
         };
 
@@ -527,6 +688,16 @@ class StageEditorState extends MusicBeatState
         super.update(elapsed);
     }
 
+    function getIdleOffset(character:String) {
+        var tempjson = characterjson(character);
+
+        for (i in tempjson.animations) {
+            if (i.anim == "idle") {
+                top10awesome = i.offsets;
+            }
+        }
+        return top10awesome;
+    }
 
     function ClipboardAdd(prefix:String = ''):String {
 		if(prefix.toLowerCase().endsWith('v')) //probably copy paste attempt

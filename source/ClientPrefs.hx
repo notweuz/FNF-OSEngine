@@ -33,7 +33,7 @@ class ClientPrefs {
 	public static var scoreposition:String = 'Classic';
 	public static var iconbops:String = 'OS';
 	public static var colorblindMode:String = 'None';
-	public static var hideMidScrollOpArrows:Bool = false;
+	public static var opponentStrums:Bool = false;
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
 	public static var healthBarAlpha:Float = 1;
@@ -122,7 +122,7 @@ class ClientPrefs {
 		//FlxG.save.data.violence = violence;
 		FlxG.save.data.camZooms = camZooms;
 		FlxG.save.data.colorblindMode = colorblindMode;
-		FlxG.save.data.hideMidScrollOpArrows = hideMidScrollOpArrows;
+		FlxG.save.data.opponentStrums = opponentStrums;
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
 		FlxG.save.data.hideWatermark = hideWatermark;
@@ -195,8 +195,8 @@ class ClientPrefs {
 		if(FlxG.save.data.colorblindMode != null) {
 			colorblindMode = FlxG.save.data.colorblindMode;
 		}
-		if(FlxG.save.data.hideMidScrollOpArrows != null) {
-			hideMidScrollOpArrows = FlxG.save.data.hideMidScrollOpArrows;
+		if(FlxG.save.data.opponentStrums != null) {
+			opponentStrums = FlxG.save.data.opponentStrums;
 		}
 		if(FlxG.save.data.noteSplashes != null) {
 			noteSplashes = FlxG.save.data.noteSplashes;

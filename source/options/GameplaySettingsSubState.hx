@@ -58,7 +58,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option('Hide Middlescroll Opponent Notes',
 			'If checked, hides opponent arrows when playing with middlescroll',
-			'hideMidScrollOpArrows',
+			'opponentStrums',
 			'bool',
 			false);
 		addOption(option);

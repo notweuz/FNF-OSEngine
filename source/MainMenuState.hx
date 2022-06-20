@@ -29,7 +29,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var osEngineVesrion:String = '1.4.0'; //This is also used for Discord RPC
+	public static var osEngineVersion:String = '1.4.0'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -42,6 +42,7 @@ class MainMenuState extends MusicBeatState
 		#if MODS_ALLOWED 'mods', #end
 		#if ACHIEVEMENTS_ALLOWED 'awards', #end
 		'credits',
+		'donate',
 		//'discord', you can go to discord now by pressing ctrl in credits
 		'options'
 	];
@@ -74,8 +75,7 @@ class MainMenuState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camAchievement);
 		FlxCamera.defaultCameras = [camGame];
-		camera.zoom = 1.85;
-		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
+		//camera.zoom = 1.85;
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -163,7 +163,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		var versionShit:FlxText = new FlxText(FlxG.width * 0.7, FlxG.height - 44, 0, "OS Engine v" + osEngineVesrion + " - Modded Psych Engine", 12);
+		var versionShit:FlxText = new FlxText(FlxG.width * 0.7, FlxG.height - 44, 0, "OS Engine v" + osEngineVersion + " - Modded Psych Engine", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -239,6 +239,7 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			if(FreeplayState.vocals != null) FreeplayState.vocals.volume += 0.5 * elapsed;
 		}
 
 		var lerpVal:Float = CoolUtil.boundTo(elapsed * 7.5, 0, 1);
@@ -263,14 +264,12 @@ class MainMenuState extends MusicBeatState
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
-				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 			}
 
 			if (controls.ACCEPT)
 			{
-				if (optionShit[curSelected] == 'donate')
-				{
-					CoolUtil.browserLoad('https://www.youtube.com/watch?v=dQw4w9WgXcQ'); // WHOEVER DELETES THIS IS GAY
+				if (optionShit[curSelected] == 'donate') {
+					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
 				} else if (optionShit[curSelected] == customOption) {
 					CoolUtil.browserLoad(customOptionLink);
 				}
@@ -333,24 +332,18 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story_mode':
 										MusicBeatState.switchState(new StoryMenuState());
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'freeplay':
 										MusicBeatState.switchState(new FreeplayState());
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									#if MODS_ALLOWED
 									case 'mods':
 										MusicBeatState.switchState(new ModsMenuState()); 
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									#end
 									case 'awards':
 										MusicBeatState.switchState(new AchievementsMenuState());
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'credits':
 										MusicBeatState.switchState(new CreditsState());
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 									case 'options':
 										LoadingState.loadAndSwitchState(new options.OptionsState());
-										   	CoolUtil.cameraZoom(camera, 2, 1, FlxEase.backOut, ONESHOT);
 								}
 							});
 						}

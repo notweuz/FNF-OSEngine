@@ -23,7 +23,7 @@ import Controls;
 
 using StringTools;
 
-class Option // i need to add here icon values
+class Option
 {
 	private var child:Alphabet;
 	public var text(get, set):String;
