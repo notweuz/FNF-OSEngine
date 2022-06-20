@@ -1311,15 +1311,13 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-<<<<<<< HEAD
 		
 		#if android
 		addAndroidControls();
 		#end
-=======
+		
 		laneunderlay.cameras = [camHUD];
 		laneunderlayOp.cameras = [camHUD];
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -4062,14 +4060,11 @@ class PlayState extends MusicBeatState
 				return;
 			}
 		}
-<<<<<<< HEAD
 		
 		#if android
 		androidc.visible = false;
 		#end
-=======
 
->>>>>>> bd72487f06f712b5fdd0ddae7a9f23ac30ea95ed
 		timeBarBG.visible = false;
 		timeBar.visible = false;
 		timeTxt.visible = false;
