@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': OS Engine" file="OS Engine" packageName="com.weuz.osengine" package="com.weuz.osengine" main="Main" version="0.2.7" company="weuz" />
+	<app title="Friday Night Funkin': OS Engine" file="OS Engine" packageName="com.weuz.osengine" package="com.weuz.osengine" main="Main" version="0.2.8" company="weuz" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
@@ -89,8 +89,6 @@
 		<library name="week7"         preload="false" />
 	</section>
 	
-	<assets path="plugins/"             rename=''               if="VIDEOS_ALLOWED windows" />
-	<assets path="dlls/"                rename=''               if="VIDEOS_ALLOWED windows" />
 	<assets path="assets/videos"        library="videos"        if="VIDEOS_ALLOWED"/>
 	<assets path="assets/songs"         library="songs"         exclude="*.ogg" if="web"/>
 	<assets path="assets/songs"         library="songs"         exclude="*.mp3" unless="web"/>
@@ -109,7 +107,9 @@
 	<assets path="assets/week7"         library="week7"         exclude="*.ogg" if="web"/>
 	<assets path="assets/week7"         library="week7"         exclude="*.mp3" unless="web"/>
 	
-	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
+	<section if="MODS_ALLOWED">
+		<assets path='example_mods' rename='mods' embed='false'/>
+	</section>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
 	<!-- <template path='mods' /> -->
 	
@@ -173,7 +173,10 @@
 
 	<!--Disable the Flixel core focus lost screen-->
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
-
+	
+        <!-- Show debug traces for hxCodec -->
+        <haxedef name="HXC_DEBUG_TRACE" if="debug" />
+	
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 

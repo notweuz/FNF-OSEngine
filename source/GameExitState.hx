@@ -47,7 +47,6 @@ class GameExitState extends MusicBeatState
 			case 'No':
                 FlxG.sound.play(Paths.sound('cancelMenu'));
 				MusicBeatState.switchState(new TitleState());
-				CoolUtil.cameraZoom(camera, 3, 3, FlxEase.backOut, ONESHOT);
 		}
 	}
 
@@ -58,9 +57,6 @@ class GameExitState extends MusicBeatState
 		#if desktop
 		DiscordClient.changePresence("Game Closing Menu", null);
 		#end
-
-		camera.zoom = 2.2;
-		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
 
         var bg:FlxBackdrop = new FlxBackdrop(Paths.image('loading'), 0.2, 0, true, true);
 		bg.velocity.set(200, 110);
@@ -115,8 +111,6 @@ class GameExitState extends MusicBeatState
 		if (controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
-
-			CoolUtil.cameraZoom(camera, 2, .5, FlxEase.sineOut, ONESHOT);
 		}
 
 		if (controls.ACCEPT) {

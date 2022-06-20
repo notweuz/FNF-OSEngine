@@ -1,4 +1,5 @@
 package animateatlas;
+
 import flixel.util.FlxDestroyUtil;
 import openfl.geom.Rectangle;
 import flixel.math.FlxPoint;
@@ -13,6 +14,7 @@ import animateatlas.displayobject.SpriteMovieClip;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.graphics.frames.FlxFrame;
+import flixel.util.FlxColor;
 
 using StringTools;
 class AtlasFrameMaker extends FlxFramesCollection
@@ -39,7 +41,7 @@ class AtlasFrameMaker extends FlxFramesCollection
 
 		if (Paths.fileExists('images/$key/spritemap1.json', TEXT))
 		{
-			PlayState.instance.addTextToDebug("Only Spritemaps made with Adobe Animate 2018 are supported");
+			PlayState.instance.addTextToDebug("Only Spritemaps made with Adobe Animate 2018 are supported", FlxColor.RED);
 			trace("Only Spritemaps made with Adobe Animate 2018 are supported");
 			return null;
 		}

@@ -14,7 +14,6 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
 import lime.utils.Assets;
 import flixel.system.FlxSound;
 import openfl.utils.Assets as OpenFlAssets;
@@ -54,10 +53,6 @@ class FreeplayState extends MusicBeatState
 	override function create()
 	{
 		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
-
-		camera.zoom = 2.2;
-		CoolUtil.cameraZoom(camera, 1, .5, FlxEase.sineOut, ONESHOT);
 		//Paths.clearUnusedMemory();
 		
 		persistentUpdate = true;
@@ -254,7 +249,7 @@ class FreeplayState extends MusicBeatState
 	}*/
 
 	var instPlaying:Int = -1;
-	private static var vocals:FlxSound = null;
+	public static var vocals:FlxSound = null;
 	var holdTime:Float = 0;
 	override function update(elapsed:Float)
 	{
@@ -335,7 +330,6 @@ class FreeplayState extends MusicBeatState
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MusicBeatState.switchState(new MainMenuState());
-			CoolUtil.cameraZoom(camera, 2, .5, FlxEase.backOut, ONESHOT);
 		}
 
 		if(ctrl)
