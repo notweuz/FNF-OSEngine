@@ -16,6 +16,7 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import ColorblindFilters;
 #if MODS_ALLOWED
 import sys.FileSystem;
 import sys.io.File;
@@ -60,6 +61,7 @@ class MainMenuState extends MusicBeatState
 	override function create()
 	{
 		WeekData.loadTheFirstEnabledMod();
+		if (ClientPrefs.colorblindMode != null) ColorblindFilters.applyFiltersOnGame(); // applies colorbind filters, ok?
 
 		#if desktop
 		// Updating Discord Rich Presence

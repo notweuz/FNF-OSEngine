@@ -4496,15 +4496,6 @@ class PlayState extends MusicBeatState
 				// Shubs, this is for the "Just the Two of Us" achievement lol
 				//									- Shadow Mario
 				keysPressed[key] = true;
-
-				
-				if (ClientPrefs.ghostTapping) {
-					var animToPlay:String = singAnimations[Std.int(Math.abs(key))];
-					boyfriend.playAnim(animToPlay, true);
-					boyfriend.holdTimer = 0;
-				}
-				
-
 				//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
 				Conductor.songPosition = lastTime;
 			}
