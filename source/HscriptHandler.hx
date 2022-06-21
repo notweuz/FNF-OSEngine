@@ -29,6 +29,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
+import flixel.addons.display.FlxBackdrop;
 
 class HscriptHandler {
     public static function setVars(interp:Interp) {
@@ -43,6 +44,7 @@ class HscriptHandler {
         interp.variables.set('FlxG', FlxG);
         interp.variables.set('Song', Song);
         interp.variables.set('FlxGame', FlxGame);
+        interp.variables.set('FlxBackdrop', FlxBackdrop);
         interp.variables.set('FlxBar', FlxBar);
         interp.variables.set('Section', Section);
         interp.variables.set('FlxState', FlxState);
