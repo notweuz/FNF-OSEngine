@@ -4639,18 +4639,18 @@ class PlayState extends MusicBeatState
 		if (daNote.isSustainNote) {
 			if (daNote.parent != null) {
 				if (!daNote.parent.shouldbehidden) {
-					goods++;
+					songMisses++;
+					totalPlayed++;
+					if(!practiceMode) songScore -= 5;
 				}
 				vocals.volume = 0;	// you shouldn't sing if you're doing misses
 				notes.remove(daNote, true);
-				if(!practiceMode) songScore -= 5;
 				for ( i in daNote.parent.tail ) {
 					i.alpha = 0.4; 		// kade engine vibes?
 				}
 				daNote.parent.shouldbehidden = true;
 				daNote.kill();
 				daNote.destroy();
-				totalPlayed++;
 				RecalculateRating();
 				return;
 			}
