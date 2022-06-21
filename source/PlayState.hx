@@ -63,6 +63,9 @@ import DialogueBoxPsych;
 import Shaders;
 import DynamicShaderHandler;
 import Conductor.Rating;
+import hscript.Interp;
+import hscript.Parser;
+import HscriptHandler;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
@@ -315,7 +318,7 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
-	public var hscriptArray:Array<String> = [];
+	public var hscriptArray:Map<String, Interp> = [];
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
 	public var luaShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
@@ -332,6 +335,8 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		Paths.clearStoredMemory();
+
+		callOnHScripts('create', []);
 
 		ratingStuff = [
 			['You Suck!', 0.2], //From 0% to 19%
@@ -905,8 +910,18 @@ class PlayState extends MusicBeatState
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
 					} else if (file.endsWith('.hx') && !filesPushed.contains(file)) {
-						hscriptArray.push(folder + file);
+						var exparser = new Parser();
+						exparser.allowMetadata = true;
+						exparser.allowTypes = true;
+						var parsedstring = exparser.parseString(File.getContent(folder + file));
+						var interp = new Interp();
+						interp = HscriptHandler.setVars(interp);
+						//var interp = HscriptHandler.createInterpWithVars();
+
+						interp.execute(parsedstring);
+						hscriptArray.set(folder + file,interp);
 						filesPushed.push(file);
+						trace('HScript file loaded: ' + folder + file);
 					}
 				}
 			}
@@ -1350,6 +1365,19 @@ class PlayState extends MusicBeatState
 					{
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
+					} else if (file.endsWith('.hx') && !filesPushed.contains(file)) {
+						var exparser = new Parser();
+						exparser.allowMetadata = true;
+						exparser.allowTypes = true;
+						var parsedstring = exparser.parseString(File.getContent(folder + file));
+						var interp = new Interp();
+						interp = HscriptHandler.setVars(interp);
+						//var interp = HscriptHandler.createInterpWithVars();
+
+						interp.execute(parsedstring);
+						hscriptArray.set(folder + file, interp);
+						filesPushed.push(file);
+						trace('HScript file loaded: ' + folder + file);
 					}
 				}
 			}
@@ -2990,6 +3018,7 @@ class PlayState extends MusicBeatState
 			iconP1.swapOldIcon();
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
+		callOnHScripts('update', [elapsed]);
 
 		switch (curStage)
 		{
@@ -5333,6 +5362,26 @@ class PlayState extends MusicBeatState
 
 		setOnLuas('curBeat', curBeat); //DAWGG?????
 		callOnLuas('onBeatHit', []);
+		callOnHScripts('beatHit', [curBeat]);
+	}
+
+	function callSingleHScript(func:String, args:Array<Dynamic>, filename:String) {
+		if (!hscriptArray.get(filename).variables.exists(func)) {
+			trace("I can't find function with name: " + func);
+			return;
+		}
+		var method = hscriptArray.get(filename).variables.get(func);
+		if (args.length == 0) {
+			method();
+		} else if (args.length == 1) {
+			method(args[0]);
+		}
+	}
+
+	function callOnHScripts(func:String, args:Array<Dynamic>) {
+		for (i in hscriptArray.keys()) {
+			callSingleHScript(func, args, i);	// it could be easier ig
+		}
 	}
 
 	public function callOnLuas(event:String, args:Array<Dynamic>, ignoreStops=false, ?exclusions:Array<String>):Dynamic {
