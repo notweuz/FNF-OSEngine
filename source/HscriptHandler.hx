@@ -12,6 +12,7 @@ import HealthIcon;
 import Section;
 import StrumNote;
 import ClientPrefs;
+import Conductor;
 import Note; 
 import NoteSplash; 
 
@@ -35,9 +36,11 @@ class HscriptHandler {
     public static function setVars(interp:Interp) {
         interp.variables.set('PlayState', PlayState);
         interp.variables.set('Character', Character);
+        interp.variables.set('Paths', Paths);
         interp.variables.set('Boyfriend', Boyfriend);
         interp.variables.set('HealthIcon', HealthIcon);
         interp.variables.set('StrumNote', StrumNote);
+        interp.variables.set('Conductor', Conductor);
         interp.variables.set('ClientPrefs', ClientPrefs);
         interp.variables.set('GameOverSubstate', GameOverSubstate);
         interp.variables.set('Note', Note);

@@ -336,8 +336,6 @@ class PlayState extends MusicBeatState
 	{
 		Paths.clearStoredMemory();
 
-		callOnHScripts('create', []);
-
 		ratingStuff = [
 			['F', 0.2], //From 0% to 19%
 			['E', 0.4], //From 20% to 39%
@@ -1480,6 +1478,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 		callOnLuas('onCreatePost', []);
+		callOnHScripts('create', []);
 
 		super.create();
 
@@ -4497,6 +4496,7 @@ class PlayState extends MusicBeatState
 					if (canMiss) {
 						noteMissPress(key);
 						callOnLuas('noteMissPress', [key]);
+						callOnHScripts('noteMissPress', [key]);
 					}
 				}
 
@@ -4693,6 +4693,7 @@ class PlayState extends MusicBeatState
 		}
 
 		callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote, daNote.ID]);
+		callOnHScripts('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote, daNote.ID]);
 	}
 
 	function noteMissPress(direction:Int = 1):Void //You pressed a key when there was no notes to press for this key
@@ -4820,6 +4821,7 @@ class PlayState extends MusicBeatState
 		note.hitByOpponent = true;
 
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote, note.ID]);
+		callOnHScripts('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote, note.ID]);
 
 		if (!note.isSustainNote)
 		{
@@ -4952,6 +4954,7 @@ class PlayState extends MusicBeatState
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus, note.ID]);
+			callOnHScripts('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus, note.ID]);
 
 			if (!note.isSustainNote)
 			{
@@ -5458,6 +5461,7 @@ class PlayState extends MusicBeatState
 
 			// Rating FC
 			ratingFC = "";
+			if (perfects > 0 && !ClientPrefs.removePerfects) ratingFC = "PFC";
 			if (sicks > 0) ratingFC = "SFC";
 			if (goods > 0) ratingFC = "GFC";
 			if (bads > 0 || shits > 0) ratingFC = "FC";
