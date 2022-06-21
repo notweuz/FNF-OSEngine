@@ -318,7 +318,7 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
-	public var hscriptArray:Map<String, Interp> = [];
+	public var hscriptArray:Map<String, Interp> = []; // it should work like luaarray. String is tag and interp is actual hscript interp
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
 	public var luaShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
@@ -1286,11 +1286,6 @@ class PlayState extends MusicBeatState
 			scoreTxt.visible = true;
 		} else {
 			scoreTxt.visible = false;
-		}
-		if (ClientPrefs.scoreposition == "New") {
-			scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			scoreTxt.x = healthBarBG.x - 450;
-			scoreTxt.y = healthBarBG.y - 23;
 		}
 		add(scoreTxt);
 
@@ -3168,18 +3163,10 @@ class PlayState extends MusicBeatState
 		setOnLuas('curDecStep', curDecStep);
 		setOnLuas('curDecBeat', curDecBeat);
 
-		if (ClientPrefs.scoreposition == "New") {
-			if(ratingName == '?') {
-				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ?' + '\nRating: ' + ratingName; 
-			} else {
-				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ' + Math.round(averageMs) + 'ms' + '\nRating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%) ' + ratingFC;//peeps wanted no integer rating
-			}
+		if(ratingName == '?') {
+			scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ?' + ' / Accuracy: ?'; 
 		} else {
-			if(ratingName == '?') {
-				scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ?' + ' / Rating: ' + ratingName; 
-			} else {
-				scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ' + Math.round(averageMs) + 'ms' + ' / Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%) ' + ratingFC;//peeps wanted no integer rating
-			}
+			scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ' + Math.round(averageMs) + 'ms' + ' / Accuracy: ' + Highscore.floorDecimal(ratingPercent * 100, 2) + '% (' + ratingName + ' - ' + ratingFC + ') ';//peeps wanted no integer ratingx
 		}
 
 		if(botplayTxt.visible) {
