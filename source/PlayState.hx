@@ -85,16 +85,16 @@ class PlayState extends MusicBeatState
 	public static var cameramovingoffsetbf = 20; // idk why i made literally same variable
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], //From 0% to 19%
-		['Shit', 0.4], //From 20% to 39%
-		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
-		['Meh', 0.69], //From 60% to 68%
-		['Nice', 0.7], //69%
-		['Good', 0.8], //From 70% to 79%
-		['Great', 0.9], //From 80% to 89%
-		['Sick!', 1], //From 90% to 99%
-		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+		['F', 0.2], //From 0% to 19%
+		['E', 0.4], //From 20% to 39%
+		['D', 0.5], //From 40% to 49%
+		['C', 0.6], //From 50% to 59%
+		['B', 0.69], //From 60% to 68%
+		['A', 0.7], //69%
+		['AA', 0.8], //From 70% to 79%
+		['AAA', 0.9], //From 80% to 89%
+		['AAAA', 1], //From 90% to 99%
+		['AAAAA', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 	public static var animatedShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
@@ -339,16 +339,16 @@ class PlayState extends MusicBeatState
 		callOnHScripts('create', []);
 
 		ratingStuff = [
-			['You Suck!', 0.2], //From 0% to 19%
-			['Shit', 0.4], //From 20% to 39%
-			['Bad', 0.5], //From 40% to 49%
-			['Bruh', 0.6], //From 50% to 59%
-			['Meh', 0.69], //From 60% to 68%
-			['Nice', 0.7], //69%
-			['Good', 0.8], //From 70% to 79%
-			['Great', 0.9], //From 80% to 89%
-			['Sick!', 1], //From 90% to 99%
-			['Perfect!!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+			['F', 0.2], //From 0% to 19%
+			['E', 0.4], //From 20% to 39%
+			['D', 0.5], //From 40% to 49%
+			['C', 0.6], //From 50% to 59%
+			['B', 0.69], //From 60% to 68%
+			['A', 0.7], //69%
+			['AA', 0.8], //From 70% to 79%
+			['AAA', 0.9], //From 80% to 89%
+			['AAAA', 1], //From 90% to 99%
+			['AAAAA', 1] //The value on this one isn't used actually, since Perfect is always "1"
 		];
 
 		// for lua
