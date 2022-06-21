@@ -4517,6 +4517,7 @@ class PlayState extends MusicBeatState
 				spr.resetAnim = 0;
 			}
 			callOnLuas('onKeyPress', [key]);
+			callOnHScripts('onKeyPress', [key]);
 		}
 		//trace('pressed: ' + controlArray);
 	}
@@ -5354,7 +5355,6 @@ class PlayState extends MusicBeatState
 
 	function callSingleHScript(func:String, args:Array<Dynamic>, filename:String) {
 		if (!hscriptArray.get(filename).variables.exists(func)) {
-			trace("I can't find function with name: " + func);
 			return;
 		}
 		var method = hscriptArray.get(filename).variables.get(func);
