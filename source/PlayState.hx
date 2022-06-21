@@ -64,6 +64,7 @@ import Shaders;
 import DynamicShaderHandler;
 import Conductor.Rating;
 #if sys
+import sys.io.File;
 import sys.FileSystem;
 #end
 
@@ -314,6 +315,7 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
+	public var hscriptArray:Array<String> = [];
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
 	public var luaShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
@@ -901,6 +903,9 @@ class PlayState extends MusicBeatState
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
 						luaArray.push(new FunkinLua(folder + file));
+						filesPushed.push(file);
+					} else if (file.endsWith('.hx') && !filesPushed.contains(file)) {
+						hscriptArray.push(folder + file);
 						filesPushed.push(file);
 					}
 				}
@@ -4615,19 +4620,23 @@ class PlayState extends MusicBeatState
 	function noteMiss(daNote:Note):Void { //You didn't hit the key and let it go offscreen, also used by Hurt Notes
 		//Dupe note remove
 		if (daNote.isSustainNote) {
-			vocals.volume = 0;	// you shouldn't sing if you're doing misses
-			notes.remove(daNote, true);
-			if(!practiceMode) songScore -= 5;
-			for ( i in daNote.parent.tail ) {
-				i.parent.shouldbehidden = true;
-				i.alpha = 0.4; 		// kade engine vibes?
+			if (daNote.parent != null) {
+				if (!daNote.parent.shouldbehidden) {
+					goods++;
+				}
+				vocals.volume = 0;	// you shouldn't sing if you're doing misses
+				notes.remove(daNote, true);
+				if(!practiceMode) songScore -= 5;
+				for ( i in daNote.parent.tail ) {
+					i.alpha = 0.4; 		// kade engine vibes?
+				}
+				daNote.parent.shouldbehidden = true;
+				daNote.kill();
+				daNote.destroy();
+				totalPlayed++;
+				RecalculateRating();
+				return;
 			}
-			daNote.kill();
-			daNote.destroy();
-			totalPlayed++;
-			goods++;
-			RecalculateRating();
-			return;
 		}
 		notes.forEachAlive(function(note:Note) {
 			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
