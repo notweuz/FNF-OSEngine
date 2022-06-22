@@ -63,7 +63,11 @@ import DialogueBoxPsych;
 import Shaders;
 import DynamicShaderHandler;
 import Conductor.Rating;
+import hscript.Interp;
+import hscript.Parser;
+import HscriptHandler;
 #if sys
+import sys.io.File;
 import sys.FileSystem;
 #end
 
@@ -81,16 +85,16 @@ class PlayState extends MusicBeatState
 	public static var cameramovingoffsetbf = 20; // idk why i made literally same variable
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], //From 0% to 19%
-		['Shit', 0.4], //From 20% to 39%
-		['Bad', 0.5], //From 40% to 49%
-		['Bruh', 0.6], //From 50% to 59%
-		['Meh', 0.69], //From 60% to 68%
-		['Nice', 0.7], //69%
-		['Good', 0.8], //From 70% to 79%
-		['Great', 0.9], //From 80% to 89%
-		['Sick!', 1], //From 90% to 99%
-		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+		['F', 0.2], //From 0% to 19%
+		['E', 0.4], //From 20% to 39%
+		['D', 0.5], //From 40% to 49%
+		['C', 0.6], //From 50% to 59%
+		['B', 0.69], //From 60% to 68%
+		['A', 0.7], //69%
+		['AA', 0.8], //From 70% to 79%
+		['AAA', 0.9], //From 80% to 89%
+		['AAAA', 1], //From 90% to 99%
+		['AAAAA', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 	public static var animatedShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
 	public var modchartTweens:Map<String, FlxTween> = new Map<String, FlxTween>();
@@ -314,6 +318,7 @@ class PlayState extends MusicBeatState
 	// Lua shit
 	public static var instance:PlayState;
 	public var luaArray:Array<FunkinLua> = [];
+	public var hscriptArray:Map<String, Interp> = []; // it should work like luaarray. String is tag and interp is actual hscript interp
 	private var luaDebugGroup:FlxTypedGroup<DebugLuaText>;
 	public var introSoundsSuffix:String = '';
 	public var luaShaders:Map<String, DynamicShaderHandler> = new Map<String, DynamicShaderHandler>();
@@ -332,16 +337,16 @@ class PlayState extends MusicBeatState
 		Paths.clearStoredMemory();
 
 		ratingStuff = [
-			['You Suck!', 0.2], //From 0% to 19%
-			['Shit', 0.4], //From 20% to 39%
-			['Bad', 0.5], //From 40% to 49%
-			['Bruh', 0.6], //From 50% to 59%
-			['Meh', 0.69], //From 60% to 68%
-			['Nice', 0.7], //69%
-			['Good', 0.8], //From 70% to 79%
-			['Great', 0.9], //From 80% to 89%
-			['Sick!', 1], //From 90% to 99%
-			['Perfect!!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+			['F', 0.2], //From 0% to 19%
+			['E', 0.4], //From 20% to 39%
+			['D', 0.5], //From 40% to 49%
+			['C', 0.6], //From 50% to 59%
+			['B', 0.69], //From 60% to 68%
+			['A', 0.7], //69%
+			['AA', 0.8], //From 70% to 79%
+			['AAA', 0.9], //From 80% to 89%
+			['AAAA', 1], //From 90% to 99%
+			['AAAAA', 1] //The value on this one isn't used actually, since Perfect is always "1"
 		];
 
 		// for lua
@@ -902,6 +907,19 @@ class PlayState extends MusicBeatState
 					{
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
+					} else if (file.endsWith('.hx') && !filesPushed.contains(file)) {
+						var exparser = new Parser();
+						exparser.allowMetadata = true;
+						exparser.allowTypes = true;
+						var parsedstring = exparser.parseString(File.getContent(folder + file));
+						var interp = new Interp();
+						interp = HscriptHandler.setVars(interp);
+						//var interp = HscriptHandler.createInterpWithVars();
+
+						interp.execute(parsedstring);
+						hscriptArray.set(folder + file,interp);
+						filesPushed.push(file);
+						trace('HScript file loaded: ' + folder + file);
 					}
 				}
 			}
@@ -1211,7 +1229,7 @@ class PlayState extends MusicBeatState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		FlxG.fixedTimestep = false;
-		moveCameraSection(0);
+		moveCameraSection();
 
 		healthBarBG = new AttachedSprite('healthBar');
 		healthBarBG.y = FlxG.height * 0.89;
@@ -1266,11 +1284,6 @@ class PlayState extends MusicBeatState
 			scoreTxt.visible = true;
 		} else {
 			scoreTxt.visible = false;
-		}
-		if (ClientPrefs.scoreposition == "New") {
-			scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			scoreTxt.x = healthBarBG.x - 450;
-			scoreTxt.y = healthBarBG.y - 23;
 		}
 		add(scoreTxt);
 
@@ -1350,6 +1363,19 @@ class PlayState extends MusicBeatState
 					{
 						luaArray.push(new FunkinLua(folder + file));
 						filesPushed.push(file);
+					} else if (file.endsWith('.hx') && !filesPushed.contains(file)) {
+						var exparser = new Parser();
+						exparser.allowMetadata = true;
+						exparser.allowTypes = true;
+						var parsedstring = exparser.parseString(File.getContent(folder + file));
+						var interp = new Interp();
+						interp = HscriptHandler.setVars(interp);
+						//var interp = HscriptHandler.createInterpWithVars();
+
+						interp.execute(parsedstring);
+						hscriptArray.set(folder + file, interp);
+						filesPushed.push(file);
+						trace('HScript file loaded: ' + folder + file);
 					}
 				}
 			}
@@ -1457,6 +1483,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.safeZoneOffset = (ClientPrefs.safeFrames / 60) * 1000;
 		callOnLuas('onCreatePost', []);
+		callOnHScripts('create', []);
 
 		super.create();
 
@@ -2992,6 +3019,7 @@ class PlayState extends MusicBeatState
 			iconP1.swapOldIcon();
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
+		callOnHScripts('update', [elapsed]);
 
 		switch (curStage)
 		{
@@ -3141,18 +3169,10 @@ class PlayState extends MusicBeatState
 		setOnLuas('curDecStep', curDecStep);
 		setOnLuas('curDecBeat', curDecBeat);
 
-		if (ClientPrefs.scoreposition == "New") {
-			if(ratingName == '?') {
-				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ?' + '\nRating: ' + ratingName; 
-			} else {
-				scoreTxt.text = 'Score: ' + songScore + '\nMisses: ' + songMisses + '\nAverage: ' + Math.round(averageMs) + 'ms' + '\nRating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%) ' + ratingFC;//peeps wanted no integer rating
-			}
+		if(ratingName == '?') {
+			scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ?' + ' / Accuracy: ?'; 
 		} else {
-			if(ratingName == '?') {
-				scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ?' + ' / Rating: ' + ratingName; 
-			} else {
-				scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ' + Math.round(averageMs) + 'ms' + ' / Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%) ' + ratingFC;//peeps wanted no integer rating
-			}
+			scoreTxt.text = 'Score: ' + songScore + ' / Misses: ' + songMisses + ' / Average: ' + Math.round(averageMs) + 'ms' + ' / Accuracy: ' + Highscore.floorDecimal(ratingPercent * 100, 2) + '% (' + ratingName + ' - ' + ratingFC + ') ';//peeps wanted no integer ratingx
 		}
 
 		if(botplayTxt.visible) {
@@ -3300,6 +3320,7 @@ class PlayState extends MusicBeatState
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, CoolUtil.boundTo(1 - (elapsed * 3.125 * camZoomingDecay), 0, 1));
 		}
 
+		FlxG.watch.addQuick("secShit", curSection);
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
 
@@ -3949,10 +3970,10 @@ class PlayState extends MusicBeatState
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
 
-	function moveCameraSection(?id:Int = 0):Void {
-		if(SONG.notes[id] == null) return;
+	function moveCameraSection():Void {
+		if(SONG.notes[curSection] == null) return;
 
-		if (gf != null && SONG.notes[id].gfSection)
+		if (gf != null && SONG.notes[curSection].gfSection)
 		{
 			camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y);
 			camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
@@ -3962,7 +3983,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		if (!SONG.notes[id].mustHitSection)
+		if (!SONG.notes[curSection].mustHitSection)
 		{
 			moveCamera(true);
 			callOnLuas('onMoveCamera', ['dad']);
@@ -4487,6 +4508,7 @@ class PlayState extends MusicBeatState
 					if (canMiss) {
 						noteMissPress(key);
 						callOnLuas('noteMissPress', [key]);
+						callOnHScripts('noteMissPress', [key]);
 					}
 				}
 
@@ -4507,6 +4529,7 @@ class PlayState extends MusicBeatState
 				spr.resetAnim = 0;
 			}
 			callOnLuas('onKeyPress', [key]);
+			callOnHScripts('onKeyPress', [key]);
 		}
 		//trace('pressed: ' + controlArray);
 	}
@@ -4626,19 +4649,23 @@ class PlayState extends MusicBeatState
 	function noteMiss(daNote:Note):Void { //You didn't hit the key and let it go offscreen, also used by Hurt Notes
 		//Dupe note remove
 		if (daNote.isSustainNote) {
-			vocals.volume = 0;	// you shouldn't sing if you're doing misses
-			notes.remove(daNote, true);
-			if(!practiceMode) songScore -= 5;
-			for ( i in daNote.parent.tail ) {
-				i.parent.shouldbehidden = true;
-				i.alpha = 0.4; 		// kade engine vibes?
+			if (daNote.parent != null) {
+				if (!daNote.parent.shouldbehidden) {
+					songMisses++;
+					totalPlayed++;
+					if(!practiceMode) songScore -= 5;
+				}
+				vocals.volume = 0;	// you shouldn't sing if you're doing misses
+				notes.remove(daNote, true);
+				for ( i in daNote.parent.tail ) {
+					i.alpha = 0.4; 		// kade engine vibes?
+				}
+				daNote.parent.shouldbehidden = true;
+				daNote.kill();
+				daNote.destroy();
+				RecalculateRating();
+				return;
 			}
-			daNote.kill();
-			daNote.destroy();
-			totalPlayed++;
-			goods++;
-			RecalculateRating();
-			return;
 		}
 		notes.forEachAlive(function(note:Note) {
 			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
@@ -4678,6 +4705,7 @@ class PlayState extends MusicBeatState
 		}
 
 		callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote, daNote.ID]);
+		callOnHScripts('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote, daNote.ID]);
 	}
 
 	function noteMissPress(direction:Int = 1):Void //You pressed a key when there was no notes to press for this key
@@ -4738,7 +4766,6 @@ class PlayState extends MusicBeatState
 		} else if(!note.noAnimation) {
 			var altAnim:String = note.animSuffix;
 
-			var curSection:Int = Math.floor(curStep / 16);
 			if (SONG.notes[curSection] != null)
 			{
 				if (SONG.notes[curSection].altAnim) {
@@ -4805,6 +4832,7 @@ class PlayState extends MusicBeatState
 		note.hitByOpponent = true;
 
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote, note.ID]);
+		callOnHScripts('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote, note.ID]);
 
 		if (!note.isSustainNote)
 		{
@@ -4937,6 +4965,7 @@ class PlayState extends MusicBeatState
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus, note.ID]);
+			callOnHScripts('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus, note.ID]);
 
 			if (!note.isSustainNote)
 			{
@@ -5220,34 +5249,6 @@ class PlayState extends MusicBeatState
 			notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}
 
-		if (SONG.notes[Math.floor(curStep / 16)] != null)
-		{
-			if (SONG.notes[Math.floor(curStep / 16)].changeBPM)
-			{
-				Conductor.changeBPM(SONG.notes[Math.floor(curStep / 16)].bpm);
-				//FlxG.log.add('CHANGED BPM!');
-				setOnLuas('curBpm', Conductor.bpm);
-				setOnLuas('crochet', Conductor.crochet);
-				setOnLuas('stepCrochet', Conductor.stepCrochet);
-			}
-			setOnLuas('mustHitSection', SONG.notes[Math.floor(curStep / 16)].mustHitSection);
-			setOnLuas('altAnim', SONG.notes[Math.floor(curStep / 16)].altAnim);
-			setOnLuas('gfSection', SONG.notes[Math.floor(curStep / 16)].gfSection);
-			// else
-			// Conductor.changeBPM(SONG.bpm);
-		}
-		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
-
-		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos)
-		{
-			moveCameraSection(Std.int(curStep / 16));
-		}
-		if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms && curBeat % 4 == 0)
-		{
-			FlxG.camera.zoom += 0.015 * camZoomingMult;
-			camHUD.zoom += 0.03 * camZoomingMult;
-		}
-
 		iconP1.scale.set(1.2, 1.2);
 		iconP2.scale.set(1.2, 1.2);
 
@@ -5335,6 +5336,59 @@ class PlayState extends MusicBeatState
 
 		setOnLuas('curBeat', curBeat); //DAWGG?????
 		callOnLuas('onBeatHit', []);
+		callOnHScripts('beatHit', [curBeat]);
+	}
+
+	function callSingleHScript(func:String, args:Array<Dynamic>, filename:String) {
+		if (!hscriptArray.get(filename).variables.exists(func)) {
+			return;
+		}
+		var method = hscriptArray.get(filename).variables.get(func);
+		if (args.length == 0) {
+			method();
+		} else if (args.length == 1) {
+			method(args[0]);
+		}
+	}
+
+	function callOnHScripts(func:String, args:Array<Dynamic>) {
+		for (i in hscriptArray.keys()) {
+			callSingleHScript(func, args, i);	// it could be easier ig
+		}
+	}
+
+	override function sectionHit()
+	{
+		super.sectionHit();
+
+		if (SONG.notes[curSection] != null)
+		{
+			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
+			{
+				moveCameraSection();
+			}
+
+			if (camZooming && FlxG.camera.zoom < 1.35 && ClientPrefs.camZooms)
+			{
+				FlxG.camera.zoom += 0.015 * camZoomingMult;
+				camHUD.zoom += 0.03 * camZoomingMult;
+			}
+
+			if (SONG.notes[curSection].changeBPM)
+			{
+				Conductor.changeBPM(SONG.notes[curSection].bpm);
+				setOnLuas('curBpm', Conductor.bpm);
+				setOnLuas('crochet', Conductor.crochet);
+				setOnLuas('stepCrochet', Conductor.stepCrochet);
+			}
+			setOnLuas('mustHitSection', SONG.notes[curSection].mustHitSection);
+			setOnLuas('altAnim', SONG.notes[curSection].altAnim);
+			setOnLuas('gfSection', SONG.notes[curSection].gfSection);
+		}
+		
+		setOnLuas('curSection', curSection);
+		callOnLuas('onSectionHit', []);
+		callOnHScripts('sectionHit', [curSection]);
 	}
 
 	public function callOnLuas(event:String, args:Array<Dynamic>, ignoreStops=false, ?exclusions:Array<String>):Dynamic {
@@ -5424,6 +5478,7 @@ class PlayState extends MusicBeatState
 
 			// Rating FC
 			ratingFC = "";
+			if (perfects > 0 && !ClientPrefs.removePerfects) ratingFC = "PFC";
 			if (sicks > 0) ratingFC = "SFC";
 			if (goods > 0) ratingFC = "GFC";
 			if (bads > 0 || shits > 0) ratingFC = "FC";
