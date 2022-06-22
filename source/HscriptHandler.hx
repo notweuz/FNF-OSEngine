@@ -14,6 +14,7 @@ import StrumNote;
 import ClientPrefs;
 import Conductor;
 import Note; 
+import MainMenuState; 
 import NoteSplash; 
 
 import flixel.FlxBasic;
@@ -45,6 +46,7 @@ class HscriptHandler {
         interp.variables.set('GameOverSubstate', GameOverSubstate);
         interp.variables.set('Note', Note);
         interp.variables.set('FlxG', FlxG);
+        interp.variables.set('MainMenuState', MainMenuState);
         interp.variables.set('Song', Song);
         interp.variables.set('FlxGame', FlxGame);
         interp.variables.set('FlxBackdrop', FlxBackdrop);
