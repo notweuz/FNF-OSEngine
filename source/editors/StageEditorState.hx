@@ -73,9 +73,14 @@ class StageEditorState extends MusicBeatState
 
     var selectedObj:FlxSprite;
     var objectName:String;
+    var tagName:String;
+
     var selectedObjName:Int; // it's supposed to be a string, but its int now
 
 	var bgLayer:FlxTypedGroup<FlxSprite>;
+
+    var bgMap:Map<FlxSprite, Dynamic> = [];
+
 	var charLayer:FlxTypedGroup<Character>;
 
     var spritesLayer:Array<String> = [];
@@ -213,6 +218,7 @@ class StageEditorState extends MusicBeatState
     }
 
     var objectInputText:FlxUIInputText;
+    var tagInputText:FlxUIInputText;
     var objectAdd:FlxButton;
     var objectRemove:FlxButton;
     var spritesDropDown:FlxUIDropDownMenuCustom;
@@ -222,7 +228,9 @@ class StageEditorState extends MusicBeatState
         var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Manage";
         
-        objectInputText = new FlxUIInputText(10, 30, 150, "examplefolder/example", 8);
+        objectInputText = new FlxUIInputText(10, 30, 100, "examplefolder/example", 8);
+
+        tagInputText = new FlxUIInputText(objectInputText.x + 150, objectInputText.y, 100, "tag", 8);
 
         objectAdd = new FlxButton(objectInputText.x, objectInputText.y + 22, "Add Sprite", function() {
             if (FileSystem.exists(Paths.modsImages(objectName))) {
@@ -230,9 +238,20 @@ class StageEditorState extends MusicBeatState
                 sprite.loadGraphic(Paths.image(objectName), false, 0, 0, false, objectName);
                 sprite.x = 0;
                 sprite.y = 0;
-                bgLayer.add(sprite);
                 sprite.updateHitbox();
-                spritesLayer.push(objectName);
+                var objectArray:Array<Dynamic> = [
+                    tagName,
+                    objectName,
+                    sprite.x,
+                    sprite.y,
+                    sprite.scale.x,
+                    sprite.scale.y,
+                    false,
+                    sprite
+                ];
+                bgMap.set(sprite, objectArray);
+                bgLayer.add(sprite);
+                spritesLayer.push(objectArray[0]);
                 selectedObj = sprite;
                 selectedObj.updateHitbox();
                 reloadSpritesDropdown();
@@ -242,6 +261,11 @@ class StageEditorState extends MusicBeatState
         objectRemove = new FlxButton(objectAdd.x + 90, objectAdd.y, "Remove Sprite", function() {
             if (selectedObj != gf && selectedObj != bf && selectedObj != dad && selectedObj != null) {
                 bgLayer.remove(selectedObj, true);
+                for (i in bgMap.keys()) {
+                    if (i == selectedObj) {
+                        bgMap.remove(selectedObj);
+                    }
+                }
                 selectedObj.destroy();
                 spritesLayer.splice(selectedObjName, 1);
                 selectedObj = bf;
@@ -280,7 +304,9 @@ class StageEditorState extends MusicBeatState
 		tab_group.add(new FlxText(charDropDown.x, charDropDown.y - 18, 0, 'Character:'));
 		tab_group.add(new FlxText(spritesDropDown.x, spritesDropDown.y - 18, 0, 'Background Sprite:'));
 		tab_group.add(new FlxText(objectInputText.x, objectInputText.y - 18, 0, 'Image Path:'));
+		tab_group.add(new FlxText(tagInputText.x, tagInputText.y - 18, 0, 'Object Tag:'));
         tab_group.add(objectInputText);
+        tab_group.add(tagInputText);
         UI_box.addGroup(tab_group);
 	}
 
@@ -289,6 +315,7 @@ class StageEditorState extends MusicBeatState
     var objCopyCoords:FlxButton;
     var objCopySize:FlxButton;
     var saveCharacterCoordsBtn:FlxButton;
+    var saveAdvancedCoordsBtn:FlxButton;
 
     function addObjectsUI() {
         var tab_group = new FlxUI(null, UI_box);
@@ -313,6 +340,10 @@ class StageEditorState extends MusicBeatState
             saveCharacterCoords();
         });
 
+        saveAdvancedCoordsBtn = new FlxButton(saveCharacterCoordsBtn.x+85, saveCharacterCoordsBtn.y, 'Save Advanced Json', function() {
+            saveAdvancedJson();
+        });
+
 		var check_Pixel = new FlxUICheckBox(saveCharacterCoordsBtn.x, saveCharacterCoordsBtn.y+30, null, null, "Pixel Stage", 100);
 		check_Pixel.checked = stageispixel;
 		check_Pixel.callback = function()
@@ -332,12 +363,13 @@ class StageEditorState extends MusicBeatState
 		};
 
         tab_group.add(stepper_Zoom);
-        tab_group.add(objCopyCoords);
+        //tab_group.add(objCopyCoords);
 		tab_group.add(new FlxText(stepper_Zoom.x, stepper_Zoom.y - 15, 0, 'Default Zoom:'));
         tab_group.add(check_Pixel);
         tab_group.add(check_hideGirlfriend);
         tab_group.add(saveCharacterCoordsBtn);
-        tab_group.add(objCopySize);
+        tab_group.add(saveAdvancedCoordsBtn);
+        //tab_group.add(objCopySize);
         tab_group.add(objCoords);
         tab_group.add(objSize);
         UI_box.addGroup(tab_group);
@@ -496,6 +528,21 @@ class StageEditorState extends MusicBeatState
             objCoords.text = 'Object Coords: [' + xobj + '; ' + yobj + ']';
         } else {
             objCoords.text = 'Object Coords: [' + selectedObj.x + '; ' + selectedObj.y + ']';
+            for (i in bgMap.keys()) {
+                if (i == selectedObj) {
+                    var objectArray:Array<Dynamic> = [
+                        bgMap[i][0],
+                        bgMap[i][1],
+                        selectedObj.x,
+                        selectedObj.y,
+                        bgMap[i][4],
+                        bgMap[i][5],
+                        bgMap[i][6],
+                        bgMap[i][7]
+                    ];
+                    bgMap.set(i, objectArray);
+                }
+            }
         }
         selectedObj.updateHitbox();
     }      
@@ -503,6 +550,21 @@ class StageEditorState extends MusicBeatState
     function updateSize() {
         selectedObj.updateHitbox();
         objSize.text = 'Object Size: [' + selectedObj.scale.x + '; ' + selectedObj.scale.y + ']';
+        for (i in bgMap.keys()) {
+            if (i == selectedObj) {
+                var objectArray:Array<Dynamic> = [
+                    bgMap[i][0],
+                    bgMap[i][1],
+                    bgMap[i][2],
+                    bgMap[i][3],
+                    selectedObj.scale.x,
+                    selectedObj.scale.y,
+                    bgMap[i][6],
+                    bgMap[i][7]
+                ];
+                bgMap.set(i, objectArray);
+            }
+        }
         updateCoords();
     }
 
@@ -548,7 +610,7 @@ class StageEditorState extends MusicBeatState
             "boyfriend": [ bf.x - bfjson.position[0] + bfidle[0], bf.y - bfjson.position[1] + bfidle[1] ],
             "girlfriend": [ gf.x - gfjson.position[0] + gfidle[0], gf.y- gfjson.position[1] + gfidle[1] ],
             "opponent": [ dad.x - dadjson.position[0] + dadidle[0], dad.y - dadjson.position[1] + dadidle[1] ],
-            "hide_girlfriend": !gf.visible
+            "hide_girlfriend": !gf.visible  
         };
 
 		var data:String = Json.stringify(json, "\t");
@@ -562,10 +624,40 @@ class StageEditorState extends MusicBeatState
                 _file.save(data, "stage.json");
             }
     }
+
+    function saveAdvancedJson() {
+        var json = {};
+        var tempid:Int = 0; 
+        for (i in bgMap.keys()) {
+            if (i == selectedObj) {
+                var tempy = bgMap[i];
+                json = {
+                    "tag": tempy[0],
+                    "path": tempy[1],
+                    "x": tempy[2],
+                    "y": tempy[3],
+                    "scalex": tempy[4],
+                    "scaley": tempy[5],
+                    "animated": tempy[6]
+                }
+            }
+        }
+
+		var data:String = Json.stringify(json, "\t");
+
+		if (data.length > 0)
+            {
+                _file = new FileReference();
+                _file.addEventListener(Event.COMPLETE, onSaveComplete);
+                _file.addEventListener(Event.CANCEL, onSaveCancel);
+                _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+                _file.save(data, "object.json");
+            }
+    }
     
     
     override function update(elapsed:Float) {
-        var inputTexts:Array<FlxUIInputText> = [objectInputText];
+        var inputTexts:Array<FlxUIInputText> = [objectInputText, tagInputText];
 		for (i in 0...inputTexts.length) {
 			if(inputTexts[i].hasFocus) {
 				if(FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.V && Clipboard.text != null) { //Copy paste
@@ -714,6 +806,9 @@ class StageEditorState extends MusicBeatState
 			if(sender == objectInputText) {
 				objectName = objectInputText.text;
 			}
+            if (sender == tagInputText) {
+                tagName = tagInputText.text;
+            }
 		} else if(id == FlxUINumericStepper.CHANGE_EVENT && (sender is FlxUINumericStepper)) {
 			var nums:FlxUINumericStepper = cast sender;
 			var wname = nums.name;

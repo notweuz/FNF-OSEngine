@@ -1,0 +1,1 @@
+Add your object .json here. You can generate it in stage editor.
