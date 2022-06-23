@@ -43,6 +43,7 @@ class Paths
 		'videos',
 		'images',
 		'stages',
+		'objects',
 		'weeks',
 		'fonts',
 		'scripts',
@@ -412,6 +413,10 @@ class Paths
 
 	inline static public function modsImages(key:String) {
 		return modFolders('images/' + key + '.png');
+	}
+
+	inline static public function modsObjects(key:String) {
+		return modFolders('objects/' + key + '.json');
 	}
 
 	inline static public function modsXml(key:String) {
