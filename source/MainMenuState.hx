@@ -60,6 +60,9 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		#if MODS_ALLOWED
+		Paths.pushGlobalMods();
+		#end
 		WeekData.loadTheFirstEnabledMod();
 		if (ClientPrefs.colorblindMode != null) ColorblindFilters.applyFiltersOnGame(); // applies colorbind filters, ok?
 
