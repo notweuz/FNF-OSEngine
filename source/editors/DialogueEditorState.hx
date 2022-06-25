@@ -218,7 +218,7 @@ class DialogueEditorState extends MusicBeatState
 		character.playAnim(); //Plays random animation
 		characterAnimSpeed();
 
-		if(character.animation.curAnim != null) {
+		if(character.animation.curAnim != null && character.jsonFile.animations != null) {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press W or S to scroll';
 		} else {
 			animText.text = 'ERROR! NO ANIMATIONS FOUND';
