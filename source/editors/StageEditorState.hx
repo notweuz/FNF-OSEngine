@@ -106,7 +106,7 @@ class StageEditorState extends MusicBeatState
         var uibox_tabs = [
             {name: 'Characters', label: 'Characters'},
             {name: 'Objects Info', label: 'Objects Info'},
-            {name: 'Manage', label: 'Manage'},
+            {name: 'Add/Remove', label: 'Add/Remove'},
         ];
 
         betaTXT = new FlxText(12, FlxG.height - 24, 0, "ALPHA", 20);
@@ -196,9 +196,9 @@ class StageEditorState extends MusicBeatState
 
         addCharactersUI();
         addObjectsUI();
-        addManageUI();
+        addAddRemoveUI();
 
-		UI_box.selected_tab_id = 'Manage';
+		UI_box.selected_tab_id = 'Add/Remove';
 
 		FlxG.mouse.visible = true;
 
@@ -222,11 +222,10 @@ class StageEditorState extends MusicBeatState
     var objectAdd:FlxButton;
     var objectRemove:FlxButton;
     var spritesDropDown:FlxUIDropDownMenuCustom;
-    var charDropDown:FlxUIDropDownMenuCustom;
 
-    function addManageUI() {
+    function addAddRemoveUI() {
         var tab_group = new FlxUI(null, UI_box);
-		tab_group.name = "Manage";
+		tab_group.name = "Add/Remove";
         
         objectInputText = new FlxUIInputText(10, 30, 100, "examplefolder/example", 8);
 
@@ -285,23 +284,10 @@ class StageEditorState extends MusicBeatState
             updateCoords();
             updateSize();
 		});
-        
-        charDropDown = new FlxUIDropDownMenuCustom(spritesDropDown.x + 130, spritesDropDown.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(character:String)
-		{
-            selectedObj = charactersObjects[Std.parseInt(character)];
-            reloadCharacterDropDown();
-            charDropDown.selectedLabel = charactersOnStage[Std.parseInt(character)];
-            selectedObj.updateHitbox();
-            updateCoords();
-            updateSize();
-		});
-		reloadCharacterDropDown();
 
         tab_group.add(objectAdd);
         tab_group.add(objectRemove);
         tab_group.add(spritesDropDown);
-        tab_group.add(charDropDown);
-		tab_group.add(new FlxText(charDropDown.x, charDropDown.y - 18, 0, 'Character:'));
 		tab_group.add(new FlxText(spritesDropDown.x, spritesDropDown.y - 18, 0, 'Background Sprite:'));
 		tab_group.add(new FlxText(objectInputText.x, objectInputText.y - 18, 0, 'Image Path:'));
 		tab_group.add(new FlxText(tagInputText.x, tagInputText.y - 18, 0, 'Object Tag:'));
@@ -378,6 +364,7 @@ class StageEditorState extends MusicBeatState
     var dadSelect:FlxUIDropDownMenuCustom;
     var bfSelect:FlxUIDropDownMenuCustom;
     var gfSelect:FlxUIDropDownMenuCustom;
+    var charDropDown:FlxUIDropDownMenuCustom;
 
     function addCharactersUI() {
         var tab_group = new FlxUI(null, UI_box);
@@ -438,6 +425,17 @@ class StageEditorState extends MusicBeatState
             });
 
         reloadCharDrops();
+        
+        charDropDown = new FlxUIDropDownMenuCustom(gfSelect.x-130, dadSelect.y, FlxUIDropDownMenuCustom.makeStrIdLabelArray([''], true), function(character:String)
+		{
+            selectedObj = charactersObjects[Std.parseInt(character)];
+            reloadCharacterDropDown();
+            charDropDown.selectedLabel = charactersOnStage[Std.parseInt(character)];
+            selectedObj.updateHitbox();
+            updateCoords();
+            updateSize();
+		});
+		reloadCharacterDropDown();
             
         tab_group.add(dadSelect);
         tab_group.add(new FlxText(dadSelect.x, dadSelect.y - 15, 0, 'Opponent:'));
@@ -445,6 +443,8 @@ class StageEditorState extends MusicBeatState
         tab_group.add(new FlxText(bfSelect.x, bfSelect.y - 15, 0, 'Player:'));
         tab_group.add(gfSelect);
         tab_group.add(new FlxText(gfSelect.x, gfSelect.y - 15, 0, 'Girlfriend:'));
+        tab_group.add(charDropDown);
+		tab_group.add(new FlxText(charDropDown.x, charDropDown.y - 18, 0, 'Character:'));
         UI_box.addGroup(tab_group);
 	}
 
