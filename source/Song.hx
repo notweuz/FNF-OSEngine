@@ -20,6 +20,7 @@ typedef SwagSong =
 	var bpm:Float;
 	var needsVoices:Bool;
 	var speed:Float;
+	var offset:Float;
 
 	var player1:String;
 	var player2:String;
@@ -53,6 +54,7 @@ class Song
 	public var speed:Float = 1;
 	public var healthdrain:Float = 0;
 	public var stage:String;
+<<<<<<< HEAD
 	public var healthdrainKill:Bool = false;
 	public var characterTrails:Bool = false;
 	public var bfTrails:Bool = false;
@@ -60,6 +62,9 @@ class Song
 	public var disableDebugButtons:Bool = false;
 	public var swapStrumLines:Bool = false;
 
+=======
+	public var offset:Float = 0;
+>>>>>>> c364286 (Merge branch 'main' of https://github.com/KadeDev/FNF-PsychEngine)
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
