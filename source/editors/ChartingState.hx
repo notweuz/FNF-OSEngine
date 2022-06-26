@@ -202,6 +202,7 @@ class ChartingState extends MusicBeatState
 
 	var text:String = "";
 	public static var vortex:Bool = false;
+	public var mouseQuant:Bool = false;
 	override function create()
 	{
 		if(ClientPrefs.autosavecharts == true) {
@@ -1255,6 +1256,7 @@ class ChartingState extends MusicBeatState
 	}
 
 	var metronome:FlxUICheckBox;
+	var mouseScrollingQuant:FlxUICheckBox;
 	var metronomeStepper:FlxUINumericStepper;
 	var metronomeOffsetStepper:FlxUINumericStepper;
 	var disableAutoScrolling:FlxUICheckBox;
@@ -1304,6 +1306,16 @@ class ChartingState extends MusicBeatState
 
 			FlxG.sound.music.volume = vol;
 		};
+		mouseScrollingQuant = new FlxUICheckBox(10, 200, null, null, "Mouse Scrolling Quantization", 100);
+		if (FlxG.save.data.mouseScrollingQuant == null) FlxG.save.data.mouseScrollingQuant = false;
+		mouseScrollingQuant.checked = FlxG.save.data.mouseScrollingQuant;
+
+		mouseScrollingQuant.callback = function()
+		{
+			FlxG.save.data.mouseScrollingQuant = mouseScrollingQuant.checked;
+			mouseQuant = FlxG.save.data.mouseScrollingQuant;
+		};
+
 		check_vortex = new FlxUICheckBox(10, 160, null, null, "Vortex Editor (BETA)", 100);
 		if (FlxG.save.data.chart_vortex == null) FlxG.save.data.chart_vortex = false;
 		check_vortex.checked = FlxG.save.data.chart_vortex;
@@ -1421,6 +1433,7 @@ class ChartingState extends MusicBeatState
 		tab_group_chart.add(check_mute_inst);
 		tab_group_chart.add(check_mute_vocals);
 		tab_group_chart.add(check_vortex);
+		tab_group_chart.add(mouseScrollingQuant);
 		tab_group_chart.add(check_warnings);
 		tab_group_chart.add(playSoundBf);
 		tab_group_chart.add(playSoundDad);
@@ -1891,7 +1904,23 @@ class ChartingState extends MusicBeatState
 			if (FlxG.mouse.wheel != 0 && !FlxG.keys.pressed.C)
 			{
 				FlxG.sound.music.pause();
-				FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet*0.8);
+				if (!mouseQuant)
+					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet*0.8);
+				else
+					{
+						var time:Float = FlxG.sound.music.time;
+						var beat:Float = curDecBeat;
+						var snap:Float = quantization / 4;
+						var increase:Float = 1 / snap;
+						if (FlxG.mouse.wheel > 0)
+						{
+							var fuck:Float = CoolUtil.quantize(beat, snap) - increase;
+							FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
+						}else{
+							var fuck:Float = CoolUtil.quantize(beat, snap) + increase;
+							FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
+						}
+					}
 				if(vocals != null) {
 					vocals.pause();
 					vocals.time = FlxG.sound.music.time;
@@ -1932,13 +1961,14 @@ class ChartingState extends MusicBeatState
 					updateCurStep();
 					var time:Float = FlxG.sound.music.time;
 					var beat:Float = curDecBeat;
-					var snap:Float = 4/quantization;
+					var snap:Float = quantization / 4;
+					var increase:Float = 1 / snap;
 					if (FlxG.keys.pressed.UP)
 					{
-						var fuck:Float = CoolUtil.quantize(beat, snap) - snap; //(Math.floor((beat+snap) / snap) * snap);
+						var fuck:Float = CoolUtil.quantize(beat, snap) - increase; //(Math.floor((beat+snap) / snap) * snap);
 						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
 					}else{
-						var fuck:Float = CoolUtil.quantize(beat, snap) + snap; //(Math.floor((beat+snap) / snap) * snap);
+						var fuck:Float = CoolUtil.quantize(beat, snap) + increase; //(Math.floor((beat+snap) / snap) * snap);
 						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
 					}
 				}
@@ -1997,15 +2027,14 @@ class ChartingState extends MusicBeatState
 						//(Math.floor((curStep+quants[curQuant]*1.5/(quants[curQuant]/2))/quants[curQuant])*quants[curQuant]) * Conductor.stepCrochet;//snap into quantization
 					var time:Float = FlxG.sound.music.time;
 					var beat:Float = curDecBeat;
-					var snap:Float = 4/quantization;
+					var snap:Float = quantization / 4;
+					var increase:Float = 1 / snap;
 					if (FlxG.keys.pressed.UP)
 					{
-						var fuck:Float = CoolUtil.quantize(beat, snap) - snap;
-						trace(fuck);
+						var fuck:Float = CoolUtil.quantize(beat, snap) - increase;
 						feces = Conductor.beatToSeconds(fuck);
 					}else{
-						var fuck:Float = CoolUtil.quantize(beat, snap) + snap; //(Math.floor((beat+snap) / snap) * snap);
-						trace(fuck);
+						var fuck:Float = CoolUtil.quantize(beat, snap) + increase; //(Math.floor((beat+snap) / snap) * snap);
 						feces = Conductor.beatToSeconds(fuck);
 					}
 					FlxTween.tween(FlxG.sound.music, {time:feces}, 0.1, {ease:FlxEase.circOut});
@@ -2086,9 +2115,9 @@ class ChartingState extends MusicBeatState
 		bpmTxt.text =
 		Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + " / " + Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2)) +
 		"\nSection: " + curSec +
-		"\n\nBeat: " + curBeat +
+		"\n\nBeat: " + Std.string(curDecBeat).substring(0,4) +
 		"\n\nStep: " + curStep +
-		"\n\nBeat Snap: 1/" + quantization;
+		"\n\nBeat Snap: " + quantization + "th";
 
 		var playedSound:Array<Bool> = [false, false, false, false]; //Prevents ouchy GF sex sounds
 		curRenderedNotes.forEachAlive(function(note:Note) {
