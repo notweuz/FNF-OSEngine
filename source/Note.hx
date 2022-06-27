@@ -166,8 +166,20 @@ class Note extends FlxSprite
 
 		if (!inEditor && ClientPrefs.getGameplaySetting('randomcharts', false)) {
 			noteData = FlxG.random.int(0,3);
-			if (sustainNote) {
+			if (sustainNote && prevNote != null) {
 				noteData = prevNote.noteData;
+			}
+		}
+
+		if (!inEditor && ClientPrefs.getGameplaySetting('mirrorcharts', false)) {
+			if (noteData == 0) {
+				noteData = 3;
+			} else if (noteData == 1) {
+				noteData = 2;
+			} else if (noteData == 2) {
+				noteData = 1;
+			} else if (noteData == 3) {
+				noteData = 0;
 			}
 		}
 

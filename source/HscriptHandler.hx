@@ -35,6 +35,8 @@ import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
 import flixel.addons.display.FlxBackdrop;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 
 class HscriptHandler {
     public static function setVars(interp:Interp) {
@@ -56,6 +58,8 @@ class HscriptHandler {
         interp.variables.set('FlxBar', FlxBar);
         interp.variables.set('Section', Section);
         interp.variables.set('FlxState', FlxState);
+        interp.variables.set('FlxEase', FlxEase);
+        interp.variables.set('FlxTween', FlxTween);
         interp.variables.set('NoteSplash', NoteSplash);
         interp.variables.set('FlxSprite', FlxSprite);
         interp.variables.set('FlxBasic', FlxBasic);

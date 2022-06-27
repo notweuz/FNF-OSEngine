@@ -35,6 +35,7 @@ class ClientPrefs {
 	public static var opponentStrums:Bool = false;
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
+	public static var showMsText:Bool = true;
 	public static var healthBarAlpha:Float = 1;
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
@@ -133,6 +134,7 @@ class ClientPrefs {
 		FlxG.save.data.scoreZoom = scoreZoom;
 		FlxG.save.data.characterTrail = characterTrail;
 		FlxG.save.data.noReset = noReset;
+		FlxG.save.data.showMsText = showMsText;
 		FlxG.save.data.holdNoteVisibility = holdNoteVisibility;
 		FlxG.save.data.healthBarAlpha = healthBarAlpha;
 		FlxG.save.data.comboOffset = comboOffset;
@@ -271,6 +273,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.noReset != null) {
 			noReset = FlxG.save.data.noReset;
+		}
+		if(FlxG.save.data.showMsText != null) {
+			showMsText = FlxG.save.data.showMsText;
 		}
 		if(FlxG.save.data.healthBarAlpha != null) {
 			healthBarAlpha = FlxG.save.data.healthBarAlpha;
