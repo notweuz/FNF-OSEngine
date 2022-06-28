@@ -48,6 +48,7 @@ class ClientPrefs {
 	public static var cameramoveonnotes:Bool = true;
 	public static var removePerfects:Bool = false;
 	public static var characterTrail:Bool = false;
+	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -160,6 +161,7 @@ class ClientPrefs {
 		FlxG.save.data.underlaneVisibility = underlaneVisibility;
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.noteSkinSettings = noteSkinSettings;
+		FlxG.save.data.checkForUpdates = checkForUpdates;
 	
 		FlxG.save.flush();
 
@@ -340,6 +342,10 @@ class ClientPrefs {
 		if (FlxG.save.data.mute != null)
 		{
 			FlxG.sound.muted = FlxG.save.data.mute;
+		}
+		if (FlxG.save.data.checkForUpdates != null)
+		{
+			checkForUpdates = FlxG.save.data.checkForUpdates;
 		}
 
 		var save:FlxSave = new FlxSave();
