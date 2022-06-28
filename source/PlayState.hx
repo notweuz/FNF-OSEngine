@@ -1299,7 +1299,6 @@ class PlayState extends MusicBeatState
 		} else {
 			scoreTxt.visible = false;
 		}
-		updateScore(true); // pretending it's a miss so it won't bounce -Ghost
 		add(scoreTxt);
 
 		songTxt = new FlxText(12, FlxG.height - 24, 0, "", 8);
@@ -2484,7 +2483,7 @@ class PlayState extends MusicBeatState
 			+ ' / Accuracy: ' + Highscore.floorDecimal(ratingPercent * 100, 2) + '% (' + ratingName + ' - ' + ratingFC + ') ';
 		}
 
-		if(ClientPrefs.scoreZoom && !miss)
+		if(ClientPrefs.scoreZoom && !miss && !cpuControlled)
 		{
 			if(scoreTxtTween != null) {
 				scoreTxtTween.cancel();
@@ -4355,7 +4354,7 @@ class PlayState extends MusicBeatState
 			{
 				songHits++;
 				totalPlayed++;
-				RecalculateRating();
+				RecalculateRating(false);
 			}
 		}
 
@@ -4727,7 +4726,6 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 		health -= daNote.missHealth * healthLoss;
-		updateScore(true);
 		
 		if(instakillOnMiss)
 		{
@@ -4742,7 +4740,7 @@ class PlayState extends MusicBeatState
 		if(!practiceMode) songScore -= 10;
 
 		totalPlayed++;
-		RecalculateRating();
+		RecalculateRating(true);
 
 		var char:Character = boyfriend;
 		if(daNote.gfNote) {
@@ -4765,8 +4763,6 @@ class PlayState extends MusicBeatState
 		if (!boyfriend.stunned)
 		{
 			health -= 0.05 * healthLoss;
-			updateScore(true);
-			
 			if(instakillOnMiss)
 			{
 				vocals.volume = 0;
@@ -4784,7 +4780,7 @@ class PlayState extends MusicBeatState
 				songMisses++;
 			}
 			totalPlayed++;
-			RecalculateRating();
+			RecalculateRating(true);
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
@@ -4908,7 +4904,6 @@ class PlayState extends MusicBeatState
 
 			if(note.hitCausesMiss) {
 				noteMiss(note);
-				updateScore(true);
 				if(!note.noteSplashDisabled && !note.isSustainNote) {
 					spawnNoteSplashOnNote(note);
 				}
@@ -4937,7 +4932,6 @@ class PlayState extends MusicBeatState
 
 			if (!note.isSustainNote)
 			{
-				updateScore(false); // false means you didn't miss the note -Ghost
 				combo += 1;
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
@@ -5493,10 +5487,15 @@ class PlayState extends MusicBeatState
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
 	public var ratingFC:String;
-	public function RecalculateRating() {
+	public function RecalculateRating(badHit:Bool = false) {
 		setOnLuas('score', songScore);
 		setOnLuas('misses', songMisses);
 		setOnLuas('hits', songHits);
+		
+		if (badHit)
+			updateScore(true); // miss notes shouldn't make the scoretxt bounce -Ghost
+		else
+			updateScore(false);
 
 		var ret:Dynamic = callOnLuas('onRecalculateRating', [], false);
 		if(ret != FunkinLua.Function_Stop)
