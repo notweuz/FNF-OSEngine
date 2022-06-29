@@ -376,6 +376,10 @@ class Note extends FlxSprite
 		}
 	}
 
+	public function globalReloadNote(?prefix:String = '', ?texture:String = '', ?suffix:String = ''){
+		reloadNote(prefix, texture, suffix); // LOOOOOOOOOOOOOOL TOP 10 0 IQ MOVES
+	}
+
 	function loadNoteAnims() {
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
@@ -397,6 +401,10 @@ class Note extends FlxSprite
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
+	}
+
+	public function globalLoadNoteAnims(){
+		loadNoteAnims(); // LOOOOOOOOOOOOOOL TOP 10 0 IQ MOVES
 	}
 
 	function loadPixelNoteAnims() {
