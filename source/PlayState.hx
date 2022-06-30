@@ -2663,14 +2663,23 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var ishouldsetthisskin:String = null;
+				if (gottaHitNote) {
+					if (FileSystem.exists(Paths.modsImages("NOTE_" + SONG.player1 + '_assets'))) {
+						ishouldsetthisskin = 'NOTE_' + SONG.player1 + '_assets';
+					}
+				} else {
+					if (FileSystem.exists(Paths.modsImages("NOTE_" + SONG.player2 + '_assets'))) {
+						ishouldsetthisskin = 'NOTE_' + SONG.player2 + '_assets';
+					}
+				}
+
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, null, null, ishouldsetthisskin);
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = (section.gfSection && (songNotes[1]<4));
 				swagNote.noteType = songNotes[3];
 				if(!Std.isOfType(songNotes[3], String)) swagNote.noteType = editors.ChartingState.noteTypeList[songNotes[3]]; //Backward compatibility + compatibility with Week 7 charts
-
 				swagNote.scrollFactor.set();
 
 				var susLength:Float = swagNote.sustainLength;
@@ -2686,7 +2695,18 @@ class PlayState extends MusicBeatState
 					{
 						oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true);
+						var susskin:String = null;
+						if (gottaHitNote) {
+							if (FileSystem.exists(Paths.modsImages("NOTE_" + SONG.player1 + '_assets'))) {
+								susskin = 'NOTE_' + SONG.player1 + '_assets';
+							}
+						} else {
+							if (FileSystem.exists(Paths.modsImages("NOTE_" + SONG.player2 + '_assets'))) {
+								susskin = 'NOTE_' + SONG.player2 + '_assets';
+							}
+						}
+
+						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true, null, susskin);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = (section.gfSection && (songNotes[1]<4));
 						sustainNote.noteType = swagNote.noteType;

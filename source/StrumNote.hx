@@ -4,6 +4,9 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import PlayState;
+#if sys
+import sys.FileSystem;
+#end
 
 using StringTools;
 
@@ -55,6 +58,18 @@ class StrumNote extends FlxSprite
 			}
 		}
 		if (PlayState.SONG.arrowSkin != null && PlayState.SONG.arrowSkin.length > 1) skin = PlayState.SONG.arrowSkin;
+
+		#if sys
+		if (this.player == 1) {
+			if (FileSystem.exists(Paths.modsImages("NOTE_" + PlayState.SONG.player1 + '_assets'))) {
+				skin = "NOTE_" + PlayState.SONG.player1 + '_assets';
+			}
+		} else {
+			if (FileSystem.exists(Paths.modsImages("NOTE_" + PlayState.SONG.player2 + '_assets'))) {
+				skin = "NOTE_" + PlayState.SONG.player2 + '_assets';
+			}
+		}
+		#end
 		//trace(PlayState.SONG.arrowSkin); мама я в ютубе
 		texture = skin; //Load texture and anims
 

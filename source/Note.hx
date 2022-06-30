@@ -39,6 +39,7 @@ class Note extends FlxSprite
 	public var parent:Note;
 
 	public var shouldbehidden:Bool = false;
+	public var charSkin:String = null;
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
@@ -160,7 +161,7 @@ class Note extends FlxSprite
 		return value;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?charSkin:String = null)
 	{
 		super();
 
@@ -189,6 +190,7 @@ class Note extends FlxSprite
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
+		this.charSkin = charSkin;
 
 		x += (ClientPrefs.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -306,7 +308,7 @@ class Note extends FlxSprite
 			skin = PlayState.SONG.arrowSkin;
 			if(skin == null || skin.length < 1) {
 				skin = 'NOTE_assets';
-				if (prefix != 'HURT') {
+				if (prefix == '') {
 					if(ClientPrefs.noteSkinSettings == 'Clasic') {
 						skin = 'NOTE_assets';
 					} else if (ClientPrefs.noteSkinSettings == 'Circle') {
@@ -316,6 +318,10 @@ class Note extends FlxSprite
 					}
 				}
 			}
+		}
+
+		if (charSkin != null && (prefix == '')) {
+			skin = charSkin;
 		}
 
 		var animName:String = null;
