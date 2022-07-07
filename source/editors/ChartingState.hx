@@ -1577,11 +1577,11 @@ class ChartingState extends MusicBeatState
 			}
 			else if(curSelectedNote != null)
 			{
-				if(sender == value1InputText) {
+				if(sender == value1InputText && value1InputText != null && value1InputText.text != null) {
 					curSelectedNote[1][curEventSelected][1] = value1InputText.text;
 					updateGrid();
 				}
-				else if(sender == value2InputText) {
+				else if(sender == value2InputText && value2InputText != null && value2InputText.text != null) {
 					curSelectedNote[1][curEventSelected][2] = value2InputText.text;
 					updateGrid();
 				}

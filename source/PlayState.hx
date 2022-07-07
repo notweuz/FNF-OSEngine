@@ -2468,14 +2468,15 @@ class PlayState extends MusicBeatState
 	{
 		if(ratingName == '?') {
 			scoreTxt.text = 'Score: ' + songScore 
-			+ ' / Misses: ' + songMisses 
-			+ ' / Average: ?'
-			+ ' / Accuracy: ' + ratingName;
+			+ ' | Combo Breaks: ' + songMisses 
+			+ ' | Average: ?'
+			+ ' | Accuracy: ' + ratingName;
 		} else {
 			scoreTxt.text = 'Score: ' + songScore 
-			+ ' / Misses: ' + songMisses 
-			+ ' / Average: ' + Math.round(averageMs) + 'ms'
-			+ ' / Accuracy: ' + Highscore.floorDecimal(ratingPercent * 100, 2) + '% (' + ratingName + ' - ' + ratingFC + ') ';
+			+ ' | Combo Breaks: ' + songMisses 
+			+ ' | Average: ' + Math.round(averageMs) + 'ms'
+			+ ' | Accuracy: ' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%' 
+			+ ' | ' + ratingName + ' [' + ratingFC + ']';
 		}
 
 		if(ClientPrefs.scoreZoom && !miss && !cpuControlled)
@@ -3259,7 +3260,8 @@ class PlayState extends MusicBeatState
 				iconP1.animation.curAnim.curFrame = 2;
 			else
 				iconP1.animation.curAnim.curFrame = 0;
-		} else {
+		} 
+		else {
 			if (healthBar.percent < 20)
 				iconP1.animation.curAnim.curFrame = 1;
 			else
