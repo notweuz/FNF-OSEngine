@@ -173,6 +173,8 @@ class Note extends FlxSprite
 		}
 
 		if (!inEditor && ClientPrefs.getGameplaySetting('mirrorcharts', false)) {
+			noteData = Std.parseInt(Std.string(Math.abs(Std.parseFloat(Std.string(noteData-3)))));
+			/*
 			if (noteData == 0) {
 				noteData = 3;
 			} else if (noteData == 1) {
@@ -182,6 +184,7 @@ class Note extends FlxSprite
 			} else if (noteData == 3) {
 				noteData = 0;
 			}
+			*/
 		}
 
 		if (prevNote == null)
