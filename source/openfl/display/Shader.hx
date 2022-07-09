@@ -454,8 +454,9 @@ class Shader
 			__initGL();
 		}
 	}
-        //Thx Yoshi engine for da code!!!!
-	@:noCompletion private override function __initGL():Void
+        //Thx Yoshi engine for da code!!!! 
+	//for some reason init good make the code less laggy 
+	@:noCompletion private function __initGL():Void
         {
             if (__glSourceDirty || __paramBool == null)
             {
@@ -474,18 +475,18 @@ class Shader
     
             if (__context != null && program == null)
             {
-                shaderWorkNow();
+                initGood();
             }
         }
     
-        public function shaderWorkNow()
+		@:noCompletion public function initGood()
         {
             initGLforce(glFragmentSource, glVertexSource);
         }
     
-        public function initGLforce(glFragmentSource:String, glVertexSource:String) 
+        @:noCompletion public function initGLforce(glFragmentSource:String, glVertexSource:String) 
         {
-            @:privateAccess
+           
             var gl = __context.gl;
     
             #if android
@@ -517,79 +518,79 @@ class Shader
     
             var id = vertex + fragment;
     
-            @:privateAccess
+          
             program = __context.createProgram(GLSL);
     
-            @:privateAccess
+          
             program.__glProgram = __createGLProgram(vertex, fragment);
     
             if (program != null)
             {
-                @:privateAccess
+            
                 glProgram = program.__glProgram;
     
                 for (input in __inputBitmapData)
                 {
-                    @:privateAccess
+                  
                     if (input.__isUniform)
                     {
-                        @:privateAccess
+                
                         input.index = gl.getUniformLocation(glProgram, input.name);
                     }
                     else
                     {
-                        @:privateAccess
+                
                         input.index = gl.getAttribLocation(glProgram, input.name);
                     }
                 }
     
                 for (parameter in __paramBool)
                 {
-                    @:privateAccess
+       
                     if (parameter.__isUniform)
                     {
-                        @:privateAccess
+    
                         parameter.index = gl.getUniformLocation(glProgram, parameter.name);
                     }
                     else
                     {
-                        @:privateAccess
+           
                         parameter.index = gl.getAttribLocation(glProgram, parameter.name);
                     }
                 }
     
                 for (parameter in __paramFloat)
                 {
-                    @:privateAccess
+                 
                     if (parameter.__isUniform)
                     {
-                        @:privateAccess
+                       
                         parameter.index = gl.getUniformLocation(glProgram, parameter.name);
                     }
                     else
                     {
-                        @:privateAccess
+         
                         parameter.index = gl.getAttribLocation(glProgram, parameter.name);
                     }
                 }
     
                 for (parameter in __paramInt)
                 {
-                    @:privateAccess
+      
                     if (parameter.__isUniform)
                     {
-                        @:privateAccess
+    
                         parameter.index = gl.getUniformLocation(glProgram, parameter.name);
                     }
                     else
                     {
-                        @:privateAccess
+             
                         parameter.index = gl.getAttribLocation(glProgram, parameter.name);
                     }
                 }
             }
-        } 
-
+        }  
+	
 	@:noCompletion private function __processGLData(source:String, storageType:String):Void
 	{
 		var lastMatch = 0, position, regex, name, type;
