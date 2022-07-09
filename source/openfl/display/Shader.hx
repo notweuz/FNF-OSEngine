@@ -454,7 +454,7 @@ class Shader
 			__initGL();
 		}
 	}
-
+        //Thx Yoshi engine for da code!!!!
 	@:noCompletion private override function __initGL():Void
         {
             if (__glSourceDirty || __paramBool == null)
