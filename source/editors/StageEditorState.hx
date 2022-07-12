@@ -203,7 +203,7 @@ class StageEditorState extends MusicBeatState
 		FlxG.mouse.visible = true;
 
         guideButton = new FlxButton(12, FlxG.height - 50, "Guide", function() {
-            CoolUtil.browserLoad("https://www.youtube.com/watch?v=oZpLuBPSkcQ"); // there's supposed to be google.com actually (cuz it should be funny... but it isn't)
+            CoolUtil.browserLoad("https://youtu.be/LwqHwiF4CF8"); // there's supposed to be google.com actually (cuz it should be funny... but it isn't)
         });
 		guideButton.cameras = [camMenu];
 
