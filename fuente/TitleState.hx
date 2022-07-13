@@ -647,15 +647,13 @@ class TitleState extends MusicBeatState
 					addMoreText('Cooljer', 45);
 				case 3:
 					deleteCoolText();
-					createCoolText(['Forked', 'from'], 15);
+					createCoolText(['Mod', 'Gift for'], 15);
 				case 4:
-					addMoreText('Psych Engine', 45);
+					addMoreText('Javiera', 45);
 				case 6:
 					deleteCoolText();
-					createCoolText(['Psych Engine by'], 45);
-					addMoreText('Shadow Mario',45);
-					addMoreText('RiverOaken',45);
-					addMoreText('bbpanzu',45);
+					createCoolText(['Vs Javi Team'], 45);
+					addMoreText('NimuUwU',45);
 				case 8:
 					deleteCoolText();
 					createCoolText([curWacky[0]]);
@@ -668,9 +666,9 @@ class TitleState extends MusicBeatState
 				// credTextShit.visible = true;
 				case 14:
 					addMoreText('Night');
-				// credTextShit.text += '\nNight';
+				// credTextShit.text += '\nNight Funkin'';
 				case 15:
-					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
+					addMoreText('Vs Javi'); // credTextShit.text += '\nVs Javi';
 
 				case 16:
 					skipIntro();
