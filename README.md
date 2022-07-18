@@ -21,7 +21,7 @@ If you want video support on your mod, simply do `haxelib install hxCodec` on a 
 * [Cooljer](https://github.com/cooljer) - Arts
 
 ### OS Engine Special Thanks
-* [jonnycat](https://github.com/McJonnycat) - Fixing bugs in Engine <3.
+* [jonnycat](https://github.com/itsyourboyjonnycat) - Fixing bugs in Engine <3.
 * [Kade Engine](https://gamebanana.com/mods/44291) - Circle Note Skin
 
 ## Psych Engine Credits:
