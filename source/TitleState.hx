@@ -664,22 +664,22 @@ class TitleState extends MusicBeatState
 					createCoolText([curWacky[0]]);
 				case 9:
 					deleteCoolText();
-					createCoolText(['Tapes Of Mandela by'], 45);
+					createCoolText(['Funkin Bastard! by'], 45);
 					addMoreText('NimuDev',45);
-					addMoreText('Jefferson13n',45);
-					addMoreText('FrancoXD',45);
+					addMoreText('El canal mas XD',45);
+					addMoreText('GuapadiXD',45);
 				case 10:
 					addMoreText(curWacky[1]);
 				case 12:
 					deleteCoolText();
 				case 13:
-					addMoreText('Tape');
+					addMoreText('Funkin');
 				// credTextShit.visible = true;
 				case 14:
-					addMoreText('Of');
-				// credTextShit.text += '\nOf';
+					addMoreText('Bastard');
+				// credTextShit.text += '\nBastard';
 				case 15:
-					addMoreText('Mandela'); // credTextShit.text += '\nMandela';
+					addMoreText('!'); // credTextShit.text += '\n!'
 
 				case 16:
 					skipIntro();
