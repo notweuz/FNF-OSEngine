@@ -29,11 +29,11 @@
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
-	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" resizable="false"/>
-
 	<!--Switch-specific-->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
+	
+	<!--PlayStation-specific-->
+	<window if="playstation" orientation="landscape" fullscreen="true" width="0" height="0" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
